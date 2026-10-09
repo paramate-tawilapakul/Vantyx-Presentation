@@ -1,0 +1,2621 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vantyx DICOM Viewer — ความสามารถหลัก</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0b1220;
+        --navy-2: #13203a;
+        --teal: #0e7490;
+        --teal-soft: #e6f4f7;
+        --cyan: #22d3ee;
+        --ink: #0f172a;
+        --body: #334155;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --bg: #f4f6f9;
+        --card: #ffffff;
+        --gold: #92400e;
+        --gold-soft: #fef3c7;
+        --green: #166534;
+        --green-soft: #dcfce7;
+        --slate-soft: #eef2f6;
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--body);
+        font-family:
+          'IBM Plex Sans Thai', 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
+        font-size: 15px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        background:
+          linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 /
+            32px 32px,
+          linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px)
+            0 0 / 32px 32px,
+          radial-gradient(
+            1200px 500px at 85% -10%,
+            #164e63 0%,
+            transparent 60%
+          ),
+          var(--navy);
+        color: #e2e8f0;
+        padding: 44px 0 40px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .brand svg {
+        width: 46px;
+        height: 46px;
+        flex: none;
+      }
+      .brand .name {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        font-size: 15px;
+        color: #fff;
+      }
+      .brand .tagline {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+      }
+      .hero h1 {
+        font-size: 38px;
+        line-height: 1.25;
+        color: #fff;
+        margin: 30px 0 8px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .hero h1 span {
+        color: var(--cyan);
+      }
+      .hero .sub {
+        font-size: 17px;
+        color: #cbd5e1;
+        max-width: 850px;
+        margin: 0;
+      }
+      .meta {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+        font-size: 13px;
+        color: #94a3b8;
+      }
+      .meta b {
+        color: #e2e8f0;
+        font-weight: 600;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+        margin-top: 30px;
+      }
+      .kpi {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 10px;
+        padding: 14px 14px 12px;
+      }
+      .kpi .v {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.15;
+      }
+      .kpi .v small {
+        font-size: 14px;
+        color: var(--cyan);
+        font-weight: 600;
+      }
+      .kpi .l {
+        font-size: 12.5px;
+        color: #a5b4c8;
+        margin-top: 4px;
+        line-height: 1.45;
+      }
+
+      /* ---------- Nav ---------- */
+      nav.toc {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(6px);
+        border-bottom: 1px solid var(--line);
+      }
+      nav.toc .wrap {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+      }
+      nav.toc a {
+        flex: none;
+        font-size: 13px;
+        color: var(--ink);
+        text-decoration: none;
+        padding: 5px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fff;
+        white-space: nowrap;
+      }
+      nav.toc a:hover {
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+      nav.toc a b {
+        color: var(--teal);
+        font-family: 'IBM Plex Sans', sans-serif;
+        margin-right: 4px;
+      }
+
+      /* ---------- Value props ---------- */
+      .props {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin: 30px 0 6px;
+      }
+      .prop {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-top: 3px solid var(--teal);
+        border-radius: 10px;
+        padding: 16px 18px;
+      }
+      .prop h3 {
+        margin: 0 0 6px;
+        font-size: 15.5px;
+        color: var(--ink);
+      }
+      .prop p {
+        margin: 0;
+        font-size: 13.5px;
+        color: var(--body);
+      }
+
+      /* ---------- Sections ---------- */
+      section {
+        padding: 34px 0 6px;
+        scroll-margin-top: 60px;
+      }
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 8px;
+        margin-bottom: 6px;
+      }
+      .sec-head .no {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--teal);
+        letter-spacing: 0.06em;
+      }
+      .sec-head h2 {
+        margin: 0;
+        font-size: 23px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .sec-head .en {
+        margin-left: auto;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 12.5px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .lead {
+        color: var(--muted);
+        margin: 8px 0 14px;
+        font-size: 14.5px;
+        max-width: 900px;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        align-items: center;
+        font-size: 13px;
+        color: var(--muted);
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-top: 18px;
+      }
+
+      table.ft {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      table.ft th {
+        text-align: left;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: #fff;
+        background: var(--navy-2);
+        padding: 10px 14px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      table.ft td {
+        padding: 12px 14px;
+        vertical-align: top;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+      table.ft tr:nth-child(even) td {
+        background: #fafbfd;
+      }
+      table.ft td:first-child {
+        width: 27%;
+      }
+      table.ft td:first-child b {
+        display: block;
+        color: var(--ink);
+        font-weight: 600;
+        font-size: 14.5px;
+        line-height: 1.45;
+      }
+      table.ft td:first-child .en {
+        display: block;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      table.ft td:last-child {
+        width: 182px;
+      }
+      table.ft ul {
+        margin: 6px 0 0;
+        padding-left: 18px;
+      }
+      .mdn {
+        display: block;
+        margin-top: 6px;
+        font-size: 12.5px;
+        color: #9f1239;
+      }
+      .mdn::before {
+        content: '▲ ';
+      }
+      table.ft li {
+        margin: 2px 0;
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+        margin: 0 4px 4px 0;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .tag.adv {
+        background: var(--gold-soft);
+        color: var(--gold);
+        border: 1px solid #fcd34d;
+      }
+      .tag.par {
+        background: var(--teal-soft);
+        color: var(--teal);
+        border: 1px solid #a5d8e3;
+      }
+      .tag.std {
+        background: var(--slate-soft);
+        color: #334155;
+        border: 1px solid #cbd5e1;
+      }
+      .tag.sec {
+        background: var(--green-soft);
+        color: var(--green);
+        border: 1px solid #86efac;
+      }
+      .tag.mda {
+        background: #ede9fe;
+        color: #5b21b6;
+        border: 1px solid #c4b5fd;
+      }
+      .tag.mdp {
+        background: #ffffff;
+        color: #5b21b6;
+        border: 1px solid #c4b5fd;
+      }
+      .tag.mdt {
+        background: #e0e7ff;
+        color: #3730a3;
+        border: 1px solid #a5b4fc;
+      }
+      .tag.mdl {
+        background: #ffe4e6;
+        color: #9f1239;
+        border: 1px solid #fda4af;
+      }
+
+      /* Performance table */
+      table.perf td.num {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      table.perf td.after {
+        color: var(--teal);
+        font-weight: 700;
+      }
+      table.perf td:first-child {
+        width: 34%;
+      }
+      table.perf td:last-child {
+        width: auto;
+      }
+
+      /* Comparison summary */
+      .cmp {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .cmp .box {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px 18px;
+      }
+      .cmp .box .v {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.1;
+      }
+      .cmp .box.hl {
+        border-color: #fcd34d;
+        background: #fffbeb;
+      }
+      .cmp .box.hl .v {
+        color: var(--gold);
+      }
+      .cmp .box .t {
+        font-weight: 600;
+        color: var(--ink);
+        margin-top: 4px;
+      }
+      .cmp .box p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* Competitor matrix */
+      table.vs td:first-child {
+        width: 26%;
+      }
+      table.vs td.mk {
+        width: 150px;
+        white-space: nowrap;
+      }
+      table.vs td:last-child {
+        width: auto;
+      }
+      table.vs tr.grp td {
+        background: var(--slate-soft);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: 0.04em;
+        padding: 7px 14px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .mk-y,
+      .mk-p,
+      .mk-n {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .mk-y::before,
+      .mk-p::before,
+      .mk-n::before {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-size: 12px;
+        line-height: 1;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .mk-y {
+        color: var(--green);
+      }
+      .mk-y::before {
+        content: '✓';
+        background: var(--green-soft);
+      }
+      .mk-p {
+        color: var(--gold);
+      }
+      .mk-p::before {
+        content: '◐';
+        background: var(--gold-soft);
+      }
+      .mk-n {
+        color: #9f1239;
+      }
+      .mk-n::before {
+        content: '✕';
+        background: #ffe4e6;
+      }
+      .mk-y small,
+      .mk-p small,
+      .mk-n small {
+        font-weight: 400;
+        color: var(--muted);
+      }
+
+      .road {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .road .item {
+        background: var(--card);
+        border: 1px dashed #94a3b8;
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .road .item:last-child:nth-child(3n + 1) {
+        grid-column: 1 / -1;
+      }
+      .road .item h4 {
+        margin: 0 0 4px;
+        font-size: 14.5px;
+        color: var(--ink);
+      }
+      .road .item p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+
+      footer {
+        margin-top: 44px;
+        background: var(--navy);
+        color: #94a3b8;
+        font-size: 12.5px;
+        padding: 22px 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px 24px;
+      }
+      footer b {
+        color: #e2e8f0;
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 1000px) {
+        .kpis {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .props,
+        .cmp {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .road {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 0 16px;
+        }
+        .hero h1 {
+          font-size: 28px;
+        }
+        .kpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .props,
+        .cmp,
+        .road {
+          grid-template-columns: 1fr;
+        }
+        .sec-head {
+          flex-wrap: wrap;
+        }
+        .sec-head .en {
+          margin-left: 0;
+          width: 100%;
+        }
+        table.ft,
+        table.ft tbody,
+        table.ft tr,
+        table.ft td {
+          display: block;
+          width: 100% !important;
+        }
+        table.ft thead {
+          display: none;
+        }
+        table.ft tr {
+          border-top: 1px solid var(--line);
+        }
+        table.ft tr:first-child {
+          border-top: 0;
+        }
+        table.ft td {
+          border-top: 0;
+          padding: 6px 14px;
+        }
+        table.ft td:first-child {
+          padding-top: 14px;
+        }
+        table.ft td:last-child {
+          padding-bottom: 14px;
+        }
+        table.perf td.num::before {
+          content: attr(data-l) ' ';
+          color: var(--muted);
+          font-weight: 400;
+        }
+        table.vs td.mk::before {
+          content: attr(data-l) ' ';
+          color: var(--muted);
+          font-size: 12.5px;
+          margin-right: 4px;
+        }
+        table.vs tr.grp td {
+          padding: 7px 14px;
+        }
+      }
+
+      /* ---------- Print ---------- */
+      @page {
+        size: A4;
+        margin: 12mm;
+      }
+      @media print {
+        body {
+          background: #fff;
+          font-size: 12.5px;
+        }
+        nav.toc {
+          display: none;
+        }
+        .hero {
+          padding: 26px 0;
+        }
+        section {
+          break-before: auto;
+          padding-top: 18px;
+        }
+        table.ft tr,
+        .prop,
+        .cmp .box,
+        .road .item,
+        .kpi {
+          break-inside: avoid;
+        }
+        .sec-head {
+          break-after: avoid;
+        }
+        .wrap {
+          max-width: none;
+          padding: 0;
+        }
+      }
+      /* ---------- Top link bar ---------- */
+      .topbar {
+        background: var(--navy);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .topbar .wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .topbar a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-size: 13.5px;
+      }
+      .topbar a:hover {
+        color: var(--cyan);
+      }
+      .topbar a.switch {
+        border: 1px solid rgba(34, 211, 238, 0.45);
+        color: var(--cyan);
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .topbar a.switch:hover {
+        background: rgba(34, 211, 238, 0.12);
+      }
+      @media print {
+        .topbar {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="wrap">
+        <a href="index.html">← หน้าแรก</a>
+        <a class="switch" href="vna_main_features.html">ดู VNA →</a>
+      </div>
+    </div>
+    <header class="hero">
+      <div class="wrap">
+        <div class="brand">
+          <svg
+            viewBox="0 0 32 32"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="Vantyx"
+          >
+            <rect
+              width="32"
+              height="32"
+              rx="6"
+              fill="#0B1220"
+              stroke="#1E3A5F"
+            />
+            <path
+              d="M 16,27 Q 10.30,16.00 9,5"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="1.8"
+              stroke-opacity="0.55"
+              stroke-linecap="round"
+            />
+            <path
+              d="M 16,27 Q 16.00,15.50 16,4"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="2.6"
+              stroke-linecap="round"
+            />
+            <path
+              d="M 16,27 Q 21.70,16.00 23,5"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="1.8"
+              stroke-opacity="0.55"
+              stroke-linecap="round"
+            />
+            <circle cx="16" cy="27" r="1.3" fill="#22D3EE" />
+          </svg>
+          <div>
+            <div class="name">VANTYX</div>
+            <div class="tagline">Medical Imaging Platform</div>
+          </div>
+        </div>
+
+        <h1>Vantyx <span>DICOM Viewer</span></h1>
+        <p class="sub">
+          สรุปความสามารถหลักของโปรแกรมดูภาพทางการแพทย์แบบ Zero-footprint —
+          เปิดดูภาพ Non-Dicom และ DICOM ครบทุก Modality
+          ผ่านเว็บเบราว์เซอร์ได้ทันที บนคอมพิวเตอร์แบบไม่ลดทอนความละเอียด
+          และบนแท็บเล็ต / มือถือ โดยไม่ต้องติดตั้งโปรแกรมใด ๆ
+        </p>
+        <div class="meta">
+          <span>ข้อมูล ณ <b>9 ตุลาคม 2569</b></span>
+          <span
+            >เทียบกับ <b>OHIF Viewer v3.13</b> (open-source) และ
+            <b>MedDream DICOM Viewer 8.9</b> (เชิงพาณิชย์)</span
+          >
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="v">0</div>
+            <div class="l">การติดตั้งฝั่งผู้ใช้ — เปิดผ่านเบราว์เซอร์</div>
+          </div>
+          <div class="kpi">
+            <div class="v">27</div>
+            <div class="l">ความสามารถที่ OHIF v3.13 ไม่มี</div>
+          </div>
+          <div class="kpi">
+            <div class="v">60<small> / 64</small></div>
+            <div class="l">
+              ฟีเจอร์เทียบเท่าหรือดีกว่า MedDream 8.9 — ดีกว่า 14 รายการ
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="v">100<small>%</small></div>
+            <div class="l">
+              คำขอภาพทุกครั้งต้องยืนยันตัวตน + จำกัดสิทธิ์ตามแผนก — รองรับ PDPA
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="v">10+</div>
+            <div class="l">
+              ชนิดข้อมูลเปิดได้ในหน้าต่างเดียว — ECG, Dose Report, วิดีโอ,
+              RTSTRUCT, PDF, Office ฯลฯ
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="v">TH / EN</div>
+            <div class="l">
+              หน้าจอภาษาไทย–อังกฤษ สลับได้ทันที — ศัพท์การแพทย์คงภาษาอังกฤษ
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="สารบัญ">
+      <div class="wrap">
+        <a href="#s1"><b>01</b>แพลตฟอร์ม</a>
+        <a href="#s2"><b>02</b>ความปลอดภัย</a>
+        <a href="#s3"><b>03</b>การเรียกดูและจัดหน้าจอ</a>
+        <a href="#s4"><b>04</b>เครื่องมือภาพ 2D</a>
+        <a href="#s5"><b>05</b>การวัดและบันทึก</a>
+        <a href="#s6"><b>06</b>MPR / 3D</a>
+        <a href="#s7"><b>07</b>PET/CT และ 4D</a>
+        <a href="#s8"><b>08</b>ตาม Modality</a>
+        <a href="#s9"><b>09</b>Workflow และส่งออก</a>
+        <a href="#s10"><b>10</b>ประสิทธิภาพ</a>
+        <a href="#s11"><b>11</b>เทียบ OHIF</a>
+        <a href="#s12"><b>12</b>เทียบ MedDream</a>
+      </div>
+    </nav>
+
+    <main class="wrap">
+      <div class="props">
+        <div class="prop">
+          <h3>เปิดได้ทันที ทุกอุปกรณ์</h3>
+          <p>
+            ไม่ต้องติดตั้ง ไม่ต้องลง plug-in อัปเดตที่ server ครั้งเดียว
+            ผู้ใช้ทุกคนได้เวอร์ชันใหม่ทันที
+          </p>
+        </div>
+        <div class="prop">
+          <h3>ปลอดภัยระดับองค์กร</h3>
+          <p>
+            ยืนยันตัวตนทุกคำขอภาพ จำกัดสิทธิ์ตามบทบาทและหน่วยงาน และบันทึก audit
+            การพิมพ์/ส่งออก
+          </p>
+        </div>
+        <div class="prop">
+          <h3>เครื่องมือเฉพาะทางครบ</h3>
+          <p>
+            MPR/3D, PET/CT SUV-TMTV, Mammography, ECG, Dose report, RTSTRUCT,
+            วิดีโอ DICOM ในโปรแกรมเดียว
+          </p>
+        </div>
+        <div class="prop">
+          <h3>จดจำการทำงานของแต่ละคน</h3>
+          <p>
+            ค่าวัด key images workspace และการตั้งค่า เก็บที่ server
+            ตามผู้ใช้ไปทุกเครื่อง
+          </p>
+        </div>
+      </div>
+
+      <div class="legend">
+        <strong style="color: var(--ink)"
+          >ความหมายของป้าย — เทียบ OHIF v3.13:</strong
+        >
+        <span
+          ><span class="tag adv">★ เหนือกว่า OHIF</span> มีใน Vantyx แต่ OHIF
+          ไม่มี / มีไม่ครบ</span
+        >
+        <span
+          ><span class="tag par">✓ เทียบเท่า OHIF</span>
+          ทำได้เท่ากันหรือดีกว่า</span
+        >
+        <span><span class="tag sec">ความปลอดภัย</span></span>
+        <span
+          ><span class="tag std">มาตรฐาน</span> ความสามารถพื้นฐาน
+          (ไม่มีข้อมูลเทียบ OHIF)</span
+        >
+      </div>
+      <div class="legend" style="margin-top: 8px">
+        <strong style="color: var(--ink)"
+          >เทียบ MedDream 8.9 (รุ่นสูงสุด Premium):</strong
+        >
+        <span
+          ><span class="tag mda">★ เหนือกว่า MedDream</span> ไม่พบในสเปกของ
+          MedDream หรือ Vantyx ทำได้ลึกกว่า</span
+        >
+        <span><span class="tag mdp">✓ เทียบเท่า MedDream</span> มีทั้งคู่</span>
+        <span
+          ><span class="tag mdt">MedDream: เฉพาะ Premium</span> MedDream
+          มีเฉพาะรุ่นแพงสุด — Vantyx รวมในระบบ</span
+        >
+        <span
+          ><span class="tag mdl">▲ MedDream ครบกว่า</span> MedDream
+          มีความสามารถเพิ่มที่ Vantyx ยังไม่มี</span
+        >
+      </div>
+
+      <!-- 01 -->
+      <section id="s1">
+        <div class="sec-head">
+          <span class="no">01</span>
+          <h2>การเข้าถึงและแพลตฟอร์ม</h2>
+          <span class="en">Access &amp; Platform</span>
+        </div>
+        <p class="lead">
+          ออกแบบให้แพทย์เปิดดูภาพได้ทุกจุดในเครือข่ายโรงพยาบาล
+          และนอกสถานที่เมื่อเปิดการเข้าถึงระยะไกล
+          ด้วยเบราว์เซอร์มาตรฐานเพียงอย่างเดียว
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>Web Viewer ไม่ต้องติดตั้ง</b
+                ><span class="en">Zero-footprint Web Viewer</span>
+              </td>
+              <td>
+                ทำงานบน Chrome / Edge / Safari / Firefox รุ่นปัจจุบัน
+                ไม่ต้องติดตั้งโปรแกรม ไม่ต้องลง plug-in
+                และไม่มีข้อมูลภาพตกค้างในเครื่อง เมื่ออัปเดตที่ server
+                ผู้ใช้ทุกคนได้เวอร์ชันใหม่ทันที
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>โหมดคอมพิวเตอร์ / แท็บเล็ต / มือถือ อัตโนมัติ</b
+                ><span class="en">Adaptive Desktop &amp; Mobile Mode</span>
+              </td>
+              <td>
+                ระบบเลือกโหมดเองตามอุปกรณ์ บนมือถือและแท็บเล็ตใช้ภาพที่ server
+                เตรียมให้ตามชนิดภาพ (CR/DX 1024 px, MG 1536 px) จัดหน้าจอ 1×1
+                พร้อมแถบเครื่องมือ 5 ปุ่มที่ใช้บ่อย ใช้นิ้วเลื่อนและบีบซูมได้
+                จึงเปิดได้ลื่นแม้เครื่องมีหน่วยความจำน้อย
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>รองรับจอสัมผัสหลายนิ้ว</b
+                ><span class="en">Multi-touch on Desktop</span>
+              </td>
+              <td>
+                บนโน้ตบุ๊กหรือจอสัมผัส: 1 นิ้ว = เครื่องมือที่เลือก, 2 นิ้ว =
+                ซูม/เลื่อนภาพ, ลาก 3 นิ้ว = เลื่อน slice (ทั้งภาพปกติและ MPR)
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>เปิดภาพจาก HIS / RIS ได้โดยตรง</b
+                ><span class="en">Secure HIS Launch</span>
+              </td>
+              <td>
+                ระบบ HIS ขอลิงก์เปิดภาพผ่าน API key ของตนเอง ได้ token
+                ที่ใช้ได้ครั้งเดียวและหมดอายุภายใน 10 นาที token ถูกลบออกจากแถบ
+                URL ทันทีหลังเปิด ผู้ใช้เข้าดูในสิทธิ์อ่านอย่างเดียว และกด F5
+                รีเฟรชต่อได้โดยไม่ต้องเข้าสู่ระบบใหม่
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>เปิดจาก Vantyx Web หรือลิงก์ตรง</b
+                ><span class="en">Web App &amp; Deep Link</span>
+              </td>
+              <td>
+                กดเปิดจากรายการ Study ใน Vantyx Web ได้ทันที
+                หรือใช้ลิงก์ตรงสำหรับเจ้าหน้าที่ที่มีบัญชี ไม่มี token อยู่ใน
+                URL และไม่เก็บ token ไว้ในเบราว์เซอร์
+              </td>
+              <td>
+                <span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>สองภาษา ไทย / อังกฤษ</b
+                ><span class="en">Bilingual UI (TH / EN)</span>
+              </td>
+              <td>
+                เลือกภาษาได้ในการตั้งค่า สลับได้ทันทีโดยไม่ต้องโหลดใหม่
+                ศัพท์ทางการแพทย์คงเป็นภาษาอังกฤษตามที่แพทย์คุ้นเคย
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ปุ่มลัดใช้ได้แม้แป้นพิมพ์เป็นภาษาไทย</b
+                ><span class="en">Layout-independent Shortcuts</span>
+              </td>
+              <td>
+                อ่านปุ่มตามตำแหน่งบนแป้นพิมพ์ ไม่ใช่ตัวอักษร
+                ผู้ใช้ไม่ต้องสลับภาษาแป้นพิมพ์ก่อนใช้ปุ่มลัด
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 02 -->
+      <section id="s2">
+        <div class="sec-head">
+          <span class="no">02</span>
+          <h2>ความปลอดภัยและการควบคุมสิทธิ์</h2>
+          <span class="en">Security &amp; Access Control</span>
+        </div>
+        <p class="lead">
+          ป้องกันข้อมูลผู้ป่วยตั้งแต่ระดับคำขอภาพแต่ละภาพ
+          สอดคล้องกับหลักการคุ้มครองข้อมูลส่วนบุคคล (PDPA)
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ยืนยันตัวตนทุกคำขอภาพ</b
+                ><span class="en">Per-request Image Authorization</span>
+              </td>
+              <td>
+                ทุกภาพ เฟรม thumbnail PDF และวิดีโอ ต้องแนบ token ที่ถูกต้อง
+                ต่ออายุ token ให้อัตโนมัติก่อนหมดอายุ (อายุ 30 นาที)
+                และตรวจสิทธิ์ที่ gateway ก่อนส่งภาพ แม้ภาพนั้นจะอยู่ใน cache
+                แล้วก็ตาม
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>สิทธิ์ตามบทบาทและขอบเขตข้อมูล</b
+                ><span class="en">RBAC &amp; Data Scope</span>
+              </td>
+              <td>
+                ต้องมีสิทธิ์ "เปิด Viewer" จึงใช้งานได้
+                เห็นเฉพาะการตรวจที่อยู่ในขอบเขตของตนเอง (ตามเครื่องส่งภาพ /
+                แผนก) ผู้ป่วย VIP หรือการตรวจที่ถูกซ่อนจะตอบกลับว่า "ไม่พบ"
+                ทุกกรณี
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>บันทึกการใช้งาน</b><span class="en">Audit Trail</span></td>
+              <td>
+                การพิมพ์ภาพและการส่งออกค่าวัด (CSV) ถูกบันทึกทุกครั้ง ระบุผู้ใช้
+                เวลา และการตรวจ
+              </td>
+              <td>
+                <span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>อ่านอย่างเดียวจาก Archive</b
+                ><span class="en">Read-only Allow-list</span>
+              </td>
+              <td>
+                Viewer ดึงได้เฉพาะเส้นทางอ่านภาพที่อนุญาตไว้ ไม่สามารถแก้ไข ลบ
+                หรือค้นข้อมูลอื่นในคลังภาพได้ ส่งภาพจากโดเมนเดียวกับตัวโปรแกรม
+                ไม่เปิดช่องทางข้ามโดเมน
+              </td>
+              <td>
+                <span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 03 -->
+      <section id="s3">
+        <div class="sec-head">
+          <span class="no">03</span>
+          <h2>การเรียกดูการตรวจและการจัดหน้าจอ</h2>
+          <span class="en">Study Browsing &amp; Hanging Protocols</span>
+        </div>
+        <p class="lead">
+          จัดภาพให้พร้อมอ่านตั้งแต่เปิด
+          พร้อมเปรียบเทียบกับการตรวจครั้งก่อนโดยอัตโนมัติ
+          ลดเวลาที่แพทย์ต้องจัดหน้าจอเอง
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ประวัติการตรวจของผู้ป่วย</b
+                ><span class="en">Patient History &amp; Priors</span>
+              </td>
+              <td>
+                แสดงทุกการตรวจของผู้ป่วยรายนี้ในที่เดียว โหลดเฉพาะข้อมูลสรุปก่อน
+                และดึงรายการภาพเมื่อเปิดดูจริง ผู้ป่วยที่มีการตรวจ CT/MR เก่า 10
+                ครั้ง (~24,000 ภาพ) จึงเปิดได้ในระดับเสี้ยววินาที
+                แทนที่จะรอหลายสิบวินาที
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ภาพย่อของ Series</b><span class="en">Series Thumbnails</span>
+              </td>
+              <td>
+                ภาพย่อทยอยโหลดโดยไม่หน่วงภาพแรก แสดงป้าย MPR (series ที่สร้าง 3D
+                ได้), จำนวน phase เช่น "60 ภาพ × 3 phases" และความยาวของวิดีโอ
+                ลากวางลงช่องใดก็ได้ หรือใช้คีย์บอร์ดเลือก
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>รูปแบบหน้าจอ</b
+                ><span class="en">Layouts &amp; Templates</span>
+              </td>
+              <td>
+                Grid 1×1 ถึง 3×3, 1×4, 2×4 (สูงสุด 9 ช่อง) และเทมเพลตพิเศษ: MPR,
+                3D Four-up, 3D Main, Axial/Coronal/Sagittal Primary
+                ดับเบิลคลิกเพื่อขยายช่องเต็มจอ
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>เปรียบเทียบกับการตรวจเก่าอัตโนมัติ</b
+                ><span class="en">Auto Prior Compare</span>
+              </td>
+              <td>
+                เลือก series ของการตรวจเก่าที่เหมาะสมที่สุดให้เอง (พิจารณา
+                modality, คำอธิบาย, ส่วนของร่างกาย, ความใหม่ และจำนวนภาพ)
+                แสดงคู่กันแบบ 1×2 / 2×1 และ sync การเลื่อนภาพ
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Hanging Protocol ที่ผู้ใช้สร้างเอง</b
+                ><span class="en">User-defined Hanging Protocols</span>
+              </td>
+              <td>
+                กำหนดกฎตาม modality, ส่วนของร่างกาย, คำอธิบาย, จำนวน series
+                และวางภาพแต่ละช่องตาม laterality / view / การตรวจเก่าลำดับที่ n
+                สร้างได้ด้วยปุ่ม "Save as protocol" จากหน้าจอปัจจุบัน
+                และทดสอบกับการตรวจที่เปิดอยู่ได้ทันที (สูงสุด 30 กฎต่อคน)
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Hanging Protocol สำเร็จรูป</b
+                ><span class="en">Built-in Protocols</span>
+              </td>
+              <td>
+                Mammography 1×4 (หรือ 2×4 เมื่อมีการตรวจเก่า), PET/CT เปิดเป็น
+                Fusion อัตโนมัติ, CT/MR เข้า MPR ได้ทันที (ตั้งค่าได้) และ<b
+                  >แบ่งจอภาพ | รายงานอัตโนมัติ</b
+                >เมื่อการตรวจมี PDF หรือ SR
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>บันทึก Workspace ต่อผู้ใช้</b
+                ><span class="en">Per-user Workspace</span>
+              </td>
+              <td>
+                กดครั้งเดียวบันทึก layout, series ในแต่ละช่อง (รวมการตรวจเก่า)
+                และภาพที่กำลังดู
+                เปิดการตรวจเดิมครั้งถัดไปจะกลับมาอยู่ในสภาพเดิมทันที
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 04 -->
+      <section id="s4">
+        <div class="sec-head">
+          <span class="no">04</span>
+          <h2>เครื่องมือภาพ 2D</h2>
+          <span class="en">2D Imaging Tools</span>
+        </div>
+        <p class="lead">
+          แถบเครื่องมือ 8 หมวด (Navigate, Window/Level, Measure, ROI, Annotate,
+          Edit, View, More) อยู่ในแถวเดียวเสมอ ย่อเป็นเมนูอัตโนมัติบนจอแคบ
+          และผู้ใช้ซ่อน/ปักหมุด/เรียงลำดับเองได้
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>Window / Level และ Preset</b
+                ><span class="en">W/L Presets per Modality</span>
+              </td>
+              <td>
+                ลากเมาส์ปรับ W/L, preset แยกตาม modality ที่ผู้ใช้แก้ไขเองได้
+                (ปุ่ม 1–9) และแสดงค่า W/L ที่ฝังมากับไฟล์ DICOM พร้อมชื่อ
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>W/L Region และ Histogram</b
+                ><span class="en">Region W/L &amp; Histogram</span>
+              </td>
+              <td>
+                เลือกพื้นที่บนภาพเพื่อตั้ง W/L ให้พอดีบริเวณนั้น หรือปรับจากกราฟ
+                histogram ในหน้าต่างลอยที่ลากย้ายได้
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Invert, Colormap และ Colorbar</b
+                ><span class="en">Pseudocolor &amp; Colorbar</span>
+              </td>
+              <td>
+                กลับสีภาพ, colormap 7 แบบ (Grayscale, Hot Iron, Jet, HSV,
+                Cool-to-warm, Viridis, Inferno) และแถบสีบนภาพ PET / Fusion
+                ที่ลากปรับ W/L ได้
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Zoom, Pan และแว่นขยาย</b
+                ><span class="en">Zoom / Pan / Advanced Magnify</span>
+              </td>
+              <td>
+                ซูม 10%–100 เท่า, แว่นขยายแบบชั่วคราว และแว่นขยายค้างบนภาพ
+                1.5×–5× ที่วัดค่าในแว่นได้ ใช้ได้ทั้งภาพ 2D และ MPR
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>หมุน / พลิก / คืนค่า</b
+                ><span class="en">Rotate / Flip / Reset</span>
+              </td>
+              <td>
+                หมุน 90° ตามและทวนเข็ม พลิกแนวนอน/แนวตั้ง และคืนค่าการแสดงผล
+                ผ่านปุ่ม เมนูคลิกขวา หรือปุ่มลัด
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ข้อมูลบนภาพ</b
+                ><span class="en">Orientation, Scale Bar &amp; Overlay</span>
+              </td>
+              <td>
+                ตัวอักษรทิศ A/P/R/L/H/F จาก tag ของภาพ (ไม่เดาเมื่อไม่มีข้อมูล),
+                แถบมาตราส่วน mm/cm และข้อความ 4 มุม (ชื่อ, HN, เพศ/อายุ,
+                modality, zoom, W/L, ลำดับภาพ) ที่เลือกได้ต่อผู้ใช้
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Cine และการเลื่อนภาพ</b
+                ><span class="en">Cine (Yoyo / Auto Re-play)</span>
+              </td>
+              <td>
+                เล่นภาพต่อเนื่อง 5–60 fps พร้อมโหมด Yoyo (เดินหน้า-ถอยหลัง)
+                และเล่นซ้ำอัตโนมัติ เลื่อน slice ด้วยล้อเมาส์ แถบเลื่อน หรือลาก
+                3 นิ้ว
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Sync และเส้นอ้างอิง</b
+                ><span class="en">Sync Groups &amp; Reference Lines</span>
+              </td>
+              <td>
+                จับกลุ่ม sync A–D (การเลื่อน slice ตามตำแหน่งจริง, ซูม/เลื่อน,
+                W/L) และแสดงเส้นอ้างอิงระหว่างระนาบ CT/MR อัตโนมัติ
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ดู DICOM Tag</b><span class="en">DICOM Tag Browser</span>
+              </td>
+              <td>
+                แสดงทุก tag รวม private tag และ sequence ค้นหาได้
+                เลื่อนดูทีละภาพ/เฟรม และคัดลอกค่าได้
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ปรับแต่งการควบคุม</b
+                ><span class="en">Mouse, Shortcuts &amp; Context Menu</span>
+              </td>
+              <td>
+                กำหนดปุ่มเมาส์ซ้าย/ขวา/กลาง/ล้อ แยกตามชนิดช่องภาพ,
+                ปุ่มลัดครบชุดที่แก้ไขได้ และเมนูคลิกขวา
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 05 -->
+      <section id="s5">
+        <div class="sec-head">
+          <span class="no">05</span>
+          <h2>การวัดและการบันทึกบนภาพ</h2>
+          <span class="en">Measurements, Annotations &amp; Key Images</span>
+        </div>
+        <p class="lead">
+          เครื่องมือวัดครบชุด พร้อมบันทึกผลไว้ที่ server —
+          ค่าวัดไม่หายเมื่อปิดโปรแกรม และทีมแพทย์เห็นงานของกันและกัน
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>การวัดพื้นฐาน</b
+                ><span class="en"
+                  >Length, Angle, Cobb, Bidirectional, Calibrate</span
+                >
+              </td>
+              <td>
+                วัดความยาว มุม มุม Cobb และ Bidirectional, ปรับเทียบระยะ
+                (Calibrate) สำหรับภาพที่ไม่มีข้อมูลขนาด pixel พร้อมระบุว่า
+                "Calibrated (User)"
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>CTR และ Height</b
+                ><span class="en">Cardiothoracic Ratio &amp; Height</span>
+              </td>
+              <td>
+                วัดอัตราส่วนหัวใจต่อทรวงอกบน CR/DX เตือนเมื่อเกิน 0.5
+                และเตือนเมื่อเป็นภาพท่า AP หรือผู้ป่วยอายุต่ำกว่า 2 ปี;
+                เครื่องมือวัดความสูงแนวดิ่ง
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ROI และสถิติ</b
+                ><span class="en">ROI Statistics (HU / SUV)</span>
+              </td>
+              <td>
+                Rectangle, Ellipse, Circle, Freehand, Spline, Livewire แสดง mean
+                / max / min / SD / พื้นที่ / เส้นรอบรูป เป็น HU หรือ SUV และ
+                Probe สำหรับค่า ณ จุด (แก้ไขการคำนวณสถิติของ
+                Freehand/Spline/Livewire ให้ถูกต้องกว่าค่าเริ่มต้นของ library)
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Ultrasound Directional</b
+                ><span class="en">Doppler / M-mode Measurement</span>
+              </td>
+              <td>
+                วัดค่าบนภาพ Doppler และ M-mode โดยใช้ calibration ของเครื่อง
+                ultrasound ในแต่ละบริเวณภาพ<span class="mdn"
+                  >MedDream มีเพิ่ม: VTI (Velocity Time Integral) และวัด
+                  Velocity คลิกเดียว</span
+                >
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdl">▲ MedDream ครบกว่า</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ระบุตำแหน่งกระดูกสันหลัง</b
+                ><span class="en">Spine Labeling</span>
+              </td>
+              <td>
+                C1–C7, T1–T13, L1–L6, S1–S5, Co1–Co4 ใส่ป้ายถัดไปให้อัตโนมัติ
+                นับขึ้น/ลง เรียงหมายเลขใหม่ได้ ฉายป้ายไปยัง series
+                อื่นในพิกัดเดียวกัน และแสดงชื่อระดับบนภาพ axial
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ลูกศรและข้อความ</b
+                ><span class="en">Arrow &amp; Text Annotation</span>
+              </td>
+              <td>ชี้ตำแหน่งและเขียนข้อความบนภาพ</td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Undo / Redo</b><span class="en">Undo / Redo</span></td>
+              <td>ย้อนกลับและทำซ้ำได้ทุกช่องภาพ รวมถึงย้อนการลบเส้นวัด</td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ตารางค่าวัดและส่งออก CSV</b
+                ><span class="en">Measurement Panel &amp; CSV Export</span>
+              </td>
+              <td>
+                รวมค่าวัดทั้งการตรวจ กดที่แถวเพื่อไปยังภาพนั้น ส่งออก CSV
+                ที่เปิดด้วย Excel ภาษาไทยได้ถูกต้อง ไม่มีชื่อผู้ป่วย/HN ในไฟล์
+                ป้องกัน CSV injection และบันทึก audit
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag sec">ความปลอดภัย</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>บันทึกค่าวัดไว้ที่ Server</b
+                ><span class="en">Server-stored Annotations</span>
+              </td>
+              <td>
+                ค่าวัดเก็บในฐานข้อมูลต่อผู้ใช้ต่อการตรวจ เปิดใหม่ก็ยังอยู่
+                ผู้ใช้อื่นเห็นค่าวัดของเพื่อนร่วมทีมแบบล็อก (สีต่างกัน
+                พร้อมชื่อเจ้าของ) และค่าวัดยังคงอยู่แม้การตรวจถูกรวม (merge)
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Key Images</b><span class="en">Key Images with Notes</span>
+              </td>
+              <td>
+                กด ★ หรือปุ่ม K เพื่อทำเครื่องหมายภาพสำคัญพร้อมโน้ต
+                แสดงรายการในแถบด้านข้าง เก็บที่ server
+                ผู้อื่นเห็นแบบอ่านอย่างเดียว และดูได้บนมือถือ
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 06 -->
+      <section id="s6">
+        <div class="sec-head">
+          <span class="no">06</span>
+          <h2>MPR และภาพ 3 มิติ</h2>
+          <span class="en">MPR &amp; 3D Visualization</span>
+        </div>
+        <p class="lead">
+          สร้างภาพหลายระนาบและภาพ 3 มิติได้ในเบราว์เซอร์ โดย server ช่วยเลือก
+          series ที่เหมาะสมให้ตั้งแต่ต้น
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>MPR หลายระนาบ</b
+                ><span class="en">Multi-planar Reconstruction</span>
+              </td>
+              <td>
+                Axial / Coronal / Sagittal พร้อม crosshair หมุนระนาบเอียง
+                (oblique) และปุ่มคืนค่า server จัดอันดับ series ที่เหมาะกับ MPR
+                ให้อัตโนมัติ และซ่อนป้าย MPR ของ series ที่สร้างภาพไม่ได้
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Slab MIP / MinIP / AIP</b
+                ><span class="en">Thick-slab Projection</span>
+              </td>
+              <td>
+                ความหนา 5–40 mm ปรับจากเมนูหรือลาก handle บน crosshair
+                ใช้ได้กับภาพ CT/MR 2D ทั่วไปด้วย
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Volume Rendering 3D</b
+                ><span class="en">3D VR — 26 Presets</span>
+              </td>
+              <td>
+                26 preset ใน 4 กลุ่ม: กระดูก (3), หัวใจและหลอดเลือด (9 —
+                cardiac, coronary, aorta/AAA, pulmonary), ทรวงอก/เนื้อเยื่อ (8 —
+                lung, airway, liver vessels ฯลฯ), MR/พิเศษ (6 — MR angio, MIP,
+                DTI)
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>เลือก Preset ตามงานทางคลินิก</b
+                ><span class="en">Clinical-intent Preset Selection</span>
+              </td>
+              <td>
+                อ่านคำอธิบายการตรวจแล้วเลือก preset ที่เหมาะสมให้ เช่น CTA แขนขา
+                → กระดูก, HRCT → ปอด, ศีรษะ → กระดูก
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ปรับคุณภาพและแสง 3D</b
+                ><span class="en">Quality &amp; Lighting Controls</span>
+              </td>
+              <td>
+                คุณภาพ 5 ระดับ (จำค่าต่อเครื่อง) ปรับ shade / ambient / diffuse
+                / specular และช่วงความทึบ เหมาะทั้งเครื่องแรงและเครื่องทั่วไป
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>ตัดปริมาตร</b><span class="en">Volume Crop</span></td>
+              <td>
+                กล่องตัดในช่อง 3D และเส้นขอบที่ลากปรับได้ในช่อง MPR
+                พร้อมลูกบาศก์บอกทิศทาง
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 07 -->
+      <section id="s7">
+        <div class="sec-head">
+          <span class="no">07</span>
+          <h2>PET/CT และภาพหลาย Phase (4D)</h2>
+          <span class="en">Nuclear Medicine &amp; Multi-phase</span>
+        </div>
+        <p class="lead">
+          ค่า SUV ตรวจสอบความถูกต้องกับการคำนวณอิสระ และเครื่องมือ VOI ตามแนวทาง
+          PERCIST สำหรับงานติดตามการรักษามะเร็ง
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ค่า SUV</b><span class="en">SUVbw / SUVlbm / SUVbsa</span>
+              </td>
+              <td>
+                SUVbw เป็นค่าเริ่มต้น เลือก SUVlbm / SUVbsa ได้
+                คำนวณครั้งเดียวต่อ series จากทุกภาพ และตรวจสอบกับการคำนวณอิสระ
+                หากข้อมูลไม่ครบจะแสดง Bq/ml พร้อมเหตุผล แทนการแสดงค่า SUV ที่ผิด
+              </td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>PET/CT Fusion</b
+                ><span class="en">Fusion 2×2 / Fusion MPR / Fusion Prior</span>
+              </td>
+              <td>
+                เทมเพลต CT | PT / Fusion | PT MIP, Fusion สามระนาบพร้อม MIP,
+                และเทียบ Fusion กับการตรวจเก่า (MIP หมุนพร้อมกัน)
+                ปรับความโปร่งใส อ่านค่า SUV + HU ใต้เมาส์ คลิกบน MIP
+                หมุนเพื่อกระโดดไปจุดที่ร้อนที่สุด
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>PET VOI และ TMTV</b
+                ><span class="en">SUVmax / SUVpeak / MTV / TLG / TMTV</span>
+              </td>
+              <td>
+                VOI แบบกล่องหรือวงกลม เกณฑ์ 41% SUVmax (ค่าเริ่มต้น), SUV ≥ 2.5,
+                ≥ 4 หรือกำหนดเอง ให้ SUVmax, SUVmean, SUVpeak (ทรงกลม 1 cm³ ตาม
+                PERCIST — แม่นกว่าวิธีมาตรฐานของ library ที่อ่านต่ำได้ถึง 7%),
+                MTV, TLG และ TMTV ส่งออก CSV พร้อม audit
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>VOI อัจฉริยะ</b><span class="en">Smart VOI Guard</span>
+              </td>
+              <td>
+                กำหนดความลึกของ VOI แต่ละก้อน เตือนเมื่อก้อนแตะขอบกล่อง
+                (บอกด้าน) ปุ่ม "ขยายให้คลุมก้อน" และคำนวณทุก VOI
+                ใหม่ทันทีเมื่อเปลี่ยนเกณฑ์
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Segmentation Overlay</b
+                ><span class="en">DICOM SEG Display &amp; Stats</span>
+              </td>
+              <td>
+                แสดง SEG พร้อมปรับความโปร่งใสรายส่วน สถิติ SUVmax/mean, MTV, TLG
+                และกระโดดไปจุดสูงสุด (แสดงผลอย่างเดียว)<span class="mdn"
+                  >MedDream มีเพิ่ม (Premium): เครื่องมือวาด / smart paint 2D–3D
+                  และบันทึกเป็น RTSTRUCT</span
+                >
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdl">▲ MedDream ครบกว่า</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ภาพหลาย Phase ทางคลินิก</b
+                ><span class="en">Clinical 4D / Multi-phase</span>
+              </td>
+              <td>
+                รองรับ 3 รูปแบบ: series ละ phase, ทุก phase ใน series เดียว และ
+                Enhanced MR/CT multi-frame ปุ่ม <code>[</code>
+                <code>]</code> เปลี่ยน phase, เล่น phase ต่อเนื่อง, sync
+                ระหว่างช่อง และ RTSTRUCT เปลี่ยนตาม phase (เช่น 4D-CT ปอด,
+                cardiac MR)
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdt">MedDream: เฉพาะ Premium</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 08 -->
+      <section id="s8">
+        <div class="sec-head">
+          <span class="no">08</span>
+          <h2>รองรับเฉพาะตาม Modality และชนิดข้อมูล</h2>
+          <span class="en">Modality-specific Support</span>
+        </div>
+        <p class="lead">
+          อ่านข้อมูลได้หลากหลายกว่าภาพทั่วไป — คลื่นไฟฟ้าหัวใจ รายงานปริมาณรังสี
+          วิดีโอ และเอกสารแนบ ในหน้าต่างเดียว
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>Mammography</b
+                ><span class="en">MG Hanging, Mirror &amp; Lock</span>
+              </td>
+              <td>
+                จัดภาพ RMLO | LMLO | RCC | LCC อัตโนมัติ (2×4
+                เมื่อมีการตรวจเก่า) ปรับขนาดให้เท่ากัน สะท้อนภาพ
+                จัดชิดผนังหน้าอก และ Mammo Lock
+                ให้ซูม/เลื่อนพร้อมกันแบบสมมาตร<span class="mdn"
+                  >MedDream มีเพิ่ม: Tomosynthesis (DBT) + MIP, Quadrant Zoom,
+                  ตัดพื้นหลังอัตโนมัติ, CAD marks (Premium) และ FDA clearance
+                  สำหรับ mammography</span
+                >
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdl">▲ MedDream ครบกว่า</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>US / XA / RF Cine</b
+                ><span class="en">Multi-frame — Single Download</span>
+              </td>
+              <td>
+                ดาวน์โหลดไฟล์ multi-frame ครั้งเดียวแล้วแยกเฟรมในเบราว์เซอร์
+                (แทนการขอทีละเฟรม) ลดภาระ server อย่างมาก คง calibration ของ
+                ultrasound
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>คลื่นไฟฟ้าหัวใจ</b><span class="en">ECG Waveform</span>
+              </td>
+              <td>
+                กระดาษสเกลจริง 25/50 mm/s, 5/10/20 mm/mV, ซูม 0.5–4×, รูปแบบ 3×4
+                + rhythm strip, caliper วัดช่วงเวลา HR และ QTc (Bazett,
+                Fridericia) แสดงค่าที่เครื่องวัดมา พิมพ์ตามสเกลจริง
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>รายงานปริมาณรังสี X-Ray</b
+                ><span class="en"
+                  >X-Ray Radiation Dose SR (RDSR) — Angio / Fluoroscopy</span
+                >
+              </td>
+              <td>
+                การ์ดสรุป DAP รวม, Dose (RP), เวลา fluoro / acquisition,
+                จำนวนเฟรม และตาราง irradiation event ทุกรายการ (รายงาน angio
+                3,500 รายการแสดงได้รวดเร็ว) — CT Dose อยู่ในแผน
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>Structured Report</b><span class="en">DICOM SR</span></td>
+              <td>แสดงรายงาน SR เป็นโครงสร้างเอกสารที่อ่านง่าย</td>
+              <td>
+                <span class="tag std">มาตรฐาน</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>RT Structure Set</b><span class="en">RTSTRUCT Overlay</span>
+              </td>
+              <td>
+                รายการ ROI เปิด/ปิด เปลี่ยนสี ปรับความโปร่งใส แสดงปริมาตร (ml)
+                ต่อ ROI และกระโดดไปยัง ROI (แสดงผลอย่างเดียว)<span class="mdn"
+                  >MedDream มีเพิ่ม (Premium): สร้าง / แก้ไข contour
+                  และบันทึกเป็น RTSTRUCT</span
+                >
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdl">▲ MedDream ครบกว่า</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>วิดีโอ DICOM</b
+                ><span class="en">DICOM Video (MPEG-2 / H.264 / HEVC)</span>
+              </td>
+              <td>
+                วิดีโอจากกล้องส่องตรวจ กล้องจุลทรรศน์ และภาพถ่าย ทุก codec —
+                server แปลงเป็น MP4 ไว้ล่วงหน้า เลื่อนตำแหน่งเล่นได้ทันที
+                และสร้างใหม่เองอัตโนมัติหากไฟล์ cache เสีย
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>DICOM Overlay</b
+                ><span class="en">Overlay Planes (60xx)</span>
+              </td>
+              <td>
+                แสดง overlay ทั้งภาพเดี่ยวและ multi-frame รวมใน thumbnail
+                และภาพบนมือถือ — เช่นหน้าจอ dose ของเครื่อง Siemens
+                ที่ปกติจะเห็นเป็นภาพดำ
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>PDF ที่ฝังใน DICOM</b
+                ><span class="en">Encapsulated PDF</span>
+              </td>
+              <td>
+                เปิดดูในหน้าต่างเดียวกัน ซูมขนาดจริง / พอดีหน้า / พอดีความกว้าง
+                / 50–200%
+              </td>
+              <td>
+                <span class="tag par">✓ เทียบเท่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>เอกสารแนบ Non-DICOM</b
+                ><span class="en">Attachments: PDF, Office, TIFF, Video</span>
+              </td>
+              <td>
+                เปิด PDF, DOCX, XLSX, PPTX, TXT, รูปภาพรวม TIFF
+                และวิดีโอที่แนบกับการตรวจได้ใน viewer กรองและจัดกลุ่มตามชนิด
+                วันที่ หรือแผนก แสดงแบบ grid หรือ timeline
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mda">★ เหนือกว่า MedDream</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 09 -->
+      <section id="s9">
+        <div class="sec-head">
+          <span class="no">09</span>
+          <h2>Workflow การพิมพ์ และการส่งออก</h2>
+          <span class="en">Workflow, Print &amp; Export</span>
+        </div>
+        <p class="lead">
+          ตั้งค่าครั้งเดียวใช้ได้ทุกเครื่อง
+          พร้อมช่องทางส่งต่อภาพให้ผู้ป่วยและทีมรักษา
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>การตั้งค่าส่วนตัวเก็บที่ Server</b
+                ><span class="en">Per-user Viewer Preferences</span>
+              </td>
+              <td>
+                9 หมวด: Mouse, Toolbar, Shortcuts, Window/Level, Layout,
+                Annotation, Overlay, Hanging, General ตามผู้ใช้ไปทุกเครื่อง
+                ส่งออก/นำเข้าเป็นไฟล์ได้ ผู้ใช้ที่เปิดจาก HIS ใช้ค่ามาตรฐาน
+                (เปลี่ยนได้เฉพาะ session)
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>พิมพ์ภาพ</b><span class="en">Browser Printing</span></td>
+              <td>
+                พิมพ์ช่องที่เลือก ทุกช่อง หรือเฉพาะ key images, 1–12 ภาพต่อหน้า,
+                A4 / Letter แนวตั้ง/แนวนอน พร้อมข้อความบนภาพ หัวกระดาษ
+                และท้ายกระดาษ "ไม่ใช้เพื่อการวินิจฉัย"
+                เตือนเมื่อความละเอียดต่ำกว่า 100 dpi ECG พิมพ์ตามสเกลจริง
+                และบันทึก audit ทุกครั้ง
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ส่งออกและคัดลอกภาพ</b
+                ><span class="en">Export MP4 / JPEG &amp; Copy</span>
+              </td>
+              <td>
+                ส่งออกทั้ง series เป็นวิดีโอ MP4 (เข้ารหัสในเบราว์เซอร์) หรือ
+                JPEG รวมไฟล์ zip และคัดลอกภาพพร้อมเส้นวัดลง clipboard
+                เพื่อวางในเอกสาร/สไลด์ได้ทันที
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>แสดงภาพคู่กับรายงาน</b
+                ><span class="en">Image | Report Split</span>
+              </td>
+              <td>
+                เมื่อการตรวจมีรายงาน PDF หรือ SR หน้าจอแบ่งเป็นภาพ |
+                รายงานให้อัตโนมัติ
+              </td>
+              <td>
+                <span class="tag adv">★ เหนือกว่า OHIF</span
+                ><span class="tag mdp">✓ เทียบเท่า MedDream</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 10 -->
+      <section id="s10">
+        <div class="sec-head">
+          <span class="no">10</span>
+          <h2>ประสิทธิภาพ — ผลวัดจริง</h2>
+          <span class="en">Measured Performance</span>
+        </div>
+        <p class="lead">
+          ตัวเลขก่อน/หลังการปรับปรุง วัดบนระบบจริงผ่านอินเทอร์เน็ต (Cloudflare
+          tunnel) และบนเครือข่ายภายใน
+        </p>
+        <table class="ft perf">
+          <thead>
+            <tr>
+              <th>ตัวชี้วัด</th>
+              <th>ก่อน</th>
+              <th>หลัง</th>
+              <th>ผลลัพธ์</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ขนาดโปรแกรมที่โหลดตอนเปิดครั้งแรก</b
+                ><span class="en">Initial JavaScript (gzip)</span>
+              </td>
+              <td class="num" data-l="ก่อน:">4,700 KB</td>
+              <td class="num after" data-l="หลัง:">1,035 KB</td>
+              <td>ลดลง 78% · เปิดครั้งถัดไปโหลดโปรแกรม 0 KB (cache)</td>
+            </tr>
+            <tr>
+              <td>
+                <b>เวลาจนเห็นภาพแรก</b
+                ><span class="en">Time to First Image</span>
+              </td>
+              <td class="num" data-l="ก่อน:">2500 s</td>
+              <td class="num after" data-l="หลัง:">~243 ms</td>
+              <td>เครือข่ายภายใน · ผ่านอินเทอร์เน็ต 255–534 ms</td>
+            </tr>
+            <tr>
+              <td>
+                <b>MPR ครบ 3 ระนาบ</b
+                ><span class="en">MPR Ready (via Internet)</span>
+              </td>
+              <td class="num" data-l="ก่อน:">16.8 s</td>
+              <td class="num after" data-l="หลัง:">2.9 s</td>
+              <td>เร็วขึ้น ~5.8 เท่า</td>
+            </tr>
+            <tr>
+              <td>
+                <b>PET/CT Fusion ครบ 4 ช่อง</b
+                ><span class="en">Fusion Ready (via Internet)</span>
+              </td>
+              <td class="num" data-l="ก่อน:">22.3 s</td>
+              <td class="num after" data-l="หลัง:">3.7 s</td>
+              <td>เร็วขึ้น ~6 เท่า</td>
+            </tr>
+            <tr>
+              <td>
+                <b>โหลดประวัติผู้ป่วย</b
+                ><span class="en">Patient History Payload</span>
+              </td>
+              <td class="num" data-l="ก่อน:">374 ms / 68 KB</td>
+              <td class="num after" data-l="หลัง:">69 ms / 6 KB</td>
+              <td>เล็กลง ~10 เท่า</td>
+            </tr>
+            <tr>
+              <td>
+                <b>เฟรม multi-frame ที่ยังไม่อยู่ใน cache (p95)</b
+                ><span class="en">Cold Frame Latency</span>
+              </td>
+              <td class="num" data-l="ก่อน:">2,198 ms</td>
+              <td class="num after" data-l="หลัง:">356 ms</td>
+              <td>เร็วขึ้น ~6 เท่า · CPU ของ gateway ลดจาก 5.4 → 3.0 core</td>
+            </tr>
+            <tr>
+              <td>
+                <b>พื้นที่จัดเก็บภาพ (บีบอัดแบบไม่สูญเสีย)</b
+                ><span class="en">JPEG-LS Lossless Storage</span>
+              </td>
+              <td class="num" data-l="ก่อน:">21.3 GB</td>
+              <td class="num after" data-l="หลัง:">7.1 GB</td>
+              <td>
+                ลดลง 67% · ค่า pixel ไม่เปลี่ยน · โหลด volume เร็วขึ้นเกือบ 2
+                เท่า
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          กลไกเสริม: โหลดภาพล่วงหน้าเรียงจาก slice ใกล้สุด (สูงสุด 500 ภาพ),
+          โหลด volume แบบสลับ (กลาง → ขอบ → ช่องว่าง) ให้ coronal/sagittal
+          ดูได้ตั้งแต่ ~25–30%, แถบความคืบหน้าทุกช่อง, หน่วยความจำ cache ปรับตาม
+          RAM ของเครื่อง (1–4 GB) และ edge cache ภาพที่ gateway 7 วัน
+        </p>
+      </section>
+
+      <!-- 11 -->
+      <section id="s11">
+        <div class="sec-head">
+          <span class="no">11</span>
+          <h2>เปรียบเทียบกับ OHIF Viewer</h2>
+          <span class="en">Benchmark vs OHIF v3.13</span>
+        </div>
+        <p class="lead">
+          OHIF เป็น open-source DICOM viewer
+          ที่ใช้อ้างอิงแพร่หลายที่สุดในอุตสาหกรรม (ฐานเทียบ v3.13.12 ณ ตุลาคม
+          2569)
+        </p>
+        <div class="cmp">
+          <div class="box hl">
+            <div class="v">27</div>
+            <div class="t">ความสามารถที่ OHIF ไม่มี</div>
+            <p>
+              เช่น ค่าวัด/key images/workspace เก็บที่ server, Hanging
+              ที่ผู้ใช้สร้างเอง, Mammo, ECG, RDSR, พิมพ์ภาพ, ระบบสิทธิ์และ audit
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">12</div>
+            <div class="t">ช่องว่างที่ปิดแล้ว</div>
+            <p>
+              ปิดช่องว่างจากการเทียบรอบล่าสุดแล้ว เช่น DICOM Video, PET
+              TMTV/SUVpeak, Volume crop, Tag browser, Multi-touch, ภาษาไทย
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">7 / 9</div>
+            <div class="t">ฟีเจอร์ร่วม เท่ากันหรือดีกว่า</div>
+            <p>
+              การวัด, Undo/Redo, MPR+Slab, VR preset, PET/CT fusion, Overlay
+              60xx, Encapsulated PDF
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">0</div>
+            <div class="t">การพึ่งพา plug-in / extension</div>
+            <p>Hanging protocol และการตั้งค่าทั้งหมดทำผ่านหน้าจอ</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 -->
+      <section id="s12">
+        <div class="sec-head">
+          <span class="no">12</span>
+          <h2>เปรียบเทียบกับ MedDream DICOM Viewer</h2>
+          <span class="en">Benchmark vs MedDream 8.9 (Commercial)</span>
+        </div>
+        <p class="lead">
+          MedDream เป็น zero-footprint viewer
+          เชิงพาณิชย์ที่ใช้งานในโรงพยาบาลหลายประเทศ — เทียบตามรายการความสามารถใน
+          Product Specification ของ MedDream 8.9.0 ซึ่งแบ่งขายเป็น 3 รุ่น
+          (Premium / Enterprise / Lite) — ตารางนี้เทียบกับรุ่นสูงสุด Premium
+        </p>
+
+        <div class="cmp">
+          <div class="box hl">
+            <div class="v">14 / 17</div>
+            <div class="t">
+              ฟีเจอร์ viewer ของ MedDream ที่ Vantyx มีครบแล้ว
+            </div>
+            <p>มีบางส่วน 1 รายการ (SEG / RTSTRUCT แสดงผลได้ แก้ไขยังไม่ได้)</p>
+          </div>
+          <div class="box">
+            <div class="v">1</div>
+            <div class="t">License เดียว ครบทุกฟีเจอร์</div>
+            <p>
+              MPR, 3D, 4D และการบันทึกค่าวัด / Key Object ของ MedDream
+              มีเฉพาะรุ่น Premium — Vantyx รวมไว้ในระบบเดียว
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">+</div>
+            <div class="t">ลึกกว่าในงาน PET</div>
+            <p>
+              นอกจาก SUV + Fusion แล้ว Vantyx มี SUVpeak (PERCIST), MTV, TLG,
+              TMTV และ VOI ที่เตือนเมื่อก้อนแตะขอบ
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">VNA</div>
+            <div class="t">ผสานกับคลังภาพในตัว</div>
+            <p>
+              ค่าวัด key images workspace และสิทธิ์ผู้ใช้ เชื่อมกับ VNA / HIS
+              ของ Vantyx โดยตรง ไม่ต้องเชื่อมระบบเพิ่ม
+            </p>
+          </div>
+        </div>
+
+        <table class="ft vs" style="margin-top: 14px">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>MedDream 8.9</th>
+              <th>Vantyx</th>
+              <th>รายละเอียดฝั่ง Vantyx</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="grp">
+              <td colspan="4">การบันทึกงานและการจัดหน้าจอ</td>
+            </tr>
+            <tr>
+              <td>
+                <b>บันทึกค่าวัดบนภาพ</b
+                ><span class="en">Saved Measurements</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(PR, Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                เก็บที่ server ต่อผู้ใช้ เพื่อนร่วมทีมเห็นแบบล็อก คงอยู่แม้
+                merge การตรวจ (การเขียนออกเป็น DICOM SR / GSPS อยู่ในแผน)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Key Images</b><span class="en">Key Object Selection</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(KO, Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                ★ / ปุ่ม K พร้อมโน้ต เก็บที่ server พิมพ์เฉพาะ key images ได้
+                (ส่งออกเป็น DICOM KOS อยู่ในแผน)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Hanging Protocol แบบกำหนดกฎ</b
+                ><span class="en">Rule-based Hanging Protocols</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                สร้างกฎเองผ่านหน้าจอ "Save as protocol" จากหน้าจอปัจจุบัน
+                ทดสอบกับการตรวจที่เปิดอยู่ และเลือกการตรวจเก่ามาเทียบอัตโนมัติ
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>บันทึก Workspace</b><span class="en">Save Workspace</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>layout, series และภาพปัจจุบัน ต่อผู้ใช้ต่อการตรวจ</td>
+            </tr>
+            <tr>
+              <td>
+                <b>ปุ่มลัดและปุ่มเมาส์ต่อผู้ใช้</b
+                ><span class="en">Per-user Shortcuts &amp; Mouse</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                เก็บที่ server ตามผู้ใช้ไปทุกเครื่อง พร้อมส่งออก/นำเข้า
+                และใช้ได้แม้แป้นพิมพ์เป็นภาษาไทย
+              </td>
+            </tr>
+
+            <tr class="grp">
+              <td colspan="4">เครื่องมือภาพและการวัด</td>
+            </tr>
+            <tr>
+              <td>
+                <b>W/L Preset และ Pseudocolor</b
+                ><span class="en">W/L Presets &amp; Colormaps</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                preset ต่อ modality แก้เองได้ (ปุ่ม 1–9), colormap 7 แบบ,
+                colorbar, W/L Region และ histogram
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>การวัดเฉพาะทาง</b
+                ><span class="en"
+                  >Cobb · CTR · Spine · Height · Calibrate · Freehand</span
+                >
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                ครบทุกรายการ — CTR มีคำเตือนท่า AP / เด็กเล็ก, spine labeling
+                C1–Co4 ฉายข้าม series ได้
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Mammography</b><span class="en">Align · Fit · Mirror</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                1×4 / 2×4 พร้อมการตรวจเก่า, ปรับขนาดเท่ากัน, สะท้อนภาพ,
+                จัดชิดผนังหน้าอก และ Mammo Lock (MedDream มีเพิ่ม: DBT, Quadrant
+                Zoom, CAD marks)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ECG Caliper</b
+                ><span class="en">ECG True-scale &amp; Caliper</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                กระดาษสเกลจริง, 3×4 + rhythm strip, วัด HR และ QTc (Bazett /
+                Fridericia), พิมพ์ตามสเกลจริง
+              </td>
+            </tr>
+
+            <tr class="grp">
+              <td colspan="4">ภาพขั้นสูง</td>
+            </tr>
+            <tr>
+              <td>
+                <b>MPR / 3D / Slab</b
+                ><span class="en">MPR · Volume Rendering · MIP</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-y">มี <small>(รวมในระบบ)</small></span>
+              </td>
+              <td>
+                MPR + oblique, slab MIP/MinIP/AIP, 3D VR 26 preset
+                เลือกตามงานทางคลินิก, volume crop
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>PET SUV และ PET/CT Fusion</b
+                ><span class="en">SUV &amp; Fusion</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                Fusion 2×2 / MPR / เทียบการตรวจเก่า และเครื่องมือ VOI: SUVmax /
+                SUVpeak / MTV / TLG / TMTV (ไม่พบในสเปก MedDream)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ภาพหลาย Phase (4D)</b><span class="en">4D / Dynamic</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                series ละ phase, รวมใน series เดียว และ Enhanced MR/CT พร้อม
+                RTSTRUCT ตาม phase (MedDream มีกราฟ time-intensity เพิ่ม —
+                Vantyx อยู่ในแผน)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>SEG / RTSTRUCT</b
+                ><span class="en">Segmentation &amp; RT Structures</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-p">บางส่วน</span>
+              </td>
+              <td>
+                แสดงผลพร้อมสถิติและปริมาตร (ml) — MedDream วาด /
+                แก้ไขและบันทึกเป็น RTSTRUCT ได้ ส่วนของ Vantyx อยู่ในแผน
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Curved MPR / Dental Panoramic</b
+                ><span class="en">Curved Planar Reformation</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y"
+                  >มี <small>(Premium · Dental = add-on)</small></span
+                >
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-n">ไม่มี</span>
+              </td>
+              <td>
+                ไม่อยู่ในแผน — งานทันตกรรมเฉพาะทางนิยมใช้ซอฟต์แวร์ของเครื่อง
+                CBCT
+              </td>
+            </tr>
+
+            <tr class="grp">
+              <td colspan="4">การส่งต่อและการทำงานร่วมกัน</td>
+            </tr>
+            <tr>
+              <td><b>พิมพ์ภาพ</b><span class="en">Print</span></td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                เลือกช่อง / ทุกช่อง / key images, 1–12 ภาพต่อหน้า,
+                เตือนความละเอียดต่ำ และบันทึก audit ทุกครั้ง
+              </td>
+            </tr>
+            <tr>
+              <td><b>คัดลอกภาพ</b><span class="en">Copy to Clipboard</span></td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:"><span class="mk-y">มี</span></td>
+              <td>
+                คัดลอกพร้อมเส้นวัด และส่งออกทั้ง series เป็น MP4 / JPEG zip
+                ได้เพิ่ม
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Live Share / Presenter</b
+                ><span class="en">Collaborative Session</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-n">ไม่มี</span>
+              </td>
+              <td>
+                ปัจจุบันใช้ลิงก์เปิดภาพ + แชทภายในของ Vantyx หรือแชร์หน้าจอผ่าน
+                Zoom / Teams
+              </td>
+            </tr>
+
+            <tr class="grp">
+              <td colspan="4">ขอบเขตผลิตภัณฑ์</td>
+            </tr>
+            <tr>
+              <td>
+                <b>เขียนแผ่น CD ผู้ป่วย</b
+                ><span class="en">CD / DVD Burning</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-p">ผ่าน VNA</span>
+              </td>
+              <td>
+                เชื่อมเครื่องเขียน CD ผ่าน API ของ VNA
+                และส่งต่อแบบลิงก์ดาวน์โหลด (Refer) แทนแผ่นได้
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>DICOM Forward / Q-R / XDS-I</b
+                ><span class="en">Interoperability from Viewer</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี</span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-p">ผ่าน VNA</span>
+              </td>
+              <td>
+                ภาพอยู่ใน VNA ของ Vantyx อยู่แล้ว ส่งต่อด้วย Refer / Export และ
+                HL7
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>AI Real-time API</b><span class="en">AI Integration</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(Premium)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-n">ไม่มี</span>
+              </td>
+              <td>แผน AI ช่วย segment (click-to-segment / SAM)</td>
+            </tr>
+            <tr>
+              <td>
+                <b>การขึ้นทะเบียนเครื่องมือแพทย์</b
+                ><span class="en">FDA / CE / อย.</span>
+              </td>
+              <td class="mk" data-l="MedDream:">
+                <span class="mk-y">มี <small>(รวม อย. ไทย)</small></span>
+              </td>
+              <td class="mk" data-l="Vantyx:">
+                <span class="mk-n">ไม่มี</span>
+              </td>
+              <td>
+                MedDream: FDA 510(k), CE Class IIb และ อย. ไทย (class 3) —
+                Vantyx ต้องพิจารณาก่อนเสนอเป็นเครื่องมือวินิจฉัยหลัก (primary
+                diagnosis); งานพิมพ์ของ Vantyx ระบุ "ไม่ใช้เพื่อการวินิจฉัย"
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          อ้างอิง: MedDream HTML5 DICOM Viewer 8.9.0 — Product Specification
+          (meddream.com) เทียบตามรายการความสามารถในเอกสารที่ผู้ผลิตเผยแพร่
+          ไม่ได้ทดสอบกับผลิตภัณฑ์จริง · ป้ายเทียบ MedDream ในหัวข้อ 01–09
+          ใช้เอกสารเดียวกัน · ฝั่ง Vantyx = สถานะ ณ 9 ตุลาคม 2569
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span><b>Vantyx</b> — Medical Imaging Platform · DICOM Viewer</span>
+        <span
+          >ข้อมูล ณ 9 ตุลาคม 2569 · จัดทำจาก source code
+          และเอกสารออกแบบของระบบ</span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vantyx — ความสามารถหลัก</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0b1220;
+        --navy-2: #13203a;
+        --teal: #0e7490;
+        --cyan: #22d3ee;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
+          linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
+          radial-gradient(1100px 600px at 85% -10%, #164e63 0%, transparent 60%),
+          radial-gradient(900px 500px at 0% 110%, #0e3a4f 0%, transparent 60%),
+          var(--navy);
+        color: var(--text);
+        font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+        text-align: center;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+      }
+      .brand svg {
+        width: 52px;
+        height: 52px;
+        flex: none;
+      }
+      .brand .name {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        font-size: 17px;
+        color: #fff;
+      }
+      .brand .tagline {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+      }
+      h1 {
+        margin: 34px 0 8px;
+        font-size: 36px;
+        line-height: 1.3;
+        color: #fff;
+        font-weight: 700;
+      }
+      .sub {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 16.5px;
+        max-width: 640px;
+      }
+      .choices {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 400px));
+        gap: 24px;
+        margin-top: 44px;
+        width: 100%;
+        justify-content: center;
+      }
+      a.choice {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        text-decoration: none;
+        color: inherit;
+        padding: 30px 30px 26px;
+        border-radius: 16px;
+        background: rgba(19, 32, 58, 0.78);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-top: 4px solid var(--cyan);
+        transition:
+          transform 0.15s ease,
+          border-color 0.15s ease,
+          background 0.15s ease;
+      }
+      a.choice:hover,
+      a.choice:focus-visible {
+        transform: translateY(-3px);
+        border-color: rgba(34, 211, 238, 0.6);
+        background: rgba(22, 78, 99, 0.55);
+        outline: none;
+      }
+      .choice .eyebrow {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 12.5px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--cyan);
+        font-weight: 600;
+      }
+      .choice h2 {
+        margin: 8px 0 10px;
+        font-size: 28px;
+        line-height: 1.25;
+        color: #fff;
+      }
+      .choice p {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 15px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 18px 0 22px;
+      }
+      .chips span {
+        font-size: 12.5px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        color: #e2e8f0;
+      }
+      .choice .go {
+        margin-top: auto;
+        font-weight: 600;
+        color: var(--cyan);
+        font-size: 15.5px;
+      }
+      .choice .go::after {
+        content: ' →';
+        transition: margin 0.15s ease;
+      }
+      a.choice:hover .go::after {
+        margin-left: 4px;
+      }
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 12.5px;
+        padding: 0 16px 24px;
+      }
+      @media (max-width: 760px) {
+        main {
+          padding: 36px 16px;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        .choices {
+          grid-template-columns: 1fr;
+          gap: 16px;
+          margin-top: 32px;
+        }
+        a.choice {
+          padding: 24px 22px 22px;
+        }
+        .choice h2 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="brand">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vantyx">
+          <rect width="32" height="32" rx="6" fill="#0B1220" stroke="#1E3A5F" />
+          <path d="M 16,27 Q 10.30,16.00 9,5" fill="none" stroke="#22D3EE" stroke-width="1.8" stroke-opacity="0.55" stroke-linecap="round" />
+          <path d="M 16,27 Q 16.00,15.50 16,4" fill="none" stroke="#22D3EE" stroke-width="2.6" stroke-linecap="round" />
+          <path d="M 16,27 Q 21.70,16.00 23,5" fill="none" stroke="#22D3EE" stroke-width="1.8" stroke-opacity="0.55" stroke-linecap="round" />
+          <circle cx="16" cy="27" r="1.3" fill="#22D3EE" />
+        </svg>
+        <div>
+          <div class="name">VANTYX</div>
+          <div class="tagline">Medical Imaging Platform</div>
+        </div>
+      </div>
+
+      <h1>สรุปความสามารถหลัก</h1>
+      <p class="sub">เลือกระบบที่ต้องการดูรายละเอียด</p>
+
+      <div class="choices">
+        <a class="choice" href="vna_main_features.html">
+          <span class="eyebrow">Vendor Neutral Archive</span>
+          <h2>Vantyx VNA</h2>
+          <p>คลังภาพกลางของโรงพยาบาล รับภาพจากทุก PACS เชื่อมต่อ HIS จัดเก็บและสำรองข้อมูลอย่างปลอดภัย</p>
+          <div class="chips"><span>DICOM</span><span>HL7 v2</span><span>On-premise</span><span>PDPA</span></div>
+          <span class="go">ดูความสามารถของ VNA</span>
+        </a>
+        <a class="choice" href="viewer_main_features.html">
+          <span class="eyebrow">Zero-footprint Viewer</span>
+          <h2>Vantyx DICOM Viewer</h2>
+          <p>เปิดดูภาพ DICOM ผ่านเว็บเบราว์เซอร์ ครบทั้ง MPR / 3D, PET/CT, Mammography และ ECG พร้อมเทียบกับ OHIF และ MedDream</p>
+          <div class="chips"><span>ไม่ต้องติดตั้ง</span><span>MPR / 3D</span><span>TH / EN</span><span>PDPA</span></div>
+          <span class="go">ดูความสามารถของ Viewer</span>
+        </a>
+      </div>
+    </main>
+    <footer>ข้อมูล ณ 9 ตุลาคม 2569</footer>
+  </body>
+</html>

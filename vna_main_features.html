@@ -1,0 +1,2731 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vantyx VNA — ความสามารถหลัก</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0b1220;
+        --navy-2: #13203a;
+        --teal: #0e7490;
+        --teal-soft: #e6f4f7;
+        --cyan: #22d3ee;
+        --ink: #0f172a;
+        --body: #334155;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --bg: #f4f6f9;
+        --card: #ffffff;
+        --gold: #92400e;
+        --gold-soft: #fef3c7;
+        --green: #166534;
+        --green-soft: #dcfce7;
+        --violet: #5b21b6;
+        --violet-soft: #ede9fe;
+        --slate-soft: #eef2f6;
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--body);
+        font-family:
+          'IBM Plex Sans Thai', 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
+        font-size: 15px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+      code {
+        font-family: 'IBM Plex Sans', Consolas, monospace;
+        font-size: 0.92em;
+        background: var(--slate-soft);
+        padding: 1px 5px;
+        border-radius: 4px;
+      }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        background:
+          linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 /
+            32px 32px,
+          linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px)
+            0 0 / 32px 32px,
+          radial-gradient(
+            1200px 500px at 85% -10%,
+            #164e63 0%,
+            transparent 60%
+          ),
+          var(--navy);
+        color: #e2e8f0;
+        padding: 44px 0 40px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .brand svg {
+        width: 46px;
+        height: 46px;
+        flex: none;
+      }
+      .brand .name {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        font-size: 15px;
+        color: #fff;
+      }
+      .brand .tagline {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+      }
+      .hero h1 {
+        font-size: 38px;
+        line-height: 1.25;
+        color: #fff;
+        margin: 30px 0 8px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .hero h1 span {
+        color: var(--cyan);
+      }
+      .hero .sub {
+        font-size: 17px;
+        color: #cbd5e1;
+        max-width: 860px;
+        margin: 0;
+      }
+      .meta {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+        font-size: 13px;
+        color: #94a3b8;
+      }
+      .meta b {
+        color: #e2e8f0;
+        font-weight: 600;
+      }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+        margin-top: 30px;
+      }
+      .kpi {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 10px;
+        padding: 14px 14px 12px;
+      }
+      .kpi .v {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.15;
+      }
+      .kpi .v small {
+        font-size: 14px;
+        color: var(--cyan);
+        font-weight: 600;
+      }
+      .kpi .l {
+        font-size: 12.5px;
+        color: #a5b4c8;
+        margin-top: 4px;
+        line-height: 1.45;
+      }
+
+      /* ---------- Nav ---------- */
+      nav.toc {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(6px);
+        border-bottom: 1px solid var(--line);
+      }
+      nav.toc .wrap {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        align-items: center;
+      }
+      nav.toc a {
+        flex: none;
+        font-size: 13px;
+        color: var(--ink);
+        text-decoration: none;
+        padding: 5px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fff;
+        white-space: nowrap;
+      }
+      nav.toc a:hover {
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+      nav.toc a b {
+        color: var(--teal);
+        font-family: 'IBM Plex Sans', sans-serif;
+        margin-right: 4px;
+      }
+      nav.toc a.part {
+        background: var(--navy-2);
+        color: #fff;
+        border-color: var(--navy-2);
+        font-weight: 600;
+      }
+      nav.toc a.part:hover {
+        color: var(--cyan);
+      }
+
+      /* ---------- Value props ---------- */
+      .props {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin: 30px 0 6px;
+      }
+      .prop {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-top: 3px solid var(--teal);
+        border-radius: 10px;
+        padding: 16px 18px;
+      }
+      .prop h3 {
+        margin: 0 0 6px;
+        font-size: 15.5px;
+        color: var(--ink);
+      }
+      .prop p {
+        margin: 0;
+        font-size: 13.5px;
+        color: var(--body);
+      }
+
+      /* ---------- Part banner ---------- */
+      .part-banner {
+        margin: 46px 0 4px;
+        border-radius: 12px;
+        padding: 22px 26px;
+        background: linear-gradient(120deg, var(--navy-2), #0e3a4f);
+        color: #e2e8f0;
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        scroll-margin-top: 60px;
+      }
+      .part-banner .pn {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        color: var(--cyan);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .part-banner h2 {
+        margin: 2px 0 4px;
+        font-size: 26px;
+        color: #fff;
+      }
+      .part-banner p {
+        margin: 0;
+        color: #b6c4d6;
+        font-size: 14px;
+      }
+
+      /* ---------- Sections ---------- */
+      section {
+        padding: 34px 0 6px;
+        scroll-margin-top: 60px;
+      }
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 8px;
+        margin-bottom: 6px;
+      }
+      .sec-head .no {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--teal);
+        letter-spacing: 0.06em;
+      }
+      .sec-head h2 {
+        margin: 0;
+        font-size: 23px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .sec-head .en {
+        margin-left: auto;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 12.5px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .lead {
+        color: var(--muted);
+        margin: 8px 0 14px;
+        font-size: 14.5px;
+        max-width: 920px;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        align-items: center;
+        font-size: 13px;
+        color: var(--muted);
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-top: 18px;
+      }
+
+      table.ft {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      table.ft th {
+        text-align: left;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: #fff;
+        background: var(--navy-2);
+        padding: 10px 14px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      table.ft td {
+        padding: 12px 14px;
+        vertical-align: top;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+      }
+      table.ft tr:nth-child(even) td {
+        background: #fafbfd;
+      }
+      table.ft td:first-child {
+        width: 25%;
+      }
+      table.ft td:first-child b {
+        display: block;
+        color: var(--ink);
+        font-weight: 600;
+        font-size: 14.5px;
+        line-height: 1.45;
+      }
+      table.ft td:first-child .en {
+        display: block;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      table.ft td:last-child {
+        width: 170px;
+      }
+      table.ft ul {
+        margin: 6px 0 0;
+        padding-left: 18px;
+      }
+      table.ft li {
+        margin: 2px 0;
+      }
+
+      table.plain td:first-child {
+        width: 30%;
+      }
+      table.plain td:last-child {
+        width: auto;
+      }
+      table.plain td.num {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-variant-numeric: tabular-nums;
+      }
+      table.plain td.after {
+        color: var(--teal);
+        font-weight: 700;
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+        margin: 0 4px 4px 0;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .tag.role {
+        background: var(--slate-soft);
+        color: #334155;
+        border: 1px solid #cbd5e1;
+      }
+      .tag.std {
+        background: var(--violet-soft);
+        color: var(--violet);
+        border: 1px solid #c4b5fd;
+      }
+      .tag.sec {
+        background: var(--green-soft);
+        color: var(--green);
+        border: 1px solid #86efac;
+      }
+      .tag.key {
+        background: var(--gold-soft);
+        color: var(--gold);
+        border: 1px solid #fcd34d;
+      }
+      .tag.par {
+        background: var(--teal-soft);
+        color: var(--teal);
+        border: 1px solid #a5d8e3;
+      }
+
+      /* ---------- Architecture flow ---------- */
+      .arch {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 22px;
+        margin-top: 14px;
+      }
+      .flow {
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+      }
+      .node {
+        flex: 1;
+        border-radius: 10px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        background: #f8fafc;
+        min-width: 0;
+      }
+      .node h5 {
+        margin: 0 0 4px;
+        font-size: 14px;
+        color: var(--ink);
+      }
+      .node p {
+        margin: 0;
+        font-size: 12.5px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .node.src {
+        background: #f1f5f9;
+      }
+      .node.core {
+        background: var(--teal-soft);
+        border-color: #a5d8e3;
+      }
+      .node.core h5 {
+        color: var(--teal);
+      }
+      .node.out {
+        background: #ecfeff;
+        border-color: #a5f3fc;
+      }
+      .arrow {
+        flex: none;
+        width: 54px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 10.5px;
+        color: var(--teal);
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.3;
+      }
+      .arrow::before {
+        content: '→';
+        font-size: 22px;
+        line-height: 1;
+        color: var(--teal);
+      }
+      .arrow.bi::before {
+        content: '⇄';
+      }
+      .flow + .flow {
+        margin-top: 14px;
+      }
+      .arch .cap {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin: 14px 0 0;
+      }
+
+      /* ---------- Grids ---------- */
+      .cmp {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .cmp.two {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .cmp .box {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px 18px;
+      }
+      .cmp .box .v {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.1;
+      }
+      .cmp .box .t {
+        font-weight: 600;
+        color: var(--ink);
+        margin-top: 4px;
+      }
+      .cmp .box p {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .stds {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .stds span {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--violet);
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 13px;
+        color: var(--ink);
+      }
+      .stds span small {
+        color: var(--muted);
+      }
+
+      .road {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .road .item {
+        background: var(--card);
+        border: 1px dashed #94a3b8;
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .road .item:last-child:nth-child(3n + 1) {
+        grid-column: 1 / -1;
+      }
+      .road .item h4 {
+        margin: 0 0 4px;
+        font-size: 14.5px;
+        color: var(--ink);
+      }
+      .road .item p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .callout {
+        margin-top: 16px;
+        background: #fffbeb;
+        border: 1px solid #fcd34d;
+        border-left: 4px solid #d97706;
+        border-radius: 10px;
+        padding: 14px 18px;
+        font-size: 13.5px;
+      }
+      .callout h4 {
+        margin: 0 0 6px;
+        color: var(--gold);
+        font-size: 14.5px;
+      }
+      .callout ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+
+      .reqbox {
+        margin-top: 16px;
+        background: var(--teal-soft);
+        border: 1px solid #a5d8e3;
+        border-left: 4px solid var(--teal);
+        border-radius: 10px;
+        padding: 14px 18px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .reqbox h4 {
+        margin: 0 0 10px;
+        color: var(--teal);
+        font-size: 15px;
+      }
+      .reqgrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px 20px;
+      }
+      .reqgrid div {
+        font-size: 13.5px;
+      }
+      .reqgrid div > b:first-child {
+        display: block;
+        color: var(--ink);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+      .reqgrid span {
+        color: var(--body);
+      }
+      @media (max-width: 1000px) {
+        .reqgrid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 720px) {
+        .reqgrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      footer {
+        margin-top: 44px;
+        background: var(--navy);
+        color: #94a3b8;
+        font-size: 12.5px;
+        padding: 22px 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px 24px;
+      }
+      footer b {
+        color: #e2e8f0;
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 1000px) {
+        .kpis {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .props,
+        .cmp {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .road {
+          grid-template-columns: 1fr 1fr;
+        }
+        .flow {
+          flex-direction: column;
+        }
+        .arrow {
+          width: auto;
+          height: 34px;
+          flex-direction: row;
+          gap: 6px;
+        }
+        .arrow::before {
+          content: '↓';
+        }
+        .arrow.bi::before {
+          content: '⇅';
+        }
+      }
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 0 16px;
+        }
+        .hero h1 {
+          font-size: 28px;
+        }
+        .kpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .props,
+        .cmp,
+        .cmp.two,
+        .road {
+          grid-template-columns: 1fr;
+        }
+        .part-banner {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+        .sec-head {
+          flex-wrap: wrap;
+        }
+        .sec-head .en {
+          margin-left: 0;
+          width: 100%;
+        }
+        table.ft,
+        table.ft tbody,
+        table.ft tr,
+        table.ft td {
+          display: block;
+          width: 100% !important;
+        }
+        table.ft thead {
+          display: none;
+        }
+        table.ft tr {
+          border-top: 1px solid var(--line);
+        }
+        table.ft tr:first-child {
+          border-top: 0;
+        }
+        table.ft td {
+          border-top: 0;
+          padding: 6px 14px;
+        }
+        table.ft td:first-child {
+          padding-top: 14px;
+        }
+        table.ft td:last-child {
+          padding-bottom: 14px;
+        }
+        table.ft td[data-l]::before {
+          content: attr(data-l) ' ';
+          color: var(--muted);
+          font-weight: 400;
+        }
+      }
+
+      /* ---------- Print ---------- */
+      @page {
+        size: A4;
+        margin: 12mm;
+      }
+      @media print {
+        body {
+          background: #fff;
+          font-size: 12.5px;
+        }
+        nav.toc {
+          display: none;
+        }
+        .hero {
+          padding: 26px 0;
+        }
+        section {
+          padding-top: 18px;
+        }
+        .part-banner {
+          break-before: page;
+        }
+        table.ft tr,
+        .prop,
+        .cmp .box,
+        .road .item,
+        .kpi,
+        .node,
+        .callout,
+        .reqbox {
+          break-inside: avoid;
+        }
+        .sec-head {
+          break-after: avoid;
+        }
+        .wrap {
+          max-width: none;
+          padding: 0;
+        }
+      }
+      /* ---------- Top link bar ---------- */
+      .topbar {
+        background: var(--navy);
+        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .topbar .wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+      .topbar a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-size: 13.5px;
+      }
+      .topbar a:hover {
+        color: var(--cyan);
+      }
+      .topbar a.switch {
+        border: 1px solid rgba(34, 211, 238, 0.45);
+        color: var(--cyan);
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .topbar a.switch:hover {
+        background: rgba(34, 211, 238, 0.12);
+      }
+      @media print {
+        .topbar {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="wrap">
+        <a href="index.html">← หน้าแรก</a>
+        <a class="switch" href="viewer_main_features.html">ดู DICOM Viewer →</a>
+      </div>
+    </div>
+    <header class="hero">
+      <div class="wrap">
+        <div class="brand">
+          <svg
+            viewBox="0 0 32 32"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="Vantyx"
+          >
+            <rect
+              width="32"
+              height="32"
+              rx="6"
+              fill="#0B1220"
+              stroke="#1E3A5F"
+            />
+            <path
+              d="M 16,27 Q 10.30,16.00 9,5"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="1.8"
+              stroke-opacity="0.55"
+              stroke-linecap="round"
+            />
+            <path
+              d="M 16,27 Q 16.00,15.50 16,4"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="2.6"
+              stroke-linecap="round"
+            />
+            <path
+              d="M 16,27 Q 21.70,16.00 23,5"
+              fill="none"
+              stroke="#22D3EE"
+              stroke-width="1.8"
+              stroke-opacity="0.55"
+              stroke-linecap="round"
+            />
+            <circle cx="16" cy="27" r="1.3" fill="#22D3EE" />
+          </svg>
+          <div>
+            <div class="name">VANTYX</div>
+            <div class="tagline">Medical Imaging Platform</div>
+          </div>
+        </div>
+
+        <h1>Vantyx <span>VNA</span></h1>
+        <p class="sub">
+          สรุปความสามารถหลักของระบบคลังภาพทางการแพทย์แบบ Vendor Neutral Archive
+          — รับภาพจากทุก PACS ด้วยมาตรฐาน DICOM จัดเก็บอย่างปลอดภัย
+          ค้นหาและแบ่งปันได้รวดเร็ว และเชื่อมต่อ HIS ด้วยมาตรฐาน HL7
+        </p>
+        <div class="meta">
+          <span>ข้อมูล ณ <b>9 ตุลาคม 2569</b></span>
+          <span
+            >ติดตั้งแบบ <b>On-premise ในโรงพยาบาล</b> — ไม่ต้องพึ่ง Cloud</span
+          >
+          <span
+            >รูปแบบติดตั้ง: <b>Single VM</b> และ
+            <b>High Availability (2 Server + Witness)</b></span
+          >
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="v">−67<small>%</small></div>
+            <div class="l">
+              พื้นที่จัดเก็บภาพลดลง ด้วยการบีบอัดแบบไม่สูญเสีย (JPEG-LS)
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="v">1<small> ล้าน</small></div>
+            <div class="l">การตรวจในฐานข้อมูลทดสอบ — ค้นรายการ Study 24 ms</div>
+          </div>
+          <div class="kpi">
+            <div class="v">0</div>
+            <div class="l">
+              ข้อผิดพลาดในการทดสอบโหลด 10–20 ผู้ใช้พร้อมกัน บนขนาด S ขึ้นไป
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="v">ทุก 5<small> นาที</small></div>
+            <div class="l">
+              สำรองฐานข้อมูลอัตโนมัติต่อเนื่อง — กู้คืนได้ทุกจุดเวลาย้อนหลัง 14
+              สัปดาห์
+            </div>
+          </div>
+          <div class="kpi">
+            <div class="v">69</div>
+            <div class="l">สิทธิ์การใช้งานที่กำหนดได้ละเอียดตามบทบาท</div>
+          </div>
+          <div class="kpi">
+            <div class="v">HL7 v2</div>
+            <div class="l">
+              เชื่อม HIS ครบวงจร — รับผู้ป่วย/ใบสั่งตรวจ, ส่ง Worklist,
+              แจ้งภาพพร้อม และเปิดภาพจาก HIS
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="toc" aria-label="สารบัญ">
+      <div class="wrap">
+        <a class="part" href="#part1">ส่วนที่ 1 · Frontend UI</a>
+        <a href="#a1"><b>1.1</b>หน้าจอหลัก</a>
+        <a href="#a2"><b>1.2</b>การตั้งค่าระบบ</a>
+        <a href="#a3"><b>1.3</b>สิทธิ์และขอบเขตข้อมูล</a>
+        <a href="#a4"><b>1.4</b>ประสบการณ์ใช้งาน</a>
+        <a class="part" href="#part2">ส่วนที่ 2 · VNA / HIS</a>
+        <a href="#b1"><b>2.1</b>สถาปัตยกรรม</a>
+        <a href="#b2"><b>2.2</b>DICOM</a>
+        <a href="#b3"><b>2.3</b>รับและจัดการข้อมูล</a>
+        <a href="#b4"><b>2.4</b>วงจรชีวิต Study</a>
+        <a href="#b5"><b>2.5</b>เชื่อมต่อ HIS</a>
+        <a href="#b6"><b>2.6</b>จัดเก็บและสำรองข้อมูล</a>
+        <a href="#b7"><b>2.7</b>ความปลอดภัย</a>
+        <a href="#b8"><b>2.8</b>ประสิทธิภาพและ HA</a>
+        <a href="#b9"><b>2.9</b>เฝ้าระวังระบบ</a>
+        <a href="#b10"><b>2.10</b>รูปแบบติดตั้ง</a>
+        <a href="#b11"><b>2.11</b>ขอบเขตปัจจุบัน</a>
+      </div>
+    </nav>
+
+    <main class="wrap">
+      <div class="props">
+        <div class="prop">
+          <h3>รับภาพได้จากทุก PACS</h3>
+          <p>
+            PACS ทุกยี่ห้อของโรงพยาบาล ผ่าน DICOM มาตรฐาน รวมเป็นคลังกลางเดียว
+          </p>
+        </div>
+        <div class="prop">
+          <h3>เชื่อมต่อ HIS ครบวงจร</h3>
+          <p>
+            รับผู้ป่วย/ใบสั่งตรวจผ่าน HL7 สร้าง Worklist ให้เครื่องตรวจ
+            แจ้งภาพพร้อม และเปิดภาพจาก HIS ได้ทันที
+          </p>
+        </div>
+        <div class="prop">
+          <h3>ปลอดภัยและตรวจสอบได้</h3>
+          <p>
+            สิทธิ์ละเอียดตามบทบาท แผนก และแหล่งที่ส่งภาพ บันทึก audit
+            ทุกการกระทำ สอดคล้อง PDPA
+          </p>
+        </div>
+        <div class="prop">
+          <h3>มั่นคง ขยายได้</h3>
+          <p>
+            สำรองข้อมูลต่อเนื่อง กู้คืน ณ จุดเวลาได้
+            ทำสำเนาข้ามดิสก์/ข้ามเครื่อง และ 5 ขนาดติดตั้งตามโรงพยาบาล
+          </p>
+        </div>
+      </div>
+
+      <!-- ================= PART 1 ================= -->
+      <div class="part-banner" id="part1">
+        <div class="pn">ส่วนที่ 1</div>
+        <div>
+          <h2>Frontend UI — เว็บแอปพลิเคชันสำหรับผู้ใช้งาน</h2>
+          <p>
+            ใช้งานผ่านเว็บเบราว์เซอร์ ทุกหน้าจอแสดงตามสิทธิ์ของผู้ใช้
+            รองรับคอมพิวเตอร์ แท็บเล็ต และมือถือ พร้อมโหมดสว่าง/มืด
+          </p>
+        </div>
+      </div>
+
+      <div class="legend">
+        <strong style="color: var(--ink)">คอลัมน์ "ผู้ใช้หลัก":</strong>
+        <span
+          ><span class="tag role">แพทย์</span
+          ><span class="tag role">รังสีเทคนิค</span
+          ><span class="tag role">เวชระเบียน</span
+          ><span class="tag role">ผู้ดูแลระบบ</span
+          ><span class="tag role">ผู้บริหาร</span>
+          กลุ่มผู้ใช้ที่ได้ประโยชน์จากหน้าจอนั้นมากที่สุด
+          (ทุกหน้าเปิด/ปิดได้ตามสิทธิ์)</span
+        >
+      </div>
+
+      <!-- 1.1 -->
+      <section id="a1">
+        <div class="sec-head">
+          <span class="no">1.1</span>
+          <h2>หน้าจอการทำงานหลัก</h2>
+          <span class="en">Clinical &amp; Operational Pages</span>
+        </div>
+        <p class="lead">
+          เมนูหลัก 11 รายการ จัดตามลำดับงานจริง: ค้นหาผู้ป่วยและการตรวจ →
+          เปิดภาพ → แนบเอกสาร → ส่งต่อ → ตรวจสอบย้อนหลัง
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>หน้าจอ / ฟีเจอร์</th>
+              <th>คำอธิบายและความสามารถหลัก</th>
+              <th>ผู้ใช้หลัก</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>แดชบอร์ด</b><span class="en">Dashboard</span></td>
+              <td>
+                ภาพรวมปริมาณงานและพื้นที่จัดเก็บแบบเรียลไทม์
+                <ul>
+                  <li>
+                    เลือกมุมมอง รายชั่วโมง / วัน / เดือน / ปี กรองตาม modality
+                    และพื้นที่ (Region)
+                  </li>
+                  <li>
+                    KPI: จำนวนการตรวจทั้งหมด อัตราเติบโตเฉลี่ย
+                    และช่วงเวลาที่มีงานสูงสุด (Peak)
+                  </li>
+                  <li>
+                    กราฟแนวโน้มปริมาณภาพ และแยกตาม Modality / เครื่องส่งภาพ (AE)
+                    / พื้นที่
+                  </li>
+                  <li>
+                    สถานะพื้นที่จัดเก็บ Hot (SSD) / Cold (HDD) พร้อมสถานะเตือน
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag role">ผู้บริหาร</span
+                ><span class="tag role">ผู้ดูแลระบบ</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>รายการการตรวจ</b><span class="en">Studies</span></td>
+              <td>
+                หน้าค้นหาหลักของระบบ (หน้าแรกหลังเข้าสู่ระบบ)
+                <ul>
+                  <li>
+                    ค้นหาด้วย HN, ชื่อ, ช่วงวันที่, ช่วงอายุ, modality (~20
+                    ชนิด), กรณี VIP และรายการที่ถูกลบ
+                  </li>
+                  <li>
+                    แสดง HN, ชื่อ, อายุ ณ วันตรวจ, modality ทุกชนิดใน study,
+                    คำอธิบาย, ส่วนของร่างกาย, สถาบัน, เครื่องส่งภาพ, จำนวน
+                    series/ภาพ
+                  </li>
+                  <li>
+                    ดับเบิลคลิกเปิด Viewer, เปิดรายละเอียด, ปักหมุดรายการโปรด,
+                    คัดลอกลิงก์ Viewer, แนบไฟล์, ส่งออก
+                  </li>
+                  <li>
+                    จำคอลัมน์ที่เลือกต่อผู้ใช้ และคงตัวกรองเดิมเมื่อย้อนกลับ
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag role">แพทย์</span
+                ><span class="tag role">รังสีเทคนิค</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>รายละเอียดการตรวจ</b><span class="en">Study Detail</span>
+              </td>
+              <td>
+                ประวัติการตรวจทั้งหมดของผู้ป่วยในหน้าเดียว
+                แสดงเป็นรายการพับ/ขยาย
+                <ul>
+                  <li>
+                    ภาพย่อของทุก series (คลิกเปิด Viewer) และดู DICOM Tags ระดับ
+                    study / series
+                  </li>
+                  <li>
+                    เอกสารแนบ non-DICOM แบบ grid หรือ list จัดกลุ่มตามชนิด
+                    วันที่ หรือแผนก — เปิดดูภาพ, PDF, Word, Excel, PowerPoint,
+                    ข้อความ, เสียง และวิดีโอได้ในหน้าเดียว
+                  </li>
+                  <li>
+                    ลบชั่วคราว (ต้องระบุเหตุผล), กู้คืน, ลบถาวร (พิมพ์คำยืนยัน)
+                    และรวมการตรวจ (Merge) ตามสิทธิ์
+                  </li>
+                  <li>ผูกไฟล์ที่ยังไม่ได้จับคู่เข้ากับการตรวจ</li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag role">แพทย์</span
+                ><span class="tag role">รังสีเทคนิค</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ผู้ป่วย</b
+                ><span class="en">Patients · Register · Merge · Edit</span>
+              </td>
+              <td>
+                บริหารทะเบียนผู้ป่วยกลาง (Master Patient Index)
+                <ul>
+                  <li>
+                    ค้นหาตาม HN, ชื่อ, อายุ แสดงจำนวนการตรวจและการตรวจล่าสุด
+                  </li>
+                  <li>
+                    <b>แก้ไขข้อมูลผู้ป่วย</b>: ตรวจ HN ซ้ำทันที
+                    มีผลกับทุกการตรวจ และบันทึก audit ก่อน/หลัง
+                  </li>
+                  <li><b>ลงทะเบียนผู้ป่วยใหม่</b>: ระบบออก HN ให้อัตโนมัติ</li>
+                  <li>
+                    <b>รวมผู้ป่วยซ้ำ</b>: ระบบเสนอรายการที่น่าจะซ้ำ
+                    แยกระดับความมั่นใจ สูง / กลาง / ต่ำ
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag role">เวชระเบียน</span
+                ><span class="tag role">ผู้ดูแลระบบ</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>รายการโปรด</b><span class="en">Favorites</span></td>
+              <td>
+                ปักหมุดการตรวจที่ติดตามอยู่ (เช่น เคสสอน เคสติดตามผล)
+                แสดงจำนวนบนเมนู และใช้เครื่องมือเดียวกับหน้ารายการการตรวจ
+              </td>
+              <td><span class="tag role">แพทย์</span></td>
+            </tr>
+            <tr>
+              <td><b>ส่งออกการตรวจ</b><span class="en">Export Study</span></td>
+              <td>
+                เลือกส่งออกเป็นไฟล์ ZIP ได้ 3 แบบรวมกัน: DICOM ต้นฉบับ
+                (แยกโฟลเดอร์ตาม series), ภาพ JPEG ทุกเฟรม และเอกสารแนบ
+                ดาวน์โหลดแบบ streaming ผ่านตัวจัดการดาวน์โหลดของเบราว์เซอร์
+                ใช้กฎแก้ไข Tag (Tag Morphing) ของช่องทาง Export อัตโนมัติ
+              </td>
+              <td>
+                <span class="tag role">แพทย์</span
+                ><span class="tag role">เวชระเบียน</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Modality Worklist</b
+                ><span class="en">MWL &amp; Emergency Order</span>
+              </td>
+              <td>
+                รายการนัดตรวจที่ส่งให้เครื่องตรวจโดยตรง
+                (ไม่ต้องพิมพ์ข้อมูลผู้ป่วยซ้ำที่เครื่อง)
+                <ul>
+                  <li>
+                    แท็บสถานะ: Scheduled / Completed / Cancelled / Expired / All
+                    กรองตามที่มา (HIS / Manual), modality, HN, accession,
+                    ช่วงเวลา
+                  </li>
+                  <li>ยกเลิกหลายรายการพร้อมกัน</li>
+                  <li>
+                    <b>Emergency Order</b> สำหรับช่วง HIS
+                    ล่มหรือผู้ป่วยฉุกเฉินไม่ทราบตัวตน — ออกเลข
+                    <code>MAN-YYYYMMDD-NNNN</code> บังคับระบุเหตุผล และบันทึก
+                    audit
+                  </li>
+                </ul>
+              </td>
+              <td><span class="tag role">รังสีเทคนิค</span></td>
+            </tr>
+            <tr>
+              <td><b>VIP</b><span class="en">VIP Cases</span></td>
+              <td>
+                กำหนดให้การตรวจของผู้ป่วยบุคคลสำคัญ
+                เห็นได้เฉพาะผู้ใช้ที่ระบุเท่านั้น (มีผลเหนือสิทธิ์อื่นทั้งหมด
+                รวมถึงสิทธิ์ Global) มอบหมาย / เปลี่ยนผู้รับผิดชอบ / ยกเลิกได้
+                พร้อมบันทึกผู้มอบหมายและเวลา
+              </td>
+              <td><span class="tag role">ผู้ดูแลระบบ</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ไฟล์และเอกสารแนบ</b><span class="en">Files · Non-DICOM</span>
+              </td>
+              <td>
+                บริหารเอกสาร non-DICOM เช่น ใบส่งตัว ผลแล็บ ภาพถ่าย วิดีโอ
+                <ul>
+                  <li>
+                    <b>4 แท็บ</b>: ยังไม่จับคู่ / จับคู่กับผู้ป่วยแล้ว /
+                    จับคู่กับการตรวจแล้ว / ค้นหาไฟล์ทั้งหมด
+                  </li>
+                  <li>
+                    อัปโหลดแบบลากวาง ระบุแผนกและหมายเหตุ
+                    แล้วจับคู่กับผู้ป่วยหรือการตรวจภายหลังได้
+                    (เหมาะกับผู้ป่วยฉุกเฉินที่ยังไม่มี HN)
+                  </li>
+                  <li>
+                    ลบ / กู้คืน / ลบถาวร ทีละหลายรายการ พร้อมผลรายไฟล์ —
+                    ไฟล์ที่ลบเข้าถังขยะ 90 วัน
+                  </li>
+                  <li>
+                    รองรับ ภาพ (รวม TIFF), PDF, Word, Excel, PowerPoint,
+                    ข้อความ, เสียง, วิดีโอ สูงสุด 200 MB ต่อไฟล์ วิดีโอแปลงเป็น
+                    MP4 อัตโนมัติ
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag role">เวชระเบียน</span
+                ><span class="tag role">รังสีเทคนิค</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>นำเข้า DICOM</b><span class="en">Import DICOM</span></td>
+              <td>
+                นำเข้าภาพจากไฟล์ ZIP (สูงสุด 1 GB) เลือกแผนก
+                แสดงความคืบหน้าและยกเลิกได้ ไฟล์ non-DICOM ใน ZIP
+                เดียวกันแนบเข้ากับการตรวจให้อัตโนมัติ
+              </td>
+              <td>
+                <span class="tag role">เวชระเบียน</span
+                ><span class="tag role">รังสีเทคนิค</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ส่งต่อการตรวจ</b
+                ><span class="en">Refer to Another Hospital</span>
+              </td>
+              <td>
+                ส่งภาพและเอกสารให้โรงพยาบาลปลายทางทางอีเมล
+                โดยผู้รับไม่ต้องมีบัญชี
+                <ul>
+                  <li>
+                    เลือกการตรวจ (ผู้ป่วยรายเดียว) โรงพยาบาลปลายทาง อีเมล
+                    หมายเหตุ และอายุลิงก์ 24 ชม. / 3 วัน / 1 สัปดาห์ / 1 เดือน
+                  </li>
+                  <li>
+                    ผู้รับดาวน์โหลด ZIP ที่สร้างขึ้นขณะดาวน์โหลด
+                    (ไม่เก็บสำเนาไว้บน server) ทุกการดาวน์โหลดถูกบันทึก
+                  </li>
+                  <li>
+                    ประวัติการส่ง เพิกถอนลิงก์
+                    หรือเปิดใช้ใหม่พร้อมกำหนดวันหมดอายุ และแก้ไข Tag
+                    ตามข้อกำหนดของปลายทาง
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag role">แพทย์</span
+                ><span class="tag role">เวชระเบียน</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>บันทึกการใช้งาน</b><span class="en">Audit Logs</span></td>
+              <td>
+                ตรวจสอบย้อนหลังทุกการกระทำในระบบ กรองตามประเภท (Audit /
+                Application), ระดับความรุนแรง, 13 โมดูล (เช่น Auth, Patients,
+                Studies, Files, Refer, HL7), ผู้ใช้, HN และช่วงเวลา
+              </td>
+              <td>
+                <span class="tag role">ผู้ดูแลระบบ</span
+                ><span class="tag role">ผู้บริหาร</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>ลิงก์เปิดภาพโดยตรง</b
+                ><span class="en">Open-Viewer Deep Link</span>
+              </td>
+              <td>
+                ลิงก์ที่คัดลอกส่งต่อให้เพื่อนร่วมงานได้
+                หากยังไม่เข้าสู่ระบบจะพาไปหน้า login
+                แล้วกลับมาเปิดภาพให้อัตโนมัติ เปิด Viewer เต็มจอ
+                และเปิดบนจอที่สองเมื่อมีหลายจอ
+              </td>
+              <td><span class="tag role">แพทย์</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 1.2 -->
+      <section id="a2">
+        <div class="sec-head">
+          <span class="no">1.2</span>
+          <h2>การตั้งค่าระบบ</h2>
+          <span class="en">Settings — 12 Administration Pages</span>
+        </div>
+        <p class="lead">
+          ผู้ดูแลระบบปรับแต่งได้เองผ่านหน้าจอ
+          ทุกการเปลี่ยนแปลงมีผลทันทีโดยไม่ต้องรีสตาร์ทระบบ
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>หน้าตั้งค่า</th>
+              <th>คำอธิบายและความสามารถหลัก</th>
+              <th>กลุ่ม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ผู้ใช้และบทบาท</b><span class="en">Users &amp; Roles</span>
+              </td>
+              <td>
+                สร้าง/แก้ไข/ลบบทบาท (Administrator, Doctor, Medical Tech, Nurse,
+                Staff) กำหนดสิทธิ์แบบ checkbox tree, สร้างผู้ใช้
+                กำหนดสถานที่และแผนก ขอบเขตข้อมูล สิทธิ์ VIP, รีเซ็ตรหัสผ่าน
+                และระงับบัญชี
+              </td>
+              <td><span class="tag sec">สิทธิ์การใช้งาน</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>สถานที่ / แผนก / AE Title</b
+                ><span class="en">Location · Department · AE Title</span>
+              </td>
+              <td>
+                โครงสร้างองค์กร 3 ระดับ สถานที่ → แผนก → เครื่องส่งภาพ (AE
+                Title) ซึ่งเป็นตัวกำหนดว่าใครเห็นการตรวจใด
+                รองรับหลายสาขา/หลายอาคาร
+              </td>
+              <td><span class="tag key">ข้อมูลหลัก</span></td>
+            </tr>
+            <tr>
+              <td><b>Protocol</b><span class="en">Exam Protocol</span></td>
+              <td>
+                รหัสและชื่อการตรวจ ผูกกับ modality และส่วนของร่างกาย ใช้กับ
+                Worklist และใบสั่งตรวจจาก HIS
+              </td>
+              <td><span class="tag key">ข้อมูลหลัก</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>โรงพยาบาลปลายทาง</b><span class="en">Refer Hospital</span>
+              </td>
+              <td>
+                รายชื่อและอีเมลโรงพยาบาลที่ส่งต่อบ่อย สำหรับเลือกในหน้าส่งต่อ
+              </td>
+              <td><span class="tag key">ข้อมูลหลัก</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>แก้ไข Tag ขาออก</b><span class="en">Tag Morphing</span>
+              </td>
+              <td>
+                แก้ไข DICOM tag ตามข้อกำหนดของปลายทางขณะส่งออก/ส่งต่อ โดย<b
+                  >ไม่แตะต้นฉบับในคลัง</b
+                >
+                <ul>
+                  <li>
+                    คำสั่ง: กำหนดค่า, ลบ, คัดลอกจาก tag อื่น, ใส่ค่าเมื่อว่าง,
+                    ดึงค่าที่แก้ไขแล้วจากฐานข้อมูล, regex, จัดรูปแบบ,
+                    ตารางแปลงค่า
+                  </li>
+                  <li>
+                    ผูกกับช่องทาง (Refer / Export) ตามโรงพยาบาล แผนก ผู้ใช้
+                    หรือทั้งระบบ พร้อมลำดับความสำคัญ
+                  </li>
+                  <li>
+                    ทดสอบรูปแบบ และดูตัวอย่างก่อน/หลังกับการตรวจจริงได้ทันที —
+                    ปลอดภัยแบบ fail-closed
+                  </li>
+                </ul>
+              </td>
+              <td><span class="tag std">การเชื่อมต่อ</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ระบบที่เชื่อมต่อ</b
+                ><span class="en">Integration Clients</span>
+              </td>
+              <td>
+                ออก API key ให้ HIS / RIS แต่ละระบบเพื่อเปิดภาพจากหน้าจอของตนเอง
+                แสดง key ครั้งเดียว เปลี่ยน key ได้ ดูการใช้งานล่าสุด
+                และปิดใช้งานพร้อมตัด session ทั้งหมดทันที
+              </td>
+              <td><span class="tag std">การเชื่อมต่อ</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>HL7 Integration</b
+                ><span class="en">HL7 Endpoints &amp; Messages</span>
+              </td>
+              <td>
+                กำหนดปลายทาง HL7 ขาเข้า/ขาออก (MSH-3/4/5/6, host/port)
+                และกล่องข้อความ HL7 ย้อนหลัง กรองตามทิศทาง สถานะ ชนิดข้อความ
+                ดูข้อความต้นฉบับและผลการประมวลผล
+              </td>
+              <td><span class="tag std">การเชื่อมต่อ</span></td>
+            </tr>
+            <tr>
+              <td><b>DICOM Nodes</b><span class="en">PACS Allowlist</span></td>
+              <td>
+                ลงทะเบียน PACS / workstation / เครื่องที่ดึง Worklist (AE Title,
+                Host:Port) กำหนดสิทธิ์ราย node: Echo, Store, Worklist, Query,
+                C-MOVE, C-GET ทดสอบ C-ECHO ได้จากหน้าจอ
+                และแสดงเครื่องที่ยังไม่ลงทะเบียนที่พยายามส่งภาพเข้ามา
+              </td>
+              <td><span class="tag std">การเชื่อมต่อ</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>System Settings</b
+                ><span class="en">Runtime Configuration</span>
+              </td>
+              <td>
+                ค่าปรับแต่ง 25 รายการใน 6 หมวด (General, Storage, Tag Morphing,
+                Email, Monitoring, HL7) เช่น ชื่อสถาบัน ความจุพื้นที่
+                เกณฑ์แจ้งเตือนดิสก์ อีเมลรับแจ้งเตือน
+                มีการตรวจสอบค่าและบันทึกผู้แก้ไข
+              </td>
+              <td><span class="tag key">ระบบ</span></td>
+            </tr>
+            <tr>
+              <td><b>Cache</b><span class="en">Cache Management</span></td>
+              <td>
+                ดูกลุ่มข้อมูลที่ cache ไว้ จำนวนรายการ และเวลาคงเหลือ
+                ล้างทีละกลุ่มหรือทั้งหมดได้เมื่อต้องการให้ข้อมูลหลักที่แก้ไขมีผลทันที
+              </td>
+              <td><span class="tag key">ระบบ</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 1.3 -->
+      <section id="a3">
+        <div class="sec-head">
+          <span class="no">1.3</span>
+          <h2>สิทธิ์การใช้งานและขอบเขตข้อมูล</h2>
+          <span class="en">RBAC &amp; Data Access Scope</span>
+        </div>
+        <p class="lead">
+          ควบคุมได้ทั้ง "ทำอะไรได้" (สิทธิ์ตามบทบาท) และ "เห็นข้อมูลของใคร"
+          (ขอบเขตข้อมูล) — รองรับหลักการเข้าถึงเท่าที่จำเป็นตาม PDPA
+        </p>
+        <div class="cmp">
+          <div class="box">
+            <div class="v">69</div>
+            <div class="t">สิทธิ์ย่อย</div>
+            <p>
+              แยกตามหน้าจอและการกระทำ เช่น เปิด Viewer, ลบ, กู้คืน, รวม, ส่งออก,
+              ส่งต่อ, Emergency Order — สิทธิ์ใหม่ปิดไว้เป็นค่าเริ่มต้นเสมอ
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">5</div>
+            <div class="t">ประเภทบทบาท</div>
+            <p>
+              Administrator, Doctor, Medical Tech, Nurse, Staff —
+              สร้างกลุ่มย่อยได้ไม่จำกัด
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">3</div>
+            <div class="t">ระดับขอบเขตข้อมูล</div>
+            <p>
+              เฉพาะของตนเอง / ตามแผนก / ทั้งระบบ โดยแผนกผูกกับเครื่องส่งภาพ (AE
+              Title) และสถานที่
+            </p>
+          </div>
+          <div class="box">
+            <div class="v">VIP</div>
+            <div class="t">ระดับเหนือสุด</div>
+            <p>
+              การตรวจ VIP เห็นได้เฉพาะผู้ใช้ที่มอบหมาย ผู้อื่นจะได้ผล "ไม่พบ"
+              แม้มีสิทธิ์ทั้งระบบ
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 1.4 -->
+      <section id="a4">
+        <div class="sec-head">
+          <span class="no">1.4</span>
+          <h2>ประสบการณ์ใช้งานและความสามารถร่วม</h2>
+          <span class="en">Cross-cutting UX</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ฟีเจอร์</th>
+              <th>รายละเอียด</th>
+              <th>กลุ่ม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>เข้าสู่ระบบอย่างปลอดภัย</b
+                ><span class="en">Login &amp; Session</span>
+              </td>
+              <td>
+                ป้องกันการเดารหัสผ่าน (10 ครั้ง / 15 นาที)
+                แจ้งจำนวนครั้งที่เหลือ ต่ออายุ session อัตโนมัติแบบไม่สะดุด
+                และออกจากระบบทันทีเมื่อ session ถูกเพิกถอน
+              </td>
+              <td><span class="tag sec">ความปลอดภัย</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>เลือกสถานที่ / แผนก</b
+                ><span class="en">Location &amp; Department Switcher</span>
+              </td>
+              <td>
+                ผู้ใช้ที่ประจำหลายสาขาหรือหลายแผนกเลือกบริบทการทำงานได้จากแถบด้านบน
+                ระบบจำค่าไว้ต่อผู้ใช้
+              </td>
+              <td><span class="tag role">ทุกบทบาท</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ข้อความภายใน</b
+                ><span class="en">Secure Messaging (Chat)</span>
+              </td>
+              <td>
+                แชท 1:1 และกลุ่มภายในองค์กร หน้าต่างลอยใช้คู่กับงานอื่นได้
+                แสดงสถานะอ่านแล้ว แจ้งข้อความใหม่แบบเรียลไทม์ —
+                ข้อมูลไม่ออกนอกโรงพยาบาล
+              </td>
+              <td><span class="tag role">ทุกบทบาท</span></td>
+            </tr>
+            <tr>
+              <td><b>โปรไฟล์และรหัสผ่าน</b><span class="en">Profile</span></td>
+              <td>
+                แก้ไขชื่อ อัปโหลดรูปโปรไฟล์ (ตรวจชนิดไฟล์จริงที่ server)
+                และเปลี่ยนรหัสผ่าน
+              </td>
+              <td><span class="tag role">ทุกบทบาท</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>รองรับทุกขนาดจอ + โหมดมืด</b
+                ><span class="en">Responsive &amp; Dark Mode</span>
+              </td>
+              <td>
+                เมนูพับเป็น drawer บนแท็บเล็ต/มือถือ
+                ย่อเหลือไอคอนบนคอมพิวเตอร์ได้ สลับโหมดสว่าง/มืดและจำค่าไว้
+              </td>
+              <td><span class="tag role">ทุกบทบาท</span></td>
+            </tr>
+            <tr>
+              <td><b>โหลดเร็ว</b><span class="en">Performance</span></td>
+              <td>
+                ขนาดที่โหลดครั้งแรกลดจาก 4.6 MB เหลือ 314 KB,
+                โหลดหน้าล่วงหน้าเมื่อเบราว์เซอร์ว่าง, ภาพย่อเอกสารสร้างที่
+                server (ตัวอย่างไฟล์ TIFF 20 MB → 9 KB)
+                และรีโหลดอัตโนมัติเมื่อมีเวอร์ชันใหม่
+              </td>
+              <td><span class="tag key">ประสิทธิภาพ</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ================= PART 2 ================= -->
+      <div class="part-banner" id="part2">
+        <div class="pn">ส่วนที่ 2</div>
+        <div>
+          <h2>VNA และการเชื่อมต่อกับ HIS</h2>
+          <p>
+            ระบบหลังบ้านที่รับ จัดเก็บ ดูแล และแบ่งปันภาพทางการแพทย์ ตามมาตรฐาน
+            DICOM และ HL7 v2
+          </p>
+        </div>
+      </div>
+
+      <!-- 2.1 -->
+      <section id="b1">
+        <div class="sec-head">
+          <span class="no">2.1</span>
+          <h2>ภาพรวมสถาปัตยกรรม</h2>
+          <span class="en">Architecture Overview</span>
+        </div>
+        <p class="lead">
+          ออกแบบแบบ event-driven: รับภาพ → ตรวจสอบตัวตนผู้ป่วย → ทำดัชนี →
+          พร้อมให้ค้นหาและเปิดดู แต่ละส่วนแยกกันทำงาน หากส่วนใดล่ม
+          ข้อมูลไม่สูญหายและประมวลผลต่อเมื่อกลับมา
+        </p>
+        <div class="arch">
+          <div class="flow">
+            <div class="node src">
+              <h5>PACS ของโรงพยาบาล</h5>
+              <p>
+                ภาพทุก modality: CT, MR, CR/DX, US, MG, NM/PET, XA, Endoscope
+                ฯลฯ
+              </p>
+            </div>
+            <div class="arrow">DICOM<br />C-STORE</div>
+            <div class="node core">
+              <h5>Vantyx Gateway</h5>
+              <p>รับภาพ DICOM, บีบอัด JPEG-LS, Modality Worklist, DICOMweb</p>
+            </div>
+            <div class="arrow">Event</div>
+            <div class="node core">
+              <h5>Ingest Pipeline</h5>
+              <p>
+                คิวข้อความ + worker, EMPI จับคู่ผู้ป่วย, ทำดัชนี, แปลงวิดีโอ
+              </p>
+            </div>
+            <div class="arrow">Index</div>
+            <div class="node out">
+              <h5>Web App + Viewer</h5>
+              <p>ค้นหา เปิดภาพ แนบเอกสาร ส่งต่อ ส่งออก</p>
+            </div>
+          </div>
+          <div class="flow">
+            <div class="node src">
+              <h5>HIS / RIS</h5>
+              <p>ระบบสารสนเทศโรงพยาบาล</p>
+            </div>
+            <div class="arrow bi">HL7 v2<br />MLLP</div>
+            <div class="node core">
+              <h5>HL7 Interface</h5>
+              <p>
+                รับ ADT / ORM, ส่ง ORU "ภาพพร้อม", Launch API เปิดภาพจาก HIS
+              </p>
+            </div>
+            <div class="arrow">S3</div>
+            <div class="node core">
+              <h5>Object Storage</h5>
+              <p>
+                Hot (SSD) → Cold (HDD) อัตโนมัติ, ทำสำเนาข้ามดิสก์/ข้ามเครื่อง
+              </p>
+            </div>
+            <div class="arrow">Backup</div>
+            <div class="node out">
+              <h5>PostgreSQL + สำรองข้อมูล</h5>
+              <p>WAL ต่อเนื่อง, Full/Diff, กู้คืน ณ จุดเวลา</p>
+            </div>
+          </div>
+          <p class="cap">
+            ทั้งระบบทำงานบน Docker Compose 25 services ติดตั้งบน server
+            ของโรงพยาบาล (on-premise)
+          </p>
+        </div>
+      </section>
+
+      <!-- 2.2 -->
+      <section id="b2">
+        <div class="sec-head">
+          <span class="no">2.2</span>
+          <h2>การเชื่อมต่อ DICOM และมาตรฐาน</h2>
+          <span class="en">DICOM Connectivity</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>มาตรฐาน</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>รับภาพ DICOM</b><span class="en">Storage SCP (C-STORE)</span>
+              </td>
+              <td>
+                รับ study ที่ PACS ทุกยี่ห้อของโรงพยาบาลส่งต่อมา (บทบาท VNA) รวม
+                Storage Commitment
+              </td>
+              <td><span class="tag std">DICOM PS3.4 / PS3.7</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ให้ PACS / workstation ค้นและดึงภาพจาก Vantyx</b
+                ><span class="en"
+                  >Q/R SCP — C-ECHO · C-FIND · C-MOVE · C-GET</span
+                >
+              </td>
+              <td>
+                เปิดสิทธิ์ Echo / Store / Find / Worklist / Move / Get
+                แยกต่อเครื่อง C-MOVE ส่งได้เฉพาะปลายทางที่ลงทะเบียน C-GET
+                ปิดไว้จนกว่าจะเปิดให้
+              </td>
+              <td><span class="tag std">DICOM Q/R</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ควบคุมเครื่องที่เชื่อมต่อ</b
+                ><span class="en">DICOM Node Allowlist</span>
+              </td>
+              <td>
+                ปฏิเสธ AE Title ที่ไม่ได้ลงทะเบียน ตรวจ Called AET
+                แก้ไขรายการผ่านหน้าจอแล้วมีผลทันทีโดยไม่ต้องรีสตาร์ท และ sync
+                ซ้ำทุก 5 นาทีพร้อมแจ้งเตือนหากไม่ตรงกัน
+              </td>
+              <td><span class="tag sec">ความปลอดภัย</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>Modality Worklist</b><span class="en">MWL SCP (C-FIND)</span>
+              </td>
+              <td>
+                ตอบรายการนัดตรวจจากฐานข้อมูลแบบสด (ไม่ต้อง sync ไฟล์)
+                การยกเลิกจาก HIS มีผลทันที รองรับชื่อภาษาไทย (UTF-8) ออก
+                StudyInstanceUID ล่วงหน้าเพื่อจับคู่ใบสั่งกับภาพได้ตรงตัว
+                และเติม AE ของเครื่องที่ถามให้เมื่อ HIS ไม่ทราบ
+              </td>
+              <td><span class="tag std">DICOM MWL · IHE SWF</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>DICOMweb</b
+                ><span class="en">WADO-RS / WADO-URI / Rendered</span>
+              </td>
+              <td>
+                ให้บริการภาพผ่าน HTTP สำหรับ Viewer พร้อมยืนยันตัวตนทุกคำขอ
+                และภาพ JPEG ที่ server เรนเดอร์สำหรับมือถือ
+              </td>
+              <td><span class="tag std">DICOM PS3.18</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>บีบอัดแบบไม่สูญเสียตอนรับภาพ</b
+                ><span class="en">JPEG-LS Lossless at Ingest</span>
+              </td>
+              <td>
+                บีบอัดทันทีที่รับเข้า ค่า pixel เหมือนต้นฉบับทุกจุด
+                (ตรวจสอบแล้ว) ภาพที่บีบอัดมาแล้ว (US/XA JPEG, วิดีโอ)
+                คงไว้ตามเดิม เปิด/ปิดได้ต่อไซต์
+                <ul>
+                  <li>
+                    คลังทั้งหมด 21.3 GB → 7.1 GB (−67%) · CT −65% · PET −81% ·
+                    Enhanced MR −87%
+                  </li>
+                  <li>
+                    โหลด study เต็มผ่าน WAN: CT MPR 34 → 12.7 วินาที, Fusion
+                    40.6 → 17.6 วินาที
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <span class="tag std">JPEG-LS (1.2.840.10008.1.2.4.80)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>แปลง Transfer Syntax อัตโนมัติ</b
+                ><span class="en">On-the-fly Transcoding</span>
+              </td>
+              <td>
+                เมื่อปลายทางไม่รองรับรูปแบบที่จัดเก็บ ระบบแปลงให้ระหว่างส่ง
+                เครื่องรุ่นเก่ายังรับภาพได้
+              </td>
+              <td><span class="tag std">DICOM PS3.5</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ชนิดข้อมูล DICOM พิเศษ</b
+                ><span class="en">PDF · ECG · SR · RDSR · Video</span>
+              </td>
+              <td>
+                Encapsulated PDF, คลื่นไฟฟ้าหัวใจ, Structured Report,
+                รายงานปริมาณรังสี และวิดีโอ DICOM (MPEG-2 / H.264 / HEVC)
+                ที่แปลงเป็น MP4 พร้อม cache ให้เล่นและเลื่อนตำแหน่งได้ทันที
+              </td>
+              <td><span class="tag std">DICOM IODs</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.3 -->
+      <section id="b3">
+        <div class="sec-head">
+          <span class="no">2.3</span>
+          <h2>การรับและจัดการข้อมูล</h2>
+          <span class="en">Ingestion &amp; Data Management</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ไปป์ไลน์รับภาพแบบคิว</b
+                ><span class="en">Event-driven Ingest</span>
+              </td>
+              <td>
+                เมื่อ study รับครบ ระบบส่งเหตุการณ์เข้าคิวที่ทนทาน (durable
+                quorum queue) พยายามซ้ำสูงสุด 5 ครั้ง ข้อความที่ผิดพลาดแยกไป
+                dead-letter queue พร้อมแจ้งเตือน — ไม่มีภาพตกหล่นเงียบ ๆ
+              </td>
+              <td><span class="tag key">ไม่สูญหาย</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ทะเบียนผู้ป่วยกลาง</b
+                ><span class="en">EMPI Patient Matching</span>
+              </td>
+              <td>
+                จับคู่ผู้ป่วยตามลำดับ: ตัวตนจาก HIS (HN) → ตัวตนจากแหล่งภาพ →
+                ชื่อ + วันเกิด → สร้างทะเบียนใหม่ พร้อมระดับความมั่นใจ
+                ป้องกันการสร้างผู้ป่วยซ้ำเมื่อภาพเข้ามาพร้อมกัน
+                และมีเครื่องมือค้นหาและรวมรายการซ้ำ
+              </td>
+              <td><span class="tag key">ข้อมูลถูกต้อง</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ปรับข้อมูลให้เป็นมาตรฐาน</b
+                ><span class="en">Normalization</span>
+              </td>
+              <td>
+                ปรับเวลาเป็นเขตเวลาไทย
+                จัดการวันเกิดที่ผิดรูปแบบโดยไม่ทำให้การรับภาพล้มเหลว
+                และบันทึกทุก modality ใน study ที่มีหลายชนิด
+              </td>
+              <td><span class="tag key">ข้อมูลถูกต้อง</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>กู้เหตุการณ์ที่ตกหล่น</b
+                ><span class="en">Auto Reconciliation</span>
+              </td>
+              <td>
+                ทุก 5 นาทีเทียบรายการในคลังภาพกับดัชนี
+                และส่งเหตุการณ์ที่ขาดซ้ำอัตโนมัติ (พิสูจน์แล้ว: กู้ 108 study
+                หลังส่วนประมวลผลดับ 3 ชั่วโมง)
+              </td>
+              <td><span class="tag key">ไม่สูญหาย</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>นำเข้าจาก ZIP</b><span class="en">Streaming Import</span>
+              </td>
+              <td>
+                แตกไฟล์แบบ streaming ส่งเข้าคลังโดยตรงโดยไม่สร้างไฟล์ชั่วคราว
+                ทำงานขนานครั้งละ 5 ไฟล์ แนบเอกสาร non-DICOM
+                เข้าการตรวจให้อัตโนมัติ
+              </td>
+              <td><span class="tag role">งานเวชระเบียน</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>เอกสารและสื่อ non-DICOM</b
+                ><span class="en">Non-DICOM Archive</span>
+              </td>
+              <td>
+                เก็บภาพ PDF เอกสาร Office เสียง และวิดีโอ ร่วมกับภาพ DICOM
+                แยกสิทธิ์ตามแผนก ภาพย่อสร้างที่ server วิดีโอแปลงเป็น MP4
+                เบื้องหลัง และอัปโหลดล่วงหน้าสำหรับผู้ป่วยที่ยังไม่มี HN ได้
+              </td>
+              <td><span class="tag key">คลังกลางเดียว</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>สถิติการใช้งาน</b
+                ><span class="en">Imaging Volume Analytics</span>
+              </td>
+              <td>
+                นับปริมาณการตรวจรายวัน/รายชั่วโมง ตาม modality และแหล่งภาพ
+                อัปเดตอัตโนมัติภายใน ~15 วินาที แม้ฐานข้อมูลมีขนาดใหญ่
+              </td>
+              <td><span class="tag role">ผู้บริหาร</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.4 -->
+      <section id="b4">
+        <div class="sec-head">
+          <span class="no">2.4</span>
+          <h2>วงจรชีวิตการตรวจ การแบ่งปัน และการส่งออก</h2>
+          <span class="en">Study Lifecycle, Sharing &amp; Egress</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ลบ / กู้คืน / ลบถาวร</b
+                ><span class="en">Soft Delete · Restore · Hard Delete</span>
+              </td>
+              <td>
+                ลบชั่วคราวแบบกู้คืนได้ (ห้ามลบหากเคยส่งต่อแล้ว)
+                การลบถาวรเป็นช่องทางเดียวที่ทำลายภาพจริง ต้องยืนยันและบันทึก
+                audit
+              </td>
+              <td><span class="tag sec">ควบคุมได้</span></td>
+            </tr>
+            <tr>
+              <td><b>รวมการตรวจ</b><span class="en">Study Merge</span></td>
+              <td>
+                รวม study ที่แยกกันของผู้ป่วยรายเดียวกัน ทำในคลังภาพครั้งเดียว
+                ข้อมูลที่เกี่ยวข้อง (ค่าวัด รายการโปรด ฯลฯ) ย้ายตามให้ครบ
+              </td>
+              <td><span class="tag key">ข้อมูลถูกต้อง</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>แก้ไขข้อมูลผู้ป่วย</b><span class="en">Edit Patient</span>
+              </td>
+              <td>
+                แก้ HN ชื่อ เพศ วันเกิด ในธุรกรรมเดียวครอบคลุมทุกการตรวจ
+                ไม่แตะไฟล์ DICOM ต้นฉบับ ตรวจ HN ซ้ำข้ามทุกแหล่ง
+              </td>
+              <td><span class="tag key">ต้นฉบับไม่ถูกแก้</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ส่งต่อโรงพยาบาลอื่น</b
+                ><span class="en">Secure Referral Link</span>
+              </td>
+              <td>
+                ลิงก์ token 256-bit เก็บเฉพาะค่า hash อายุสูงสุด 30 วัน
+                เพิกถอนได้ ZIP สร้างขณะดาวน์โหลดโดยไม่เก็บสำเนา จำกัด 20 ครั้ง /
+                15 นาที และบันทึกทุกการดาวน์โหลด
+              </td>
+              <td><span class="tag sec">ความปลอดภัย</span></td>
+            </tr>
+            <tr>
+              <td><b>ส่งออก ZIP</b><span class="en">Study Export</span></td>
+              <td>
+                DICOM ต้นฉบับ / JPEG / non-DICOM ใช้ token ครั้งเดียว
+                จำกัดงานพร้อมกัน 3 งานทั้งระบบ (1 ต่อผู้ใช้)
+                เพื่อไม่กระทบผู้ใช้อื่น — ทดสอบ CT 1,351 ภาพ 678 MB เสร็จใน 58
+                วินาที
+              </td>
+              <td><span class="tag key">ไม่กระทบระบบ</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>แก้ไข Tag ขาออก</b
+                ><span class="en">Tag Morphing (Attribute Coercion)</span>
+              </td>
+              <td>
+                ปรับ DICOM tag ตามข้อกำหนดของแต่ละปลายทางขณะส่ง
+                โดยต้นฉบับในคลังไม่เปลี่ยน ถ้ากฎใช้ไม่ได้ระบบหยุดส่ง
+                (fail-closed) แทนการส่งข้อมูลผิด
+              </td>
+              <td><span class="tag std">IHE-style coercion</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>เชื่อมต่อเครื่องเขียน CD/DVD</b
+                ><span class="en">CD Writer API</span>
+              </td>
+              <td>
+                API สำหรับระบบเขียนแผ่นภาพให้ผู้ป่วย ยืนยันตัวตนด้วย API key
+              </td>
+              <td><span class="tag std">REST API</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.5 -->
+      <section id="b5">
+        <div class="sec-head">
+          <span class="no">2.5</span>
+          <h2>การเชื่อมต่อกับ HIS</h2>
+          <span class="en">HIS / RIS Integration</span>
+        </div>
+        <p class="lead">
+          เชื่อมต่อตลอดวงจรงานรังสี: HIS ลงทะเบียนผู้ป่วยและสั่งตรวจ →
+          เครื่องตรวจดึง Worklist → ภาพเข้าคลัง → แจ้ง HIS ว่าภาพพร้อม →
+          แพทย์เปิดภาพจากหน้าจอ HIS
+        </p>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>มาตรฐาน</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>HL7 v2 ผ่าน MLLP</b
+                ><span class="en">HL7 Interface Engine</span>
+              </td>
+              <td>
+                รับข้อความผ่าน TCP/MLLP ตอบ ACK (AA / AE / AR)
+                ทันทีที่ข้อความเข้าคิวอย่างปลอดภัย ตรวจข้อความซ้ำ
+                ประมวลผลตามลำดับ รองรับหลายปลายทาง (หลาย HIS / RIS)
+              </td>
+              <td><span class="tag std">HL7 v2.x (ทดสอบ v2.5)</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>รับข้อมูลผู้ป่วย</b><span class="en">Inbound ADT</span>
+              </td>
+              <td>
+                A04 / A28 สร้างผู้ป่วย · A08 / A31 ปรับปรุงข้อมูล · A40
+                รวมผู้ป่วย
+              </td>
+              <td><span class="tag std">ADT^A04/A08/A28/A31/A40</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>รับใบสั่งตรวจ</b
+                ><span class="en">Inbound Orders → Worklist</span>
+              </td>
+              <td>
+                สร้าง/แก้ไข/ยกเลิกใบสั่ง (NW, XO/RP, CA/OC/DC/CR) แปลงเป็นรายการ
+                Worklist ให้เครื่องตรวจ มีกลไกเลือกฟิลด์สำรองรองรับ HIS
+                หลายผู้ผลิตในประเทศไทย ใบสั่งหมดอายุใน 7 วัน
+              </td>
+              <td><span class="tag std">ORM^O01 · OMI^O23 · OMG^O19</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>แจ้ง HIS ว่าภาพพร้อม</b
+                ><span class="en">Outbound Results</span>
+              </td>
+              <td>
+                ส่ง 1 ครั้งต่อ study ใหม่ พร้อมเลข Accession และ
+                StudyInstanceUID รอ ACK (ปรับได้ 1–120 วินาที) พยายามซ้ำ 5 ครั้ง
+                แล้วแจ้งเตือนหากไม่สำเร็จ
+              </td>
+              <td><span class="tag std">ORU^R01 · แนวทาง IHE</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>เปิดภาพจาก HIS</b><span class="en">Viewer Launch API</span>
+              </td>
+              <td>
+                HIS เรียก API ด้วย key ของตนเอง ได้ลิงก์ใช้ครั้งเดียว (token
+                256-bit อายุ 30–600 วินาที)
+                แพทย์เปิดภาพได้ทันทีโดยไม่ต้องมีบัญชี Vantyx —
+                ทุกการเปิดถูกบันทึกผ่านผู้ใช้เฉพาะของระบบที่เชื่อมต่อ
+              </td>
+              <td>
+                <span class="tag std">REST API</span
+                ><span class="tag sec">ใช้ครั้งเดียว</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Emergency Order</b><span class="en">Downtime Workflow</span>
+              </td>
+              <td>
+                สร้าง Worklist ด้วยมือเมื่อ HIS
+                ล่มหรือผู้ป่วยฉุกเฉินไม่ทราบตัวตน ต้องมีสิทธิ์ ระบุเหตุผล
+                และบันทึก audit
+              </td>
+              <td><span class="tag key">Business continuity</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ความปลอดภัยของ HL7</b
+                ><span class="en">HL7 Security &amp; Inbox</span>
+              </td>
+              <td>
+                จำกัด IP ต้นทาง (CIDR) และตรวจ MSH-3/4 กับปลายทางที่เปิดใช้
+                เก็บข้อความต้นฉบับ 90 วันในกล่องข้อความสำหรับผู้ดูแล
+                พร้อมแจ้งเตือนเมื่อปลายทางไม่ตอบ
+              </td>
+              <td><span class="tag sec">ความปลอดภัย</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.6 -->
+      <section id="b6">
+        <div class="sec-head">
+          <span class="no">2.6</span>
+          <h2>การจัดเก็บ สำรองข้อมูล และกู้คืน</h2>
+          <span class="en">Storage, Backup &amp; Disaster Recovery</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>Object Storage แบบ S3</b><span class="en">SeaweedFS</span>
+              </td>
+              <td>
+                เก็บภาพ DICOM เอกสารแนบ และวิดีโอแยก bucket
+                ขยายความจุได้โดยเพิ่มดิสก์/เครื่อง
+              </td>
+              <td><span class="tag std">S3 API</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>จัดชั้นข้อมูลร้อน-เย็นอัตโนมัติ</b
+                ><span class="en">Hot / Cold Tiering</span>
+              </td>
+              <td>
+                ข้อมูลใหม่อยู่บน SSD (เปิดเร็ว) ข้อมูลที่ไม่มีการเขียน 14 วัน
+                (ปรับได้ 1 วัน – 1 ปี) ย้ายไป HDD ทุกคืนอัตโนมัติ —
+                ลดต้นทุนดิสก์ราคาสูง
+              </td>
+              <td><span class="tag key">ลดต้นทุน</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ทำสำเนาข้อมูลภาพ</b><span class="en">Replication</span>
+              </td>
+              <td>
+                Single VM: 2 สำเนาบนดิสก์กายภาพคนละลูก · ชุด HA: สำเนาข้าม
+                server หากดิสก์/เครื่องหาย
+                ระบบยังเขียนต่อได้และสร้างสำเนาคืนเองเมื่อกลับมา
+                พร้อมแจ้งเตือนสำเนาที่ขาด
+              </td>
+              <td><span class="tag key">ทนต่อดิสก์เสีย</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>สำรองฐานข้อมูลต่อเนื่อง</b
+                ><span class="en">pgBackRest — WAL + PITR</span>
+              </td>
+              <td>
+                สำรองต่อเนื่องทุก 5 นาที Full รายสัปดาห์ + Differential รายวัน
+                เก็บ 14 ชุด (~14 สัปดาห์) กู้คืน ณ จุดเวลาใดก็ได้ (Point-in-Time
+                Recovery)
+              </td>
+              <td><span class="tag key">RPO ≈ 5 นาที</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ทดสอบกู้คืนอัตโนมัติ</b
+                ><span class="en">Weekly Restore Test</span>
+              </td>
+              <td>
+                ทุกสัปดาห์ระบบทดลองกู้คืนข้อมูลจริงในพื้นที่แยก
+                แจ้งเตือนหากการทดสอบไม่เกิดขึ้น ตรวจสถานะการสำรองทุก 10 นาที
+              </td>
+              <td><span class="tag key">พิสูจน์ได้</span></td>
+            </tr>
+            <tr>
+              <td><b>คู่มือกู้ระบบ</b><span class="en">DR Runbooks</span></td>
+              <td>
+                ขั้นตอนกู้คืนที่ซ้อมจริงแล้ว: กู้ฐานข้อมูล, PITR, ดิสก์ระบบเสีย,
+                สลับเครื่องในชุด HA
+              </td>
+              <td><span class="tag key">ซ้อมแล้ว</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.7 -->
+      <section id="b7">
+        <div class="sec-head">
+          <span class="no">2.7</span>
+          <h2>ความปลอดภัยและการปฏิบัติตามข้อกำหนด</h2>
+          <span class="en">Security &amp; Compliance</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>กลุ่ม</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>การยืนยันตัวตนและ Session</b
+                ><span class="en">JWT + Refresh Rotation</span>
+              </td>
+              <td>
+                Access token 30 นาที, refresh token 3 วันใน cookie แบบ httpOnly
+                / SameSite=Strict หมุนเวียนทุกครั้งพร้อมตรวจจับการใช้ซ้ำ เพิกถอน
+                session ได้ทันที และจำกัดการเดารหัสผ่าน 10 ครั้ง / 15 นาที
+              </td>
+              <td><span class="tag sec">Authentication</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ป้องกันภาพรั่วไหล</b
+                ><span class="en">Image Authorization</span>
+              </td>
+              <td>
+                ทุกคำขอภาพต้องมี token ที่ถูกต้อง ตรวจที่ gateway
+                ก่อนส่งแม้ภาพอยู่ใน cache อนุญาตเฉพาะคำขออ่านและเส้นทางที่กำหนด
+                ลิงก์ไฟล์/วิดีโอลงลายมือชื่อ HMAC และหมดอายุ
+              </td>
+              <td><span class="tag sec">Data protection</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>จำกัดอัตราการเรียกใช้</b
+                ><span class="en">Rate Limiting</span>
+              </td>
+              <td>
+                ค่าพื้นฐาน 300 ครั้ง/นาที/IP และกำหนดเฉพาะงาน เช่น ภาพ DICOMweb
+                6,000/นาที, อัปโหลด 20/นาที, HL7 600/นาที, เปิดภาพจาก HIS
+                60/นาที
+              </td>
+              <td><span class="tag sec">Availability</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>สิทธิ์และขอบเขตข้อมูล</b
+                ><span class="en">RBAC + Data Scope</span>
+              </td>
+              <td>
+                69 สิทธิ์ย่อย, ขอบเขตตามแผนก / สถานที่ / เครื่องส่งภาพ, VIP
+                เฉพาะบุคคล — ออกแบบเพื่อความเป็นส่วนตัวของผู้ป่วยตาม PDPA
+              </td>
+              <td><span class="tag sec">PDPA</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>บันทึกการตรวจสอบ</b><span class="en">Audit Trail</span>
+              </td>
+              <td>
+                บันทึกทุกการกระทำสำคัญในฐานข้อมูลแยก เก็บ 90 วัน
+                รวมการเข้าสู่ระบบที่ล้มเหลว การดาวน์โหลดของผู้รับภายนอก
+                และข้อความ HL7
+              </td>
+              <td><span class="tag sec">Accountability</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>เครือข่ายและการเชื่อมต่อระหว่างระบบ</b
+                ><span class="en">Network &amp; M2M Keys</span>
+              </td>
+              <td>
+                เปิดสู่เครือข่ายเฉพาะ Web, Viewer, DICOM และ HL7 ส่วนภายในผูกกับ
+                localhost ระบบที่เชื่อมต่อแต่ละตัวมี API key ของตนเอง
+                หมุนเปลี่ยนได้
+              </td>
+              <td><span class="tag sec">Hardening</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.8 -->
+      <section id="b8">
+        <div class="sec-head">
+          <span class="no">2.8</span>
+          <h2>ประสิทธิภาพ การขยายระบบ และ High Availability</h2>
+          <span class="en">Performance, Scalability &amp; HA</span>
+        </div>
+        <p class="lead">
+          ผลวัดจริงจากการทดสอบโหลด (load test) และฐานข้อมูลทดสอบขนาด 1
+          ล้านการตรวจ / 300,000 ผู้ป่วย —
+          ค่าจริงขึ้นกับฮาร์ดแวร์ของแต่ละโรงพยาบาล
+        </p>
+
+        <table class="ft plain">
+          <thead>
+            <tr>
+              <th>การทดสอบโหลด</th>
+              <th>ผู้ใช้พร้อมกัน</th>
+              <th>เฟรมภาพ/นาที</th>
+              <th>เวลาเฟรมนอก cache (p95)</th>
+              <th>MPR พร้อม (p95)</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>Single VM ขนาด S</b><span class="en">6 vCPU / 16 GB</span>
+              </td>
+              <td class="num" data-l="ผู้ใช้:">10</td>
+              <td class="num" data-l="เฟรม/นาที:">3,400</td>
+              <td class="num" data-l="p95:">547 ms</td>
+              <td class="num" data-l="MPR:">7.0 s</td>
+              <td class="num after" data-l="Error:">0</td>
+            </tr>
+            <tr>
+              <td><b>Server ทดสอบ</b><span class="en">12 threads</span></td>
+              <td class="num" data-l="ผู้ใช้:">20</td>
+              <td class="num" data-l="เฟรม/นาที:">
+                สูงสุด 7,935 (6.6 GB/นาที)
+              </td>
+              <td class="num" data-l="p95:">356 ms</td>
+              <td class="num" data-l="MPR:">13.7 s (p50 1.7 s)</td>
+              <td class="num after" data-l="Error:">0</td>
+            </tr>
+            <tr>
+              <td>
+                <b>ชุด HA (cache อุ่น)</b
+                ><span class="en">2 Server + Witness</span>
+              </td>
+              <td class="num" data-l="ผู้ใช้:">10</td>
+              <td class="num" data-l="เฟรม/นาที:">3,294</td>
+              <td class="num" data-l="p95:">663 ms</td>
+              <td class="num" data-l="MPR:">6.7 s</td>
+              <td class="num after" data-l="Error:">0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="ft plain" style="margin-top: 14px">
+          <thead>
+            <tr>
+              <th>ฐานข้อมูล 1 ล้านการตรวจ</th>
+              <th>ก่อนปรับปรุง</th>
+              <th>หลังปรับปรุง</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>ค้นรายการการตรวจ</b><span class="en">Study list</span></td>
+              <td class="num" data-l="ก่อน:">61 ms</td>
+              <td class="num after" data-l="หลัง:">24 ms</td>
+            </tr>
+            <tr>
+              <td>
+                <b>ค้นรายชื่อผู้ป่วย</b><span class="en">Patient list</span>
+              </td>
+              <td class="num" data-l="ก่อน:">6.6 s</td>
+              <td class="num after" data-l="หลัง:">0.3–0.7 s</td>
+            </tr>
+            <tr>
+              <td><b>ค้นเอกสารแนบ</b><span class="en">Files list</span></td>
+              <td class="num" data-l="ก่อน:">&gt; 60 s</td>
+              <td class="num after" data-l="หลัง:">12 ms</td>
+            </tr>
+            <tr>
+              <td><b>ค้นบันทึก audit</b><span class="en">Audit list</span></td>
+              <td class="num" data-l="ก่อน:">220 ms</td>
+              <td class="num after" data-l="หลัง:">22 ms</td>
+            </tr>
+            <tr>
+              <td>
+                <b>จับคู่ผู้ป่วย (ชื่อ + วันเกิด)</b
+                ><span class="en">EMPI match</span>
+              </td>
+              <td class="num" data-l="ก่อน:">42 ms</td>
+              <td class="num after" data-l="หลัง:">1.6 ms</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="ft" style="margin-top: 14px">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>จุดเด่น</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>Server หลายชุดพร้อม Load Balancer</b
+                ><span class="en">Horizontal Scaling</span>
+              </td>
+              <td>
+                API server 3 ชุด (สูงสุด 8 ชุดบนเครื่อง 32 core) กระจายงานแบบ
+                least-connection งานหนัก เช่น ส่งออก ZIP ไม่ทำให้ผู้ใช้อื่นช้า
+              </td>
+              <td><span class="tag key">ขยายได้</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>Cache ภาพที่ Gateway</b
+                ><span class="en">Edge Pixel Cache</span>
+              </td>
+              <td>
+                เก็บเฟรมภาพและภาพตัวอย่าง 7 วัน ภาพที่อยู่ใน cache ตอบได้ในระดับ
+                6–26 ms (p50)
+              </td>
+              <td><span class="tag key">เปิดภาพเร็ว</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>ชุด High Availability</b
+                ><span class="en">2 Servers + 1 Witness</span>
+              </td>
+              <td>
+                Virtual IP, ฐานข้อมูล standby ทั้ง 4 ชุด, Redis Sentinel,
+                storage ทำสำเนาข้ามเครื่อง ผลซ้อมจริง: VIP ย้ายเองใน 5–10
+                วินาที, Redis สลับเองใน ~6 วินาที, ปิดเครื่องหลักกะทันหัน —
+                ฐานข้อมูลสลับด้วยคำสั่งเดียว กู้บริการครบใน 92 วินาทีหลังสั่ง
+                (ออกแบบเพื่อกันข้อมูลแตกเป็นสองชุด)
+              </td>
+              <td><span class="tag key">ซ้อมแล้ว</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>เวลาที่ภาพพร้อมในรายการ</b
+                ><span class="en">Ingest Latency</span>
+              </td>
+              <td>
+                p50 ~35 วินาที / p95 ~50 วินาที นับจากเครื่องส่งภาพเสร็จ
+                (รวมเวลารอ 30 วินาทีเพื่อยืนยันว่า study รับครบแล้ว)
+              </td>
+              <td><span class="tag key">ใกล้เรียลไทม์</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.9 -->
+      <section id="b9">
+        <div class="sec-head">
+          <span class="no">2.9</span>
+          <h2>การเฝ้าระวังและบำรุงรักษาอัตโนมัติ</h2>
+          <span class="en">Monitoring &amp; Maintenance</span>
+        </div>
+        <table class="ft">
+          <thead>
+            <tr>
+              <th>ความสามารถ</th>
+              <th>รายละเอียด</th>
+              <th>ความถี่</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>ตรวจสุขภาพบริการ</b><span class="en">Service Health</span>
+              </td>
+              <td>
+                ตรวจ 15 บริการหลัก แจ้งเตือนทางอีเมลและบันทึก audit
+                พร้อมช่วงหน่วงกันแจ้งซ้ำ
+              </td>
+              <td><span class="tag role">ทุก 15 นาที</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>พื้นที่จัดเก็บและดิสก์</b
+                ><span class="en">Storage &amp; Disk</span>
+              </td>
+              <td>
+                ตรวจทุก volume และดิสก์ของเครื่อง (ระบบ / สำรองข้อมูล)
+                เกณฑ์เตือนปรับได้ 50–99%
+              </td>
+              <td><span class="tag role">ทุก 30 นาที</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>การสำรองและฐานข้อมูล</b
+                ><span class="en">Backup &amp; DB Probe</span>
+              </td>
+              <td>
+                สถานะการสำรอง WAL, การทดสอบกู้คืนที่ค้าง, ฐานข้อมูลหลัก/สำรอง
+                (ชุด HA แจ้งภายใน ~2 นาที)
+              </td>
+              <td><span class="tag role">ทุก 10 นาที</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>คิวและการเชื่อมต่อ</b
+                ><span class="en">Queues, HL7, DICOM Nodes</span>
+              </td>
+              <td>
+                dead-letter queue ของการรับภาพและ HL7, ปลายทาง HL7 ไม่ตอบ,
+                รายการ DICOM Node ไม่ตรงกัน, สำเนาภาพที่ขาด
+              </td>
+              <td><span class="tag role">ต่อเนื่อง</span></td>
+            </tr>
+            <tr>
+              <td>
+                <b>งานทำความสะอาดรายคืน</b
+                ><span class="en">Nightly Housekeeping</span>
+              </td>
+              <td>
+                บันทึก audit / ข้อความ HL7 / ถังขยะเอกสาร เก็บ 90 วัน, Worklist
+                หมดอายุ 7 วัน, ล้าง token และไฟล์ชั่วคราว, จัดการ cache
+                วิดีโอตามอายุและขนาด
+              </td>
+              <td><span class="tag role">ทุกคืน</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 2.10 -->
+      <section id="b10">
+        <div class="sec-head">
+          <span class="no">2.10</span>
+          <h2>รูปแบบการติดตั้งและขนาดระบบ</h2>
+          <span class="en">Deployment Models &amp; Sizing</span>
+        </div>
+        <p class="lead">
+          ติดตั้งบน VMware ในศูนย์ข้อมูลของโรงพยาบาล ใช้ IP ภายใน ไม่พึ่งพา
+          Cloud — ตอนติดตั้ง ระบบอ่านขนาดเครื่องจริงแล้วเลือกชุดค่าปรับแต่ง
+          (ฐานข้อมูล, คลังภาพ, cache, จำนวน server)
+          ของระดับที่ใกล้ที่สุดให้อัตโนมัติ
+          และมีเครื่องมือตรวจสอบว่าค่าถูกใช้งานจริง
+          <b>ตัวเลขในตารางคือขนาดอ้างอิงของแต่ละระดับ ไม่ใช่สเปกขั้นต่ำ</b> —
+          ข้อกำหนดขั้นต่ำอยู่ในกรอบด้านล่าง
+        </p>
+        <table class="ft plain">
+          <thead>
+            <tr>
+              <th>ระดับ</th>
+              <th>vCPU / RAM / SSD (hot)</th>
+              <th>เหมาะสำหรับ</th>
+              <th>ที่มาของตัวเลข</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>XS</b><span class="en">Demo</span></td>
+              <td class="num" data-l="สเปก:">4 vCPU / 8 GB / 250 GB</td>
+              <td data-l="เหมาะสำหรับ:">
+                สาธิตและทดสอบเท่านั้น — ไม่แนะนำสำหรับ production
+              </td>
+              <td data-l="ที่มา:">
+                <span class="tag role">Demo เท่านั้น</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>S</b><span class="en">Small hospital</span></td>
+              <td class="num" data-l="สเปก:">8 vCPU / 16 GB / 500 GB</td>
+              <td data-l="เหมาะสำหรับ:">
+                โรงพยาบาลขนาดเล็ก ~10 ผู้ดูภาพพร้อมกัน — ขั้นต่ำสำหรับ
+                production
+              </td>
+              <td data-l="ที่มา:">
+                <span class="tag sec">วัดจริงด้วย load test</span>
+              </td>
+            </tr>
+            <tr>
+              <td><b>M</b><span class="en">General hospital</span></td>
+              <td class="num" data-l="สเปก:">16 vCPU / 32 GB / 1 TB</td>
+              <td data-l="เหมาะสำหรับ:">
+                โรงพยาบาลทั่วไป — ขนาดที่วางไว้สำหรับ production ทั่วไป
+              </td>
+              <td data-l="ที่มา:"><span class="tag key">ค่าประมาณ</span></td>
+            </tr>
+            <tr>
+              <td><b>L</b><span class="en">Large hospital</span></td>
+              <td class="num" data-l="สเปก:">24 vCPU / 64 GB / 2 TB</td>
+              <td data-l="เหมาะสำหรับ:">โรงพยาบาลขนาดใหญ่</td>
+              <td data-l="ที่มา:"><span class="tag key">ค่าประมาณ</span></td>
+            </tr>
+            <tr>
+              <td><b>XL</b><span class="en">Imaging centre</span></td>
+              <td class="num" data-l="สเปก:">32 vCPU / 64 GB / 10 TB</td>
+              <td data-l="เหมาะสำหรับ:">
+                ศูนย์ภาพหลายแหล่ง / เก็บข้อมูล hot นาน
+              </td>
+              <td data-l="ที่มา:"><span class="tag key">ค่าประมาณ</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          "ค่าประมาณ" = คำนวณจากสูตรที่ได้จากระดับที่วัดจริง
+          ยังไม่มีเครื่องจริงให้วัด —
+          ต้องทดสอบโหลดซ้ำบนเครื่องของโรงพยาบาลตอนตรวจรับ (acceptance) ·
+          เลือกแต่ละมิติแยกกันได้ เช่น 16 vCPU + 32 GB + SSD 1 TB
+        </p>
+
+        <div class="reqbox">
+          <h4>ข้อกำหนดขั้นต่ำ (Single VM)</h4>
+          <div class="reqgrid">
+            <div>
+              <b>CPU / RAM</b
+              ><span
+                >production ขั้นต่ำ <b>8 vCPU / 16 GB</b> · ระบบต้องการอย่างน้อย
+                <b>6 vCPU</b> (น้อยกว่านี้ติดตั้งไม่ได้
+                หากไม่ปรับค่าเฉพาะ)</span
+              >
+            </div>
+            <div>
+              <b>OS disk</b
+              ><span
+                >SSD ≥ 100 GB — ระบบปฏิบัติการ, Docker images และฐานข้อมูล
+                PostgreSQL ×4</span
+              >
+            </div>
+            <div>
+              <b>Hot SSD</b
+              ><span
+                >ตามคอลัมน์ SSD (hot) ในตาราง — ประเมินได้จาก 14 วัน ×
+                ปริมาณภาพต่อวัน × 1.5</span
+              >
+            </div>
+            <div>
+              <b>Cold HDD</b
+              ><span
+                >ตามปริมาณภาพที่ต้องเก็บระยะยาว (ข้อมูลที่ไม่มีการเขียนเกิน 14
+                วันย้ายจาก SSD มาอัตโนมัติ)</span
+              >
+            </div>
+            <div>
+              <b>Backup disk</b
+              ><span
+                >แยกลูก เริ่มต้นประมาณ 3 เท่าของฐานข้อมูล
+                และเพิ่มตามปริมาณภาพที่รับต่อวัน (เก็บย้อนหลัง ~14 สัปดาห์) —
+                ระบบแจ้งเตือนเมื่อใกล้เต็ม</span
+              >
+            </div>
+            <div>
+              <b>สำเนาภาพ</b
+              ><span
+                >hot และ cold มีอย่างละ 2 ลูก (ดิสก์กายภาพคนละลูก) เพื่อเก็บภาพ
+                2 สำเนา</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="cmp two">
+          <div class="box">
+            <div class="t">Single VM (ไม่มี HA)</div>
+            <p>
+              เครื่องเดียว ≥ 8 vCPU / 16 GB, SSD ระบบ 100 GB + ดิสก์ข้อมูล 5 ลูก
+              (hot ×2, cold ×2, backup) ภาพทุกภาพมี 2 สำเนาบนดิสก์คนละลูก
+              ติดตั้งด้วยสคริปต์อัตโนมัติ
+            </p>
+          </div>
+          <div class="box">
+            <div class="t">High Availability (L1)</div>
+            <p>
+              Server 2 เครื่อง + Witness 1 เครื่อง (≥ 2 vCPU / 3 GB)
+              ทุกส่วนมีคู่สำรอง ภาพทำสำเนาข้ามเครื่อง
+              ผ่านการซ้อมดับเครื่องจริงทุกตำแหน่ง
+            </p>
+          </div>
+        </div>
+
+        <div class="stds">
+          <span>DICOM <small>Storage · Q/R · MWL · DICOMweb</small></span>
+          <span>HL7 v2.x <small>ADT · ORM/OMI/OMG · ORU · MLLP</small></span>
+          <span>IHE <small>แนวทาง Scheduled Workflow</small></span>
+          <span>JPEG-LS <small>Lossless</small></span>
+          <span>S3 <small>Object Storage</small></span>
+          <span>PostgreSQL 18 <small>+ pgBackRest PITR</small></span>
+          <span>PDPA <small>RBAC · Data Scope · Audit</small></span>
+        </div>
+      </section>
+
+      <!-- 2.11 -->
+      <section id="b11">
+        <div class="sec-head">
+          <span class="no">2.11</span>
+          <h2>ขอบเขตปัจจุบัน</h2>
+          <span class="en">Current Scope</span>
+        </div>
+        <div class="callout">
+          <h4>หมายเหตุ — สิ่งที่ยังไม่รวมในเวอร์ชันปัจจุบัน</h4>
+          <ul>
+            <li>
+              ยังไม่มีระบบเขียนผลอ่านภาพ (Radiology Reporting) — ORU ที่ส่งให้
+              HIS หมายถึง "ภาพพร้อม" ไม่ใช่ผลอ่าน
+            </li>
+            <li>
+              Vantyx ยังไม่ดึงภาพ (Query / Retrieve) จาก PACS อื่น —
+              รับภาพแบบส่งเข้ามา (push) เป็นหลัก และยังไม่เปิด QIDO-RS / STOW-RS
+              ให้ระบบภายนอก
+            </li>
+            <li>
+              ฐานข้อมูลสำรองครบถ้วนพร้อม PITR ส่วนไฟล์ภาพ DICOM
+              ป้องกันด้วยการทำสำเนาข้ามดิสก์/ข้ามเครื่อง — การสำรองนอกสถานที่
+              (3-2-1) ต้องวางแผนเพิ่มตามนโยบายของโรงพยาบาล
+            </li>
+            <li>
+              ชุด HA ยังไม่สลับฐานข้อมูลอัตโนมัติ —
+              ปัจจุบันเจ้าหน้าที่สั่งด้วยคำสั่งเดียว เสร็จใน ~1.5 นาที
+              ทำเป็นอัตโนมัติได้ภายหลังโดยไม่ต้องซื้อเครื่องเพิ่ม
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span><b>Vantyx</b> — Medical Imaging Platform · VNA</span>
+        <span
+          >ข้อมูล ณ 9 ตุลาคม 2569 · จัดทำจาก source code และเอกสารออกแบบของระบบ
+          · ตัวเลขประสิทธิภาพวัดบนเครื่องทดสอบ</span
+        >
+      </div>
+    </footer>
+  </body>
+</html>
