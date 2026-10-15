@@ -1,0 +1,1507 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>คู่มือการใช้งาน Vantyx Viewer</title>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <meta name="description" content="คู่มือการใช้งาน Vantyx DICOM Viewer ทุกเมนู ทุกปุ่ม เครื่องมือ และ Viewer Settings" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="../shared/site-nav.css" />
+    <script src="../shared/site-nav.js" defer></script>
+    <script>
+      // ตั้งธีมก่อน render (กันจอกะพริบ) — ค่าที่ผู้ใช้เลือกเก็บใน localStorage ไม่มีค่า = ตามระบบปฏิบัติการ
+      ;(function () {
+        var t = null
+        try {
+          // คีย์เดียวกับคู่มือ VNA (vantyx-doc-theme) — ธีมใช้ร่วมกันทั้ง 2 คู่มือ · คีย์เก่าของคู่มือ Viewer อ่านเป็นค่าสำรอง
+          t = localStorage.getItem('vantyx-doc-theme') || localStorage.getItem('vantyx-viewer-doc-theme')
+        } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        document.documentElement.setAttribute('data-theme', t)
+      })()
+    </script>
+  </head>
+  <body>
+    <!-- ไอคอนชุดเดียวกับ Vantyx Viewer: custom toolIcons.tsx (c-*), lucide-react 1.50.0 (l-*), @mui/icons-material 6.5.0 (m-*) -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+      <symbol id="c-cobb-angle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.4 2.8 4.6 9.2M7.4 21.2 4.6 14.8"></path><path d="M6 6 20 12 6 18"></path><path d="M15.4 10a5 5 0 0 0 0 4"></path></g></symbol>
+      <symbol id="c-cardiothoracic-ratio" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V13C4 7 7.5 3 12 3s8 4 8 10v7"></path><path d="M4 17h16"></path><path d="M8.5 12h7"></path><path d="M8.5 10.5v3M15.5 10.5v3"></path></g></symbol>
+      <symbol id="c-spine-label" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="2.5" width="8" height="4.5" rx="1.5"></rect><rect x="3" y="9.75" width="8" height="4.5" rx="1.5"></rect><rect x="3" y="17" width="8" height="4.5" rx="1.5"></rect><path d="M14 4.75h7M14 12h7M14 19.25h7"></path></g></symbol>
+      <symbol id="c-spine" viewBox="0 0 24 24"><g fill="currentColor"><rect x="11.8" y="1.3" width="5.2" height="2.6" rx="1.1" transform="rotate(-14 14.4 2.6)"></rect><rect x="9.8" y="5.1" width="5.8" height="2.8" rx="1.1" transform="rotate(2 12.7 6.5)"></rect><rect x="8.8" y="9.05" width="6.4" height="2.9" rx="1.1" transform="rotate(2 12 10.5)"></rect><rect x="9" y="13" width="7" height="3" rx="1.1" transform="rotate(-8 12.5 14.5)"></rect><rect x="10.6" y="16.95" width="7.4" height="3.1" rx="1.1" transform="rotate(-18 14.3 18.5)"></rect><path d="M11.9 21.6 19.2 19.9 14.9 23.6Z"></path></g><path d="M11.6 3.6 9.3 4.9M9.7 7.5 7.1 8.7M8.7 11.4 5.9 12.4M8.9 15.6 6.1 17M10.7 20 8.7 21.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></symbol>
+      <symbol id="c-height-difference" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h9M13 19h9"></path><path d="M12 5v14"></path><path d="m9.5 7.5 2.5-2.5 2.5 2.5M9.5 16.5l2.5 2.5 2.5-2.5"></path></g></symbol>
+      <symbol id="c-calibration" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 20 4"></path><path d="M2.5 17.5l4 4M17.5 2.5l4 4"></path><path d="M9.5 12.5l1.5 1.5M12.5 9.5l1.5 1.5"></path><circle cx="18" cy="18" r="3"></circle><path d="m16.6 18 1 1 1.8-2"></path></g></symbol>
+      <symbol id="c-ellipse-roi" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="10" ry="6.5"></ellipse></g></symbol>
+      <symbol id="c-ultrasound-directional" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"></path><path d="M10 3 4 17a14 10 0 0 0 16 0L14 3"></path><path d="M8.5 14.5 15 10"></path><path d="m12.2 9.6 2.8.4-.8 2.7"></path></g></symbol>
+      <symbol id="c-reset-oblique" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 10.5 15 9"></path><path d="M4 4v15a1 1 0 0 0 1 1h15"></path><path d="M4.293 19.707 6 18"></path><path d="m9 15 1.5-1.5"></path></g></symbol>
+      <symbol id="c-bidirectional" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18 20 6"></path><path d="M9 8l6 8"></path></g><circle cx="4" cy="18" r="2" fill="currentColor"></circle><circle cx="20" cy="6" r="2" fill="currentColor"></circle><circle cx="9" cy="8" r="1.6" fill="currentColor"></circle><circle cx="15" cy="16" r="1.6" fill="currentColor"></circle></symbol>
+      <symbol id="c-livewire" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14 6.5 8 11 5l3.5 1.5L18 6l1.5 5-2 3 1 4-5 1.5L9 18Z"></path></g><circle cx="6.5" cy="8" r="1.8" fill="currentColor"></circle><circle cx="18" cy="6" r="1.8" fill="currentColor"></circle><circle cx="9" cy="18" r="1.8" fill="currentColor"></circle></symbol>
+      <symbol id="c-wl-presets" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5" cy="4.5" r="2.4"></circle><circle cx="5" cy="12" r="2.4"></circle><circle cx="5" cy="19.5" r="2.4"></circle></g><path d="M5 2.1a2.4 2.4 0 0 0 0 4.8ZM5 9.6a2.4 2.4 0 0 0 0 4.8ZM5 17.1a2.4 2.4 0 0 0 0 4.8Z" fill="currentColor"></path><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.5h10M11 12h10M11 19.5h10"></path></g></symbol>
+      <symbol id="c-invert-image" viewBox="0 0 24 24"><path fill-rule="evenodd" fill="currentColor" d="M2 10.5a1.5 1.5 0 0 1 1.5-1.5h6A1.5 1.5 0 0 1 11 10.5v9A1.5 1.5 0 0 1 9.5 21h-6A1.5 1.5 0 0 1 2 19.5Zm2.3 4.5a2.2 2.2 0 1 0 4.4 0 2.2 2.2 0 1 0-4.4 0Z"></path><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="8" height="10" rx="1.5"></rect><path d="M6.5 6.5c1.5-3 9.5-3 11 0"></path><path d="m15.2 5.8 2.3.7.6-2.4"></path></g><circle cx="18" cy="15" r="2.2" fill="currentColor"></circle></symbol>
+      <symbol id="c-palette-colorbar" viewBox="0 0 24 24"><rect x="5" y="2.5" width="6" height="19" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"></rect><rect x="5" y="15" width="6" height="6.5" fill="currentColor"></rect><rect x="5" y="9" width="6" height="6" fill="currentColor" opacity="0.55"></rect><rect x="5" y="3" width="6" height="6" fill="currentColor" opacity="0.2"></rect><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h3M14.5 12h5M14.5 20h3"></path></g></symbol>
+      <symbol id="c-wl-region" viewBox="0 0 24 24"><rect x="2.5" y="2.5" width="19" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="3 2.4"></rect><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.6"></circle><path d="M12 7a5 5 0 0 1 0 10Z" fill="currentColor"></path></symbol>
+      <symbol id="c-ref-line" viewBox="0 0 24 24"><rect x="1.5" y="4.5" width="9" height="15" rx="1.5" fill="currentColor" opacity="0.3"></rect><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="1.5" y="4.5" width="9" height="15" rx="1.5"></rect><rect x="13.5" y="4.5" width="9" height="15" rx="1.5"></rect></g><path d="M12 11h12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path></symbol>
+      <symbol id="c-ref-line-off" viewBox="0 0 24 24"><rect x="1.5" y="4.5" width="9" height="15" rx="1.5" fill="currentColor" opacity="0.3"></rect><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="1.5" y="4.5" width="9" height="15" rx="1.5"></rect><rect x="13.5" y="4.5" width="9" height="15" rx="1.5"></rect></g><path d="M12 11h12" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2 2" opacity="0.6"></path></symbol>
+      <symbol id="l-scan-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle><path d="m16 16-1.9-1.9"></path></symbol>
+      <symbol id="l-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"></path><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle></symbol>
+      <symbol id="l-angle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M3 11a10 10 0 0 1 10 10"></path></symbol>
+      <symbol id="l-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></symbol>
+      <symbol id="l-lasso-select" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22a5 5 0 0 1-2-4"></path><path d="M7 16.93c.96.43 1.96.74 2.99.91"></path><path d="M3.34 14A6.8 6.8 0 0 1 2 10c0-4.42 4.48-8 10-8s10 3.58 10 8a7.19 7.19 0 0 1-.33 2"></path><path d="M5 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path><path d="M14.33 22h-.09a.35.35 0 0 1-.24-.32v-10a.34.34 0 0 1 .33-.34c.08 0 .15.03.21.08l7.34 6a.33.33 0 0 1-.21.59h-4.49l-2.57 3.85a.35.35 0 0 1-.28.14z"></path></symbol>
+      <symbol id="l-spline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="19" cy="5" r="2"></circle><circle cx="5" cy="19" r="2"></circle><path d="M5 17A12 12 0 0 1 17 5"></path></symbol>
+      <symbol id="l-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></symbol>
+      <symbol id="l-cylinder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5v14a9 3 0 0 0 18 0V5"></path></symbol>
+      <symbol id="l-crosshair" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" x2="18" y1="12" y2="12"></line><line x1="6" x2="2" y1="12" y2="12"></line><line x1="12" x2="12" y1="6" y2="2"></line><line x1="12" x2="12" y1="22" y2="18"></line></symbol>
+      <symbol id="l-pipette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"></path><path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"></path><path d="m2 22 .414-.414"></path></symbol>
+      <symbol id="l-type" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16"></path><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path></symbol>
+      <symbol id="l-undo2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"></path></symbol>
+      <symbol id="l-redo2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"></path><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13"></path></symbol>
+      <symbol id="l-ruler" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"></path><path d="m14.5 12.5 2-2"></path><path d="m11.5 9.5 2-2"></path><path d="m8.5 6.5 2-2"></path><path d="m17.5 15.5 2-2"></path></symbol>
+      <symbol id="l-move" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="m15 19-3 3-3-3"></path><path d="m19 9 3 3-3 3"></path><path d="M2 12h20"></path><path d="m5 9-3 3 3 3"></path><path d="m9 5 3-3 3 3"></path></symbol>
+      <symbol id="l-compass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></symbol>
+      <symbol id="l-layers3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></symbol>
+      <symbol id="l-axis3d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 10.5 15 9"></path><path d="M4 4v15a1 1 0 0 0 1 1h15"></path><path d="M4.293 19.707 6 18"></path><path d="m9 15 1.5-1.5"></path></symbol>
+      <symbol id="l-crop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"></path><path d="M18 22V8a2 2 0 0 0-2-2H2"></path></symbol>
+      <symbol id="l-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></symbol>
+      <symbol id="l-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></symbol>
+      <symbol id="l-printer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></symbol>
+      <symbol id="l-tags" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.172 2a2 2 0 0 1 1.414.586l6.71 6.71a2.4 2.4 0 0 1 0 3.408l-4.592 4.592a2.4 2.4 0 0 1-3.408 0l-6.71-6.71A2 2 0 0 1 6 9.172V3a1 1 0 0 1 1-1z"></path><path d="M2 7v6.172a2 2 0 0 0 .586 1.414l6.71 6.71a2.4 2.4 0 0 0 3.191.193"></path><circle cx="10.5" cy="6.5" r=".5" fill="currentColor"></circle></symbol>
+      <symbol id="l-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path><path d="M7 3v4a1 1 0 0 0 1 1h7"></path></symbol>
+      <symbol id="l-rotate-ccw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></symbol>
+      <symbol id="l-bookmark-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v6"></path><path d="M15 10H9"></path><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"></path></symbol>
+      <symbol id="l-layout-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="7" x="3" y="3" rx="1"></rect><rect width="9" height="7" x="3" y="14" rx="1"></rect><rect width="5" height="7" x="16" y="14" rx="1"></rect></symbol>
+      <symbol id="l-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></symbol>
+      <symbol id="l-trash2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></symbol>
+      <symbol id="m-three-d-rotation" viewBox="0 0 24 24"><path d="M7.52 21.48C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81zm.89-6.52c-.19 0-.37-.03-.52-.08-.16-.06-.29-.13-.4-.24-.11-.1-.2-.22-.26-.37-.06-.14-.09-.3-.09-.47h-1.3c0 .36.07.68.21.95s.33.5.56.69c.24.18.51.32.82.41q.45.15.96.15c.37 0 .72-.05 1.03-.15.32-.1.6-.25.83-.44s.42-.43.55-.72.2-.61.2-.97c0-.19-.02-.38-.07-.56s-.12-.35-.23-.51c-.1-.16-.24-.3-.4-.43-.17-.13-.37-.23-.61-.31.2-.09.37-.2.52-.33s.27-.27.37-.42.17-.3.22-.46.07-.32.07-.48q0-.54-.18-.96t-.51-.69c-.2-.19-.47-.33-.77-.43C9.1 8.05 8.76 8 8.39 8c-.36 0-.69.05-1 .16-.3.11-.57.26-.79.45-.21.19-.38.41-.51.67-.12.26-.18.54-.18.85h1.3q0-.255.09-.45c.09-.195.14-.25.25-.34s.23-.17.38-.22.3-.08.48-.08c.4 0 .7.1.89.31.19.2.29.49.29.86 0 .18-.03.34-.08.49s-.14.27-.25.37-.25.18-.41.24-.36.09-.58.09H7.5v1.03h.77c.22 0 .42.02.6.07s.33.13.45.23c.12.11.22.24.29.4s.1.35.1.57c0 .41-.12.72-.35.93-.23.23-.55.33-.95.33m8.55-5.92c-.32-.33-.7-.59-1.14-.77-.43-.18-.92-.27-1.46-.27H12v8h2.3c.55 0 1.06-.09 1.51-.27s.84-.43 1.16-.76.57-.73.74-1.19c.17-.47.26-.99.26-1.57v-.4c0-.58-.09-1.1-.26-1.57q-.27-.705-.75-1.2m-.39 3.16c0 .42-.05.79-.14 1.13-.1.33-.24.62-.43.85s-.43.41-.71.53q-.435.18-.99.18h-.91V9.12h.97c.72 0 1.27.23 1.64.69.38.46.57 1.12.57 1.99zM12 0l-.66.03 3.81 3.81 1.33-1.33c3.27 1.55 5.61 4.72 5.96 8.48h1.5C23.44 4.84 18.29 0 12 0"></path></symbol>
+      <symbol id="m-zoom-in" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path><path d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2z"></path></symbol>
+      <symbol id="m-open-with" viewBox="0 0 24 24"><path d="M10 9h4V6h3l-5-5-5 5h3zm-1 1H6V7l-5 5 5 5v-3h3zm14 2-5-5v3h-3v4h3v3zm-9 3h-4v3H7l5 5 5-5h-3z"></path></symbol>
+      <symbol id="m-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></symbol>
+      <symbol id="m-contrast" viewBox="0 0 24 24"><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10m1-17.93c3.94.49 7 3.85 7 7.93s-3.05 7.44-7 7.93z"></path></symbol>
+      <symbol id="m-bar-chart" viewBox="0 0 24 24"><path d="M4 9h4v11H4zm12 4h4v7h-4zm-6-9h4v16h-4z"></path></symbol>
+      <symbol id="m-straighten" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2z"></path></symbol>
+      <symbol id="m-crop-square" viewBox="0 0 24 24"><path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 14H6V6h12z"></path></symbol>
+      <symbol id="m-insert-comment" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2m-2 12H6v-2h12zm0-3H6V9h12zm0-3H6V6h12z"></path></symbol>
+      <symbol id="m-border-clear" viewBox="0 0 24 24"><path d="M7 5h2V3H7zm0 8h2v-2H7zm0 8h2v-2H7zm4-4h2v-2h-2zm0 4h2v-2h-2zm-8 0h2v-2H3zm0-4h2v-2H3zm0-4h2v-2H3zm0-4h2V7H3zm0-4h2V3H3zm8 8h2v-2h-2zm8 4h2v-2h-2zm0-4h2v-2h-2zm0 8h2v-2h-2zm0-12h2V7h-2zm-8 0h2V7h-2zm8-6v2h2V3zm-8 2h2V3h-2zm4 16h2v-2h-2zm0-8h2v-2h-2zm0-8h2V3h-2z"></path></symbol>
+      <symbol id="m-fit-screen" viewBox="0 0 24 24"><path d="M17 4h3c1.1 0 2 .9 2 2v2h-2V6h-3zM4 8V6h3V4H4c-1.1 0-2 .9-2 2v2zm16 8v2h-3v2h3c1.1 0 2-.9 2-2v-2zM7 18H4v-2H2v2c0 1.1.9 2 2 2h3zM18 8H6v8h12z"></path></symbol>
+      <symbol id="m-screen-lock-landscape" viewBox="0 0 24 24"><path d="M21 5H3c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m-2 12H5V7h14zm-9-1h4c.55 0 1-.45 1-1v-3c0-.55-.45-1-1-1v-1c0-1.11-.9-2-2-2-1.11 0-2 .9-2 2v1c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1m.8-6c0-.66.54-1.2 1.2-1.2s1.2.54 1.2 1.2v1h-2.4z"></path></symbol>
+      <symbol id="m-border-all" viewBox="0 0 24 24"><path d="M3 3v18h18V3zm8 16H5v-6h6zm0-8H5V5h6zm8 8h-6v-6h6zm0-8h-6V5h6z"></path></symbol>
+      <symbol id="m-sync" viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8m0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4z"></path></symbol>
+      <symbol id="m-sync-disabled" viewBox="0 0 24 24"><path d="M10 6.35V4.26c-.8.21-1.55.54-2.23.96l1.46 1.46c.25-.12.5-.24.77-.33m-7.14-.94 2.36 2.36C4.45 8.99 4 10.44 4 12c0 2.21.91 4.2 2.36 5.64L4 20h6v-6l-2.24 2.24C6.68 15.15 6 13.66 6 12c0-1 .25-1.94.68-2.77l8.08 8.08c-.25.13-.5.25-.77.34v2.09c.8-.21 1.55-.54 2.23-.96l2.36 2.36 1.27-1.27L4.14 4.14zM20 4h-6v6l2.24-2.24C17.32 8.85 18 10.34 18 12c0 1-.25 1.94-.68 2.77l1.46 1.46C19.55 15.01 20 13.56 20 12c0-2.21-.91-4.2-2.36-5.64z"></path></symbol>
+      <symbol id="m-more-horiz" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2m12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2m-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2"></path></symbol>
+      <symbol id="m-settings" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6"></path></symbol>
+      <symbol id="m-menu" viewBox="0 0 24 24"><path d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"></path></symbol>
+      <symbol id="m-menu-open" viewBox="0 0 24 24"><path d="M3 18h13v-2H3zm0-5h10v-2H3zm0-7v2h13V6zm18 9.59L17.42 12 21 8.41 19.59 7l-5 5 5 5z"></path></symbol>
+      <symbol id="m-arrow-drop-down" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5z"></path></symbol>
+      <symbol id="m-lock" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"></path></symbol>
+      <symbol id="m-lock-open" viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2m6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m0 12H6V10h12z"></path></symbol>
+      <symbol id="m-rotate-left" viewBox="0 0 24 24"><path d="M7.11 8.53 5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47M6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47m1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93"></path></symbol>
+      <symbol id="m-rotate-right" viewBox="0 0 24 24"><path d="M15.55 5.55 11 1v3.07C7.06 4.56 4 7.92 4 12s3.05 7.44 7 7.93v-2.02c-2.84-.48-5-2.94-5-5.91s2.16-5.43 5-5.91V10zM19.93 11c-.17-1.39-.72-2.73-1.62-3.89l-1.42 1.42c.54.75.88 1.6 1.02 2.47zM13 17.9v2.02c1.39-.17 2.74-.71 3.9-1.61l-1.44-1.44c-.75.54-1.59.89-2.46 1.03m3.89-2.42 1.42 1.41c.9-1.16 1.45-2.5 1.62-3.89h-2.02c-.14.87-.48 1.72-1.02 2.48"></path></symbol>
+      <symbol id="m-flip" viewBox="0 0 24 24"><path d="M15 21h2v-2h-2zm4-12h2V7h-2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2m16-2v2h2c0-1.1-.9-2-2-2m-8 20h2V1h-2zm8-6h2v-2h-2zM15 5h2V3h-2zm4 8h2v-2h-2zm0 8c1.1 0 2-.9 2-2h-2z"></path></symbol>
+      <symbol id="m-restore" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9m-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8z"></path></symbol>
+      <symbol id="m-close" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></symbol>
+      <symbol id="m-tune" viewBox="0 0 24 24"><path d="M3 17v2h6v-2zM3 5v2h10V5zm10 16v-2h8v-2h-8v-2h-2v6zM7 9v2H3v2h4v2h2V9zm14 4v-2H11v2zm-6-4h2V7h4V5h-4V3h-2z"></path></symbol>
+      <symbol id="m-arrow-back-ios-new" viewBox="0 0 24 24"><path d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"></path></symbol>
+      <symbol id="m-arrow-forward-ios" viewBox="0 0 24 24"><path d="M6.23 20.23 8 22l10-10L8 2 6.23 3.77 14.46 12z"></path></symbol>
+      <symbol id="m-keyboard-arrow-left" viewBox="0 0 24 24"><path d="M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6z"></path></symbol>
+      <symbol id="m-keyboard-arrow-right" viewBox="0 0 24 24"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"></path></symbol>
+      <symbol id="m-play-arrow" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></symbol>
+      <symbol id="m-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6zm8-14v14h4V5z"></path></symbol>
+      <symbol id="m-center-focus-strong" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4m-7 7H3v4c0 1.1.9 2 2 2h4v-2H5zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2m0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2z"></path></symbol>
+      <symbol id="m-grid-view" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M3 3v8h8V3zm6 6H5V5h4zm-6 4v8h8v-8zm6 6H5v-4h4zm4-16v8h8V3zm6 6h-4V5h4zm-6 4v8h8v-8zm6 6h-4v-4h4z"></path></symbol>
+      <symbol id="m-view-list" viewBox="0 0 24 24"><path d="M3 14h4v-4H3zm0 5h4v-4H3zM3 9h4V5H3zm5 5h13v-4H8zm0 5h13v-4H8zM8 5v4h13V5z"></path></symbol>
+      <symbol id="m-article" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-5 14H7v-2h7zm3-4H7v-2h10zm0-4H7V7h10z"></path></symbol>
+      <symbol id="m-image" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2M8.5 13.5l2.5 3.01L14.5 12l4.5 6H5z"></path></symbol>
+      <symbol id="m-ondemand-video" viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.11-.9-2-2-2m0 14H3V5h18zm-5-6-7 4V7z"></path></symbol>
+      <symbol id="m-audiotrack" viewBox="0 0 24 24"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3z"></path></symbol>
+      <symbol id="m-calendar-month" viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM9 14H7v-2h2zm4 0h-2v-2h2zm4 0h-2v-2h2zm-8 4H7v-2h2zm4 0h-2v-2h2zm4 0h-2v-2h2z"></path></symbol>
+      <symbol id="m-download" viewBox="0 0 24 24"><path d="M5 20h14v-2H5zM19 9h-4V3H9v6H5l7 7z"></path></symbol>
+      <symbol id="m-arrow-upward" viewBox="0 0 24 24"><path d="m4 12 1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"></path></symbol>
+      <symbol id="m-arrow-downward" viewBox="0 0 24 24"><path d="m20 12-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8z"></path></symbol>
+      <symbol id="m-delete" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"></path></symbol>
+      <symbol id="m-add" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"></path></symbol>
+      <symbol id="m-edit" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75z"></path></symbol>
+      <symbol id="m-content-copy" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"></path></symbol>
+      <symbol id="m-expand-more" viewBox="0 0 24 24"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path></symbol>
+      <symbol id="m-light-mode" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"></path></symbol>
+      <symbol id="l-panels-top-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></symbol>
+      <symbol id="m-dark-mode" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"></path></symbol>
+    </svg>
+    <header class="topbar">
+      <button class="menu-btn" type="button" aria-label="เปิดเมนู">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="brand" href="#home" aria-label="หน้าแรกของคู่มือ">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="6" fill="#0B1220" stroke="#1E3A5F" />
+          <path d="M 16,27 Q 10.30,16.00 9,5" fill="none" stroke="#22D3EE" stroke-width="1.8" stroke-opacity="0.55" stroke-linecap="round" />
+          <path d="M 16,27 Q 16.00,15.50 16,4" fill="none" stroke="#22D3EE" stroke-width="2.6" stroke-linecap="round" />
+          <path d="M 16,27 Q 21.70,16.00 23,5" fill="none" stroke="#22D3EE" stroke-width="1.8" stroke-opacity="0.55" stroke-linecap="round" />
+          <circle cx="16" cy="27" r="1.3" fill="#22D3EE" />
+        </svg>
+        <span class="txt"><b>VANTYX</b><span>คู่มือการใช้งาน Viewer</span></span>
+      </a>
+      <div class="search">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        <input id="q" type="search" placeholder="ค้นหาในคู่มือ เช่น MPR, วัดระยะ, SUV, ปุ่มลัด" autocomplete="off" aria-label="ค้นหาในคู่มือ" />
+        <kbd>/</kbd>
+        <div id="suggest" class="suggest" role="listbox"></div>
+      </div>
+      <button class="theme-btn" type="button" title="Switch to Light" aria-label="Switch to Light">
+        <svg class="ic" aria-hidden="true"><use href="#m-light-mode" /></svg>
+      </button>
+      <a class="top-link" href="../index.html">← หน้าแรก</a>
+      <div class="site-nav" data-current="viewer-manual" data-base="../"></div>
+    </header>
+
+    <nav class="sidebar" aria-label="สารบัญคู่มือ">
+      <div class="nav-group">
+        <p>เริ่มต้น</p>
+        <a class="nav" href="#home"><span class="n">1</span>ภาพรวม Viewer</a>
+        <a class="nav" href="#open"><span class="n">2</span>การเปิด Viewer และการโหลดภาพ</a>
+        <a class="nav" href="#screen"><span class="n">3</span>ส่วนประกอบหน้าจอ</a>
+      </div>
+      <div class="nav-group">
+        <p>หน้าจอหลัก</p>
+        <a class="nav" href="#sidebar"><span class="n">4</span>แถบข้าง (Series / ไฟล์ / ค่าวัด)</a>
+        <a class="nav" href="#viewport"><span class="n">5</span>ช่องแสดงภาพ (Viewport)</a>
+        <a class="nav" href="#input"><span class="n">6</span>เมาส์ คีย์บอร์ด และการสัมผัส</a>
+      </div>
+      <div class="nav-group">
+        <p>เครื่องมือ (Toolbar)</p>
+        <a class="nav" href="#toolbar"><span class="n">7</span>ภาพรวม Toolbar</a>
+        <a class="nav" href="#navigate"><span class="n">8</span>Navigate และ Window/Level</a>
+        <a class="nav" href="#measure"><span class="n">9</span>Measure และ ROI — การวัด</a>
+        <a class="nav" href="#annotate"><span class="n">10</span>Annotate · Edit · View</a>
+        <a class="nav" href="#more"><span class="n">11</span>More — Key image, Print, Tags, Layout</a>
+      </div>
+      <div class="nav-group">
+        <p>โหมดดูภาพขั้นสูง</p>
+        <a class="nav" href="#mpr"><span class="n">12</span>MPR · Crosshair · Slab</a>
+        <a class="nav" href="#vr3d"><span class="n">13</span>3D Volume Rendering</a>
+        <a class="nav" href="#petct"><span class="n">14</span>PET/CT — SUV และ Fusion</a>
+        <a class="nav" href="#segrt"><span class="n">15</span>SEG และ RTSTRUCT</a>
+        <a class="nav" href="#phase"><span class="n">16</span>4D / Phase / Cine</a>
+        <a class="nav" href="#special"><span class="n">17</span>Multi-frame · ECG · Video · รายงาน</a>
+        <a class="nav" href="#compare"><span class="n">18</span>Compare · Mammo · Hanging</a>
+      </div>
+      <div class="nav-group">
+        <p>ตั้งค่า (Viewer Settings)</p>
+        <a class="nav" href="#settings"><span class="n">19</span>ภาพรวม Viewer Settings</a>
+        <a class="nav" href="#set-input"><span class="n">20</span>เมาส์ · Toolbar · ปุ่มลัด</a>
+        <a class="nav" href="#set-display"><span class="n">21</span>Window/Level · Layout</a>
+        <a class="nav" href="#set-other"><span class="n">22</span>Annotation · Overlay · Hanging · ทั่วไป</a>
+      </div>
+      <div class="nav-group">
+        <p>อื่น ๆ</p>
+        <a class="nav" href="#mobile"><span class="n">23</span>ใช้งานบนมือถือ / แท็บเล็ต</a>
+        <a class="nav" href="#faq"><span class="n">24</span>คำถามที่พบบ่อย</a>
+      </div>
+    </nav>
+    <div class="scrim"></div>
+
+    <main>
+      <!-- ================================================================ 1 -->
+      <section class="page" id="home">
+        <p class="crumb">VANTYX DICOM VIEWER · USER MANUAL</p>
+        <h1>คู่มือการใช้งาน Vantyx Viewer</h1>
+        <p class="lead">
+          Vantyx DICOM Viewer คือหน้าต่างดูภาพทางการแพทย์ที่เปิดผ่านเว็บเบราว์เซอร์ได้ทันที ไม่ต้องติดตั้งโปรแกรม รองรับ CT, MR, X-ray, US, PET/CT,
+          Mammography, ECG, วิดีโอ และเอกสารแนบ คู่มือนี้อธิบายทุกเมนู ทุกปุ่ม เครื่องมือวัด โหมดดูภาพขั้นสูง และการตั้งค่า Viewer
+        </p>
+        <figure>
+          <img src="img/overview.webp" alt="หน้าจอ Vantyx Viewer" loading="lazy" />
+          <figcaption>หน้าจอ Viewer เมื่อเปิดการตรวจ PET/CT — ระบบจัดผัง Fusion ให้อัตโนมัติ (ข้อมูลทดสอบ TCIA)</figcaption>
+        </figure>
+
+        <h2 id="home-map">เลือกหัวข้อที่ต้องการ</h2>
+        <div class="cards">
+          <a class="card" href="#open"><b>เปิด Viewer</b><span>เปิดจากหน้า Studies, ลิงก์, ระบบ HIS และหน้าจอระหว่างโหลด</span></a>
+          <a class="card" href="#sidebar"><b>เลือก Series</b><span>แถบข้าง ประวัติการตรวจ ไฟล์แนบ และรายการค่าวัด</span></a>
+          <a class="card" href="#viewport"><b>ช่องแสดงภาพ</b><span>ข้อมูลมุมภาพ หมุน พลิก sync เล่น cine ขยายเต็มจอ</span></a>
+          <a class="card" href="#measure"><b>วัดขนาด</b><span>Length, Angle, ROI, Probe, CTR, Cobb และการลบ/แก้ไขค่าวัด</span></a>
+          <a class="card" href="#navigate"><b>ปรับภาพ</b><span>Zoom, Pan, W/L preset, Invert, Colormap, histogram</span></a>
+          <a class="card" href="#mpr"><b>MPR / 3D</b><span>ดูภาพตัดสามระนาบ crosshair slab MIP และภาพ 3 มิติ</span></a>
+          <a class="card" href="#petct"><b>PET/CT</b><span>ค่า SUV, ซ้อนภาพ Fusion, MIP และ PET VOI</span></a>
+          <a class="card" href="#more"><b>Key image / Print</b><span>ปักภาพสำคัญ คัดลอก พิมพ์ ดู DICOM tag บันทึก layout</span></a>
+          <a class="card" href="#settings"><b>Viewer Settings</b><span>ปุ่มเมาส์ ปุ่มลัด toolbar preset ภาษา และ hanging protocol</span></a>
+        </div>
+
+        <h2 id="home-requirements">สิ่งที่ต้องมี</h2>
+        <ul>
+          <li>บัญชีผู้ใช้ Vantyx VNA ที่มีสิทธิ์ <span class="perm" title="studies_open_viewer">Studies › Open Viewer</span></li>
+          <li>เบราว์เซอร์ Chrome หรือ Edge รุ่นล่าสุด (แนะนำจอความละเอียด 1920 × 1080 ขึ้นไป — toolbar จะแสดงปุ่มครบ)</li>
+          <li>อนุญาตป๊อปอัปของเว็บไซต์ VNA (Viewer เปิดเป็นหน้าต่างแยก และเปิดบนจอที่ 2 ถ้ามี)</li>
+        </ul>
+
+        <h2 id="home-quick">เริ่มต้นใช้งานเร็ว</h2>
+        <ol class="steps">
+          <li>ในหน้า Studies ของ VNA กดไอคอน <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-panels-top-left"/></svg></span> Open Viewer หรือดับเบิลคลิกที่แถวการตรวจ</li>
+          <li>คลิก Series ทางซ้ายเพื่อแสดงในช่องที่เลือก (กรอบสีเขียว) หรือลากไปวางในช่องที่ต้องการ</li>
+          <li>หมุนล้อเมาส์เพื่อเลื่อนภาพ · ลากปุ่มซ้าย = Pan · ลากปุ่มขวา = ปรับ W/L · ลากปุ่มกลาง = Zoom</li>
+          <li>เลือกเครื่องมือวัดจาก toolbar เช่น <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-straighten"/></svg></span> Length แล้วลากบนภาพ — ค่าวัดบันทึกให้อัตโนมัติ</li>
+          <li>ปรับค่าต่าง ๆ ของตัวเองได้ที่ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-settings"/></svg></span> ตั้งค่า Viewer</li>
+        </ol>
+        <div class="note">
+          <p>ภาพในคู่มือถ่ายจากระบบทดสอบด้วยข้อมูลสาธารณะที่ไม่มีข้อมูลระบุตัวตน (TCIA, CC BY 4.0) และข้อมูลจำลอง LOADTEST · ชื่อเครื่องมือบน toolbar เป็นภาษาอังกฤษในทั้งสองภาษา ส่วนคำอธิบายแสดงตามภาษาที่เลือก (ค่าเริ่มต้นภาษาไทย)</p>
+        </div>
+      </section>
+
+      <!-- ================================================================ 2 -->
+      <section class="page" id="open">
+        <p class="crumb">เริ่มต้น</p>
+        <h1>การเปิด Viewer และการโหลดภาพ</h1>
+        <p class="lead">ช่องทางเปิด Viewer ตัวบ่งชี้การโหลดภาพ และข้อความที่อาจพบเมื่อเปิดไม่ได้</p>
+
+        <h2 id="open-ways">ช่องทางเปิด Viewer</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ช่องทาง</th><th>วิธีใช้</th></tr>
+            <tr><td>หน้า Studies / Patients / Favorites</td><td>กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-panels-top-left"/></svg></span> Open Viewer ที่แถว หรือดับเบิลคลิกที่ HN, ชื่อ, อายุ, วันที่, modality, คำอธิบาย</td></tr>
+            <tr><td>หน้า Study Details</td><td>ปุ่ม Open Viewer ที่หัวแถบการตรวจ หรือคลิกภาพย่อ series เพื่อเปิดที่ series นั้น</td></tr>
+            <tr><td>ลิงก์ Viewer URL</td><td>ลิงก์ <code>…/open-viewer?studyUID=…</code> ที่คัดลอกจากหน้าเว็บ — ต้อง Login ก่อน ถ้าเบราว์เซอร์บล็อกป๊อปอัปให้กดปุ่ม “เปิด Viewer”</td></tr>
+            <tr><td>ระบบ HIS</td><td>HIS ขอลิงก์เปิดภาพผ่าน Integration Client — ลิงก์ใช้ได้ครั้งเดียว ภายใน 10 นาที (กด F5 รีเฟรชได้)</td></tr>
+          </table>
+        </div>
+        <ul>
+          <li>Viewer เปิดในหน้าต่างชื่อเดียวกันเสมอ — เปิดการตรวจใหม่ หน้าต่างเดิมจะถูกแทนที่</li>
+          <li>ถ้าคอมพิวเตอร์มีจอ 2 จอขึ้นไป Viewer จะเปิดบนจอที่ 2</li>
+          <li>กด F5 รีเฟรชหน้าต่าง Viewer ได้โดยไม่ต้อง Login ใหม่</li>
+        </ul>
+        <div class="warn"><p>ผู้ที่เปิดจาก HIS ใช้บัญชีร่วมของระบบ — วัด ปัก key image หรือปรับค่าได้เฉพาะหน้าต่างนั้น แต่<b>ไม่ถูกบันทึก</b> (มีข้อความแจ้ง “เปิดจาก HIS — …”) · Viewer Settings ของบัญชี HIS เป็นค่าเริ่มต้นเสมอ ปรับได้เฉพาะหน้าต่างนั้น</p></div>
+
+        <h2 id="open-loading">ระหว่างโหลดภาพ</h2>
+        <figure>
+          <img src="img/loading.webp" alt="แถบความคืบหน้าการโหลด" loading="lazy" />
+          <figcaption>แถบความคืบหน้าสีเหลืองบนกลางช่องภาพ</figcaption>
+        </figure>
+        <ul>
+          <li>แต่ละช่องแสดงความคืบหน้า เช่น “กำลังโหลดภาพ 40/120 · โหลดแล้ว 95/120” (ภาพ 2D — ตัวหน้าคือภาพรอบ ๆ ที่กำลังดู ตัวหลังคือทั้ง series), “กำลังโหลดไฟล์ 35% (52/150 MB)” (multi-frame), “กำลังโหลด volume 427/852 (50%)” (MPR / 3D)</li>
+          <li>ถ้าการโหลดใช้เวลาเกินครึ่งวินาที พื้นที่ภาพจะมืดลงพร้อมวงหมุน — toolbar กดไม่ได้จนกว่าจะโหลดเสร็จ (ข้อความ “รอโหลดภาพให้เสร็จก่อน”)</li>
+          <li>ภาพย่อ series ที่ยังไม่มาแสดงวงหมุน ถ้าสร้างภาพย่อไม่ได้จะขึ้น “ไม่มีภาพตัวอย่าง” · ภาพย่อเริ่มโหลดหลังภาพแรกของช่องแสดงแล้ว และโหลดพร้อมกันไม่เกิน 4 รูป — การตรวจที่มี series มากจะเห็นภาพย่อทยอยขึ้น</li>
+        </ul>
+
+        <h2 id="open-errors">ข้อความเมื่อเปิดไม่ได้</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ข้อความ</th><th>สาเหตุ / วิธีแก้</th></tr>
+            <tr><td>ไม่ได้ระบุ Study ใน URL — เปิด viewer จากรายการ Study</td><td>เปิดหน้า Viewer โดยตรงโดยไม่มีการตรวจ — เปิดจากหน้า Studies</td></tr>
+            <tr><td>ไม่มีสิทธิ์เข้าถึง</td><td>ไม่ได้รับการยืนยันตัวตนภายใน 10 วินาที — เปิดจากหน้าเว็บ VNA ที่ Login อยู่ หรือ Login ใหม่</td></tr>
+            <tr><td>ลิงก์เปิด Viewer ไม่ถูกต้อง หมดอายุ หรือถูกใช้ไปแล้ว</td><td>ลิงก์จาก HIS ใช้ซ้ำหรือเกิน 10 นาที — เปิดจาก HIS ใหม่</td></tr>
+            <tr><td>ไม่พบ Study หรือ Study นี้อยู่นอกขอบเขตแผนกของคุณ</td><td>การตรวจถูกลบ อยู่นอกแผนก หรือเป็น VIP ของผู้อื่น — ติดต่อแผนกต้นทาง</td></tr>
+            <tr><td>ยังไม่รองรับการแสดง … (RTPLAN / REG / PR)</td><td>คลิก series ที่ไม่ใช่ภาพ เช่น RT Plan, Registration, Presentation State — Viewer ยังไม่แสดงชนิดนี้</td></tr>
+          </table>
+        </div>
+        <p>ข้อความแจ้งเตือนอื่น ๆ แสดงเป็นแถบมุมจอ ปิดด้วย <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span> หรือหายเองตามเวลา</p>
+      </section>
+
+      <!-- ================================================================ 3 -->
+      <section class="page" id="screen">
+        <p class="crumb">เริ่มต้น</p>
+        <h1>ส่วนประกอบหน้าจอ</h1>
+        <p class="lead">หน้าจอ Viewer แบ่งเป็น 3 ส่วน: Toolbar ด้านบน แถบข้าง (series และไฟล์) ด้านซ้าย และพื้นที่ช่องแสดงภาพ</p>
+        <figure>
+          <img src="img/overview.webp" alt="ส่วนประกอบหน้าจอ" loading="lazy" />
+          <figcaption>Toolbar (บน) · แถบข้าง (ซ้าย) · ช่องแสดงภาพ 2×2 (ขวา) — ช่องที่กำลังใช้งานมีกรอบสีเขียว</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ส่วน</th><th>รายละเอียด</th><th>ดูต่อ</th></tr>
+            <tr><td>Toolbar</td><td>ปุ่มแสดง/ซ่อนแถบข้าง เลือก template / layout, sync และเครื่องมือทุกหมวด ปุ่ม FPS และ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-settings"/></svg></span> ตั้งค่า</td><td><a href="#toolbar">ภาพรวม Toolbar</a></td></tr>
+            <tr><td>แถบข้าง</td><td>ข้อมูลผู้ป่วย ประวัติการตรวจ แท็บ ทั้งหมด / Dicom / Non-Dicom / ค่าวัด</td><td><a href="#sidebar">แถบข้าง</a></td></tr>
+            <tr><td>ช่องแสดงภาพ</td><td>สูงสุด 9 ช่อง แต่ละช่องมีข้อมูลมุมภาพ ปุ่มควบคุม และแถบเลื่อนภาพ</td><td><a href="#viewport">ช่องแสดงภาพ</a></td></tr>
+          </table>
+        </div>
+        <h2 id="screen-toolbar">Toolbar โดยย่อ</h2>
+        <figure>
+          <img src="img/toolbar-1.webp" alt="Toolbar ครึ่งซ้าย" loading="lazy" />
+          <figcaption>Toolbar ครึ่งซ้าย: แถบข้าง · template · layout · sync · Navigate · Window/Level · Measure · ROI</figcaption>
+        </figure>
+        <figure>
+          <img src="img/toolbar-2.webp" alt="Toolbar ครึ่งขวา" loading="lazy" />
+          <figcaption>Toolbar ครึ่งขวา: Annotate · Edit · View · More · Layout · FPS · ตั้งค่า</figcaption>
+        </figure>
+        <div class="tip"><p>ถ้าหน้าต่างแคบ toolbar จะยุบหมวดเครื่องมือเข้าเมนู <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-more-horiz"/></svg></span> “เครื่องมืออื่น” อัตโนมัติ — ขยายหน้าต่างให้กว้างเพื่อเห็นปุ่มครบ</p></div>
+        <div class="note"><p>Viewer ใช้ธีมมืดเสมอ (ไม่มีปุ่มสลับธีมในหน้าต่าง Viewer) · ภาษาไทย/อังกฤษเปลี่ยนได้ที่ <a href="#set-other-general">Viewer Settings › ทั่วไป</a></p></div>
+      </section>
+
+      <!-- ================================================================ 4 -->
+      <section class="page" id="sidebar">
+        <p class="crumb">หน้าจอหลัก</p>
+        <h1>แถบข้าง (Series / ไฟล์ / ค่าวัด)</h1>
+        <p class="lead">แถบด้านซ้ายแสดงข้อมูลผู้ป่วย รายการการตรวจ series ภาพ ไฟล์แนบ (Non-DICOM) key image และรายการค่าวัด</p>
+        <figure class="narrow">
+          <img src="img/sidebar.webp" alt="แถบข้าง" loading="lazy" />
+          <figcaption>แถบข้าง: ข้อมูลผู้ป่วย ช่องประวัติการตรวจ แท็บ และภาพย่อ series (ป้าย MPR สีเหลือง)</figcaption>
+        </figure>
+
+        <h2 id="sidebar-header">ข้อมูลผู้ป่วยและประวัติการตรวจ</h2>
+        <ul>
+          <li>บรรทัดบน: วันเวลาตรวจ · คำอธิบายการตรวจ · บรรทัดถัดมา: HN · เพศ · อายุ ณ วันตรวจ (เช่น <code>45y3m</code>) · ชื่อผู้ป่วย</li>
+          <li>ช่อง <b>ประวัติการตรวจ</b> แสดงการตรวจทั้งหมดของผู้ป่วย — เลือกเพื่อเปิดการตรวจนั้นในหน้าต่างเดิม</li>
+          <li>การตรวจของแผนกอื่นที่คุณเปิดไม่ได้ อยู่ในกลุ่ม “นอกขอบเขตแผนก (เปิดไม่ได้)” เป็นสีเทา พร้อมบรรทัด “นอกแผนก · ชื่อแผนก” — ไม่ถูกใช้เป็นการตรวจครั้งก่อนของ Compare / Fusion prior / hanging protocol</li>
+        </ul>
+        <figure>
+          <img src="img/history.webp" alt="เลือกการตรวจจากประวัติ" loading="lazy" />
+          <figcaption>ช่องประวัติการตรวจ — เลือกการตรวจครั้งก่อนของผู้ป่วยคนเดียวกัน</figcaption>
+        </figure>
+
+        <h2 id="sidebar-tabs">แท็บในแถบข้าง</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>แท็บ</th><th>แสดง</th></tr>
+            <tr><td>ทั้งหมด</td><td>ภาพ DICOM ด้านบน และไฟล์แนบด้านล่าง ลากเส้นแบ่งตรงกลางเพื่อปรับสัดส่วน 20–50% (จำไว้ในเบราว์เซอร์ของเครื่องนั้น)</td></tr>
+            <tr><td>Dicom</td><td>เฉพาะ series ภาพ DICOM</td></tr>
+            <tr><td>Non-Dicom</td><td>เฉพาะไฟล์แนบ (เอกสาร รูป วิดีโอ เสียง)</td></tr>
+            <tr><td>ค่าวัด</td><td>รายการค่าที่วัดในการตรวจนี้ (เฉพาะคอมพิวเตอร์) — ดู <a href="#measure-list">รายการค่าวัด</a></td></tr>
+          </table>
+        </div>
+
+        <h2 id="sidebar-series">ภาพย่อ Series</h2>
+        <ul>
+          <li>แต่ละการ์ดแสดงภาพตัวอย่าง คำอธิบาย series และจำนวนภาพ เช่น “103 ภาพ” — รายงาน PDF / SR, ECG Waveform และวิดีโอมีการ์ดของตัวเอง</li>
+          <li>ป้าย <b style="color:#ffeb3b">MPR</b> สีเหลืองมุมขวาบน = series CT / MR / PT / NM ที่มีตั้งแต่ 40 ภาพ และ server ตรวจแล้วว่าเรียงเป็น volume ได้ — น่าจะดูแบบ MPR / 3D ได้ (ยืนยันจริงอีกครั้งตอนเปิด)</li>
+          <li>series ของช่องที่ active มีกรอบสีฟ้า (เปลี่ยนตามช่องที่คลิก) · SEG ที่ซ้อนอยู่มีกรอบสีเขียว · RTSTRUCT ที่ซ้อนอยู่มีกรอบสีฟ้าอ่อน · การ์ด SEG / RTSTRUCT บอกสถานะใต้ชื่อ: “คลิกเพื่อซ้อนบนภาพ”, “ซ้อนอยู่ · คลิกเพื่อเอาออก”, “ไม่มีบริเวณที่ตัดไว้”, “แสดงไม่ได้ · คลิกเพื่อลองใหม่”</li>
+          <li><b>คลิก</b> = แสดงในช่องที่ active · <b>ลาก</b>ไปวางในช่องใดก็ได้ (ช่องว่างแสดง “วาง Series ที่นี่”)</li>
+          <li>คลิก/ลากการ์ด SEG หรือ RTSTRUCT = ซ้อนบนภาพต้นทาง (ไม่แทนที่ภาพ) — ดู <a href="#segrt">SEG และ RTSTRUCT</a></li>
+          <li>ขณะอยู่ในผัง MPR / 3D การ์ดที่ทำ MPR ไม่ได้แน่ ๆ (SR, PDF, ECG, วิดีโอ, ภาพน้อยกว่า 40) จะคลิกหรือลากไม่ได้ · series ที่ไม่ใช่ภาพ (SEG, RTSTRUCT, รายงาน) อยู่ท้ายรายการเสมอ</li>
+        </ul>
+
+        <h2 id="sidebar-nondicom">ไฟล์แนบ (Non-DICOM)</h2>
+        <figure class="narrow">
+          <img src="img/nondicom.webp" alt="ไฟล์ Non-DICOM ในแถบข้าง" loading="lazy" />
+          <figcaption>แถบกรองไฟล์และการ์ดไฟล์ จัดกลุ่มตามชนิดไฟล์</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ตัวเลือก</th><th>ค่า</th></tr>
+            <tr><td>มุมมอง</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-grid-view"/></svg></span> ตาราง (ค่าเริ่มต้น) / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-view-list"/></svg></span> รายการ (แบบเส้นเวลา)</td></tr>
+            <tr><td>จัดกลุ่มตาม</td><td>ชนิดไฟล์ (<span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-article"/></svg></span> เอกสาร · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-image"/></svg></span> ภาพ · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-ondemand-video"/></svg></span> วิดีโอ · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-audiotrack"/></svg></span> เสียง) / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-calendar-month"/></svg></span> วันที่ / แผนก</td></tr>
+            <tr><td>ขอบเขต</td><td>Study นี้ (ค่าเริ่มต้น) / ผู้ป่วย (ไฟล์ของทุกการตรวจของผู้ป่วย)</td></tr>
+            <tr><td>แผนก</td><td>เลือกแผนกที่จะแสดง (ต้องเลือกอย่างน้อย 1)</td></tr>
+          </table>
+        </div>
+        <ul>
+          <li>คลิกการ์ดเพื่อเปิด: PDF / Word / Excel / PowerPoint / txt เปิดในหน้าต่างอ่านเอกสาร · รูป (รวม TIFF) เปิดเป็นแกลเลอรี · วิดีโอและเสียงเล่นในการ์ด (ปุ่มขยายวิดีโอ)</li>
+          <li>ถ้าการตรวจนี้ไม่มีไฟล์แนบ แถบกรองจะไม่แสดง</li>
+          <li>ไฟล์วิดีโอที่กำลังแปลงไฟล์ยังไม่แสดง</li>
+        </ul>
+
+        <h2 id="sidebar-keyimages">รายการ Key images</h2>
+        <figure class="narrow">
+          <img src="img/keyimage-list.webp" alt="รายการ Key images" loading="lazy" />
+          <figcaption>รายการ <span class="vk y"><svg class="ic" aria-hidden="true"><use href="#l-star"/></svg></span> Key images เหนือภาพย่อ series</figcaption>
+        </figure>
+        <ul>
+          <li>แสดงเมื่อการตรวจมี key image — คลิกหัวข้อเพื่อยุบ/ขยาย (<span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-expand-more"/></svg></span>)</li>
+          <li>แต่ละแถว: ชื่อ series · Frame · ผู้ปัก (คุณ / ผู้ใช้อื่น) และโน้ต — เปิดจาก HIS จะมีคำว่า “ไม่ได้บันทึก”</li>
+          <li>คลิกแถวเพื่อกระโดดไปยังภาพนั้น (เฉพาะผัง 2D — ในผัง MPR / 3D ขึ้น “กระโดดไป Key Image ได้ใน Layout 2D — เปลี่ยน Template ก่อน”) · แถวของคุณมีปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-pencil"/></svg></span> แก้โน้ต และ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-trash2"/></svg></span> เอาออกจาก key image</li>
+          <li>วิธีปัก key image ดู <a href="#more-keyimage">Key image</a></li>
+        </ul>
+
+        <h2 id="sidebar-resize">ซ่อนและปรับขนาดแถบข้าง</h2>
+        <ul>
+          <li>ปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-menu-open"/></svg></span> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-menu"/></svg></span> ซ้ายสุดของ toolbar = แสดง / ซ่อนแถบข้าง</li>
+          <li>ลากเส้นขอบขวาของแถบข้าง (เปลี่ยนเป็นสีเขียวเมื่อชี้) เพื่อปรับความกว้าง 20–50% ของหน้าจอ · ดับเบิลคลิกเส้นเพื่อกลับค่าเริ่มต้น</li>
+          <li>จอแคบกว่า 900 px แถบข้างจะลอยทับภาพ แตะพื้นหลังเพื่อปิด</li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 5 -->
+      <section class="page" id="viewport">
+        <p class="crumb">หน้าจอหลัก</p>
+        <h1>ช่องแสดงภาพ (Viewport)</h1>
+        <p class="lead">ข้อมูลบนภาพ ปุ่มควบคุมของแต่ละช่อง การเลื่อนภาพและเล่น cine การขยายช่องเต็มจอ และเมนูคลิกขวา</p>
+        <figure>
+          <img src="img/viewport-overlay.webp" alt="ช่องแสดงภาพ" loading="lazy" />
+          <figcaption>ช่องแสดงภาพ: ข้อมูล series (ซ้ายบน) ปุ่มควบคุม (ขวาบน) อักษรทิศ ข้อมูลมุมซ้ายล่าง และแถบเลื่อนภาพ (ขวาล่าง)</figcaption>
+        </figure>
+
+        <h2 id="viewport-active">ช่องที่กำลังใช้งาน (Active)</h2>
+        <ul>
+          <li>ช่องที่ active มี<b>กรอบสีเขียว</b> — เครื่องมือ preset และคีย์ลัดทำงานกับช่องนี้</li>
+          <li>ช่องจะ active เมื่อคลิก หมุนล้อเมาส์บนช่อง หรือวาง series ลงช่อง</li>
+          <li>จำนวนช่องและผังเปลี่ยนได้จาก toolbar (<a href="#toolbar-layout">Layout / Template</a>) — 1x1 ถึง 3x3 รวม 1x4 / 2x4 สูงสุด 9 ช่อง</li>
+        </ul>
+
+        <h2 id="viewport-overlay">ข้อมูลบนภาพ (Overlay)</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ตำแหน่ง</th><th>ข้อมูล</th></tr>
+            <tr><td>ซ้ายบน</td><td>วันเวลาของ series · คำอธิบาย series · ความหนา (CT) · บรรทัดสถานะ SUV / Fusion / SEG / RTSTRUCT เมื่อมี</td></tr>
+            <tr><td>ซ้ายล่าง</td><td>ค่าเริ่มต้น: <code>Zoom: 125%</code> · <code>W: 400 L: 40</code> · <code>Img: 12 / 240</code> — เลือกข้อมูลเองได้ที่ <a href="#set-other-overlay">Settings › Overlay</a></td></tr>
+            <tr><td>ขวาล่าง</td><td>ว่าง (ตั้งค่าเพิ่มได้ เช่น ชื่อผู้ป่วย HN เพศ/อายุ Modality)</td></tr>
+            <tr><td>กลางขอบภาพ</td><td>อักษรทิศ A/P/R/L/H/F (ชี้เมาส์เพื่อดูความหมาย) — ตัวอักษรหลายตัว = ระนาบเอียง</td></tr>
+            <tr><td>กลางบน</td><td>ป้าย ★ Key image (เหลือง = ของคุณ, ฟ้า = ของผู้อื่น) · ป้าย “ผู้ใช้ Calibrate เอง” เมื่อปรับมาตราส่วนเอง</td></tr>
+          </table>
+        </div>
+        <p>บนผัง MPR / 3D มีคำแนะนำสีเหลือง “Shift + ลาก: Pan” (ช่อง 3D และช่อง MPR ที่ปิด crosshair) · ตอนเปิด Volume crop มี “Ctrl + ลาก: หมุนกล่อง ภาพไม่หมุน” · ช่อง MPR ที่เปิด crosshair ใช้ Shift + ลากซ้าย = W/L (ดู <a href="#mpr-crosshair">Crosshair</a>)</p>
+
+        <h2 id="viewport-controls">ปุ่มควบคุมของแต่ละช่อง</h2>
+        <figure class="narrow">
+          <img src="img/viewport-controls.webp" alt="ปุ่มควบคุมของช่อง" loading="lazy" />
+          <figcaption>แถวปุ่มขวาบน (ล็อก · 2D/3D · phase · กลุ่ม sync · นำออก) และคอลัมน์ปุ่มขอบขวา</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>หน้าที่</th></tr>
+            <tr><td><span class="vk g"><svg class="ic" aria-hidden="true"><use href="#m-lock-open"/></svg></span> / <span class="vk y"><svg class="ic" aria-hidden="true"><use href="#m-lock"/></svg></span></td><td>ล็อกช่องนี้ไม่ให้ sync กับช่องอื่น (สีเหลือง = ล็อกอยู่)</td></tr>
+            <tr><td><span class="vk"><span class="t">2D ▾</span></span></td><td>ชนิดการแสดงผล 2D / 3D (CT, MR, PT, NM ที่มีมากกว่า 19 ภาพ)</td></tr>
+            <tr><td><span class="vk"><span class="t">A ▾</span></span></td><td>กลุ่ม sync A–D — ช่องในกลุ่มเดียวกันเลื่อน ซูม และปรับ W/L ไปพร้อมกันเมื่อเปิด Sync · ผัง MPR / Fusion / Compare จัดกลุ่มให้เองและซ่อนตัวเลือกนี้</td></tr>
+            <tr><td><span class="vk r"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span></td><td>นำ series ออกจากช่องนี้</td></tr>
+            <tr><td><span class="vk y"><svg class="ic" aria-hidden="true"><use href="#m-rotate-left"/></svg></span> / <span class="vk y"><svg class="ic" aria-hidden="true"><use href="#m-rotate-right"/></svg></span></td><td>หมุนทวนเข็ม / ตามเข็ม 90° (<kbd class="key">Shift+L</kbd> / <kbd class="key">Shift+R</kbd>)</td></tr>
+            <tr><td><span class="vk y"><svg class="ic" aria-hidden="true"><use href="#m-flip"/></svg></span></td><td>พลิกแนวนอน (<kbd class="key">Shift+H</kbd>) — ปุ่มถัดไปคือพลิกแนวตั้ง (<kbd class="key">Shift+V</kbd>)</td></tr>
+            <tr><td><span class="vk y"><svg class="ic" aria-hidden="true"><use href="#m-restore"/></svg></span></td><td>รีเซ็ตมุมมองของช่องนี้ — zoom, pan, หมุน, พลิก, W/L (<kbd class="key">Home</kbd>) · ช่อง MPR คืน Slab เป็น Normal และคืนกล่อง Volume crop ด้วย · มีผลเฉพาะช่องนี้แม้อยู่ในกลุ่ม sync</td></tr>
+            <tr><td><span class="vk y"><svg class="ic" aria-hidden="true"><use href="#c-reset-oblique"/></svg></span></td><td>Reset oblique — แสดงเมื่อระนาบ MPR ถูกหมุนเอียง ปรับทุกระนาบกลับตั้งฉาก</td></tr>
+          </table>
+        </div>
+        <p>ช่องบางชนิดมีตัวเลือกเพิ่ม เช่น preset 3D และ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-tune"/></svg></span> คุณภาพ/แสง (ช่อง 3D), ชนิด SUV (PET), Fusion, SEG, RT, Phase — อธิบายในหน้าโหมดขั้นสูง</p>
+
+        <h2 id="viewport-scrub">เลื่อนภาพและเล่น Cine</h2>
+        <figure class="narrow">
+          <img src="img/scrubbar.webp" alt="แถบเลื่อนภาพ" loading="lazy" />
+          <figcaption>แถบเลื่อนภาพมุมขวาล่าง</figcaption>
+        </figure>
+        <ul>
+          <li>หมุนล้อเมาส์บนภาพเพื่อเลื่อนทีละภาพ หรือใช้แถบมุมขวาล่าง: <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-keyboard-arrow-left"/></svg></span> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-keyboard-arrow-right"/></svg></span> ภาพก่อน/ถัดไป · ลาก slider · <span class="vk b"><svg class="ic" aria-hidden="true"><use href="#m-play-arrow"/></svg></span> เล่น / <span class="vk o"><svg class="ic" aria-hidden="true"><use href="#m-pause"/></svg></span> หยุด</li>
+          <li>ความเร็วปรับที่ปุ่ม FPS บน toolbar · ค่าเริ่มต้น การวนเล่น และ Yoyo ตั้งที่ <a href="#set-display-layout">Settings › Layout</a></li>
+          <li>เมื่อเปิด Sync การเล่นจะเริ่ม/หยุดพร้อมกันทั้งกลุ่ม</li>
+          <li>ตำแหน่งภาพปัจจุบันดูที่บรรทัด <code>Img:</code> มุมซ้ายล่าง</li>
+        </ul>
+
+        <h2 id="viewport-maximize">ขยายช่องเต็มพื้นที่ (ดับเบิลคลิก)</h2>
+        <figure>
+          <img src="img/maximize.webp" alt="ช่องที่ขยายเต็มพื้นที่" loading="lazy" />
+          <figcaption>ช่องที่ขยายเต็มพื้นที่ — มีลูกศรซ้าย/ขวาสลับช่อง และปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span> คืน Layout เดิม</figcaption>
+        </figure>
+        <ul>
+          <li>ดับเบิลคลิกช่องที่มีภาพเพื่อขยายเต็มพื้นที่ (zoom/pan ของช่องนั้นถูกรีเซ็ต) · ดับเบิลคลิกอีกครั้งหรือกด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span> “คืน Layout เดิม” เพื่อกลับ</li>
+          <li>ถ้ามีหลายช่อง ใช้ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-back-ios-new"/></svg></span> ภาพก่อนหน้า / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-forward-ios"/></svg></span> ภาพถัดไป สลับไปช่องอื่น</li>
+        </ul>
+
+        <h2 id="viewport-context">เมนูคลิกขวา</h2>
+        <figure class="narrow">
+          <img src="img/context-menu.webp" alt="เมนูคลิกขวา" loading="lazy" />
+          <figcaption>เมนูคลิกขวา — กด Shift ค้างแล้วคลิกขวาบนภาพ</figcaption>
+        </figure>
+        <p>
+          ปุ่มขวาของเมาส์ใช้ปรับ W/L เป็นค่าเริ่มต้น จึงต้องกด <kbd class="key">Shift</kbd> + คลิกขวาเพื่อเปิดเมนู (หรือตั้งปุ่มขวาเป็น “— ไม่ใช้ —” ใน
+          <a href="#set-input-mouse">Settings › เมาส์</a>) · เมนูมี หมุน 90° ตาม/ทวนเข็ม, พลิกแนวนอน/แนวตั้ง, Invert, คัดลอกภาพ, DICOM Tags, รีเซ็ตมุมมอง พร้อมคีย์ลัด · ช่องที่มีแว่นขยาย (Advanced Magnify) มีรายการ “เอาแว่นขยายออก” และคลิกขวาในแว่นจะเห็นเฉพาะตัวเลือกกำลังขยาย · คลิกขวาซ้ำบนฉากหลัง = ปิดเมนู
+        </p>
+      </section>
+
+      <!-- ================================================================ 6 -->
+      <section class="page" id="input">
+        <p class="crumb">หน้าจอหลัก</p>
+        <h1>เมาส์ คีย์บอร์ด และการสัมผัส</h1>
+        <p class="lead">การใช้เมาส์เมื่อยังไม่ได้เลือกเครื่องมือ คีย์ลัดเริ่มต้น และท่าทางบนจอสัมผัส — เปลี่ยนได้ใน Viewer Settings</p>
+
+        <h2 id="input-mouse">ปุ่มเมาส์ (ค่าเริ่มต้น)</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ช่องชนิด</th><th>ปุ่มซ้าย</th><th>ปุ่มขวา</th><th>ปุ่มกลาง</th><th>ล้อเมาส์</th></tr>
+            <tr><td>2D (stack)</td><td>Pan</td><td>W/L</td><td>Zoom</td><td>เลื่อนภาพ</td></tr>
+            <tr><td>MPR</td><td>Pan</td><td>W/L</td><td>Zoom</td><td>เลื่อนภาพ</td></tr>
+            <tr><td>3D</td><td>หมุน</td><td>W/L</td><td>Zoom</td><td>Zoom</td></tr>
+          </table>
+        </div>
+        <ul>
+          <li>เลือกเครื่องมือบน toolbar = ปุ่มซ้ายเปลี่ยนเป็นเครื่องมือนั้น · กดปุ่มเดิมอีกครั้งเพื่อปล่อยกลับเป็นค่าเริ่มต้น</li>
+          <li>ช่อง MPR และ 3D: <kbd class="key">Shift</kbd> + ลากปุ่มซ้าย = Pan เสมอ</li>
+          <li>เปลี่ยนการผูกปุ่มเมาส์ได้ที่ <a href="#set-input-mouse">Settings › เมาส์</a></li>
+        </ul>
+
+        <h2 id="input-keys">คีย์ลัดเริ่มต้น</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>คีย์</th><th>คำสั่ง</th><th>คีย์</th><th>คำสั่ง</th></tr>
+            <tr><td><kbd class="key">W</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-contrast"/></svg></span> W/L</td><td><kbd class="key">Ctrl+Z</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-undo2"/></svg></span> Undo</td></tr>
+            <tr><td><kbd class="key">Z</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-zoom-in"/></svg></span> Zoom</td><td><kbd class="key">Ctrl+Y</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-redo2"/></svg></span> Redo</td></tr>
+            <tr><td><kbd class="key">P</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-open-with"/></svg></span> Pan</td><td><kbd class="key">Shift+R</kbd></td><td>หมุน 90° ตามเข็ม</td></tr>
+            <tr><td><kbd class="key">M</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-search"/></svg></span> Magnify</td><td><kbd class="key">Shift+L</kbd></td><td>หมุน 90° ทวนเข็ม</td></tr>
+            <tr><td><kbd class="key">I</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-invert-image"/></svg></span> Invert</td><td><kbd class="key">Shift+H</kbd></td><td>พลิกแนวนอน</td></tr>
+            <tr><td><kbd class="key">L</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-straighten"/></svg></span> Length</td><td><kbd class="key">Shift+V</kbd></td><td>พลิกแนวตั้ง</td></tr>
+            <tr><td><kbd class="key">A</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-angle"/></svg></span> Angle</td><td><kbd class="key">Home</kbd></td><td>รีเซ็ตมุมมอง</td></tr>
+            <tr><td><kbd class="key">B</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-bidirectional"/></svg></span> Bidirectional</td><td><kbd class="key">K</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-star"/></svg></span> Key image</td></tr>
+            <tr><td><kbd class="key">R</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-crop-square"/></svg></span> Rect ROI</td><td><kbd class="key">[</kbd> / <kbd class="key">]</kbd></td><td>Phase ก่อนหน้า / ถัดไป</td></tr>
+            <tr><td><kbd class="key">E</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ellipse-roi"/></svg></span> Ellipse ROI</td><td><kbd class="key">V</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-crosshair"/></svg></span> Probe</td></tr>
+            <tr><td><kbd class="key">C</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-circle"/></svg></span> Circle ROI</td><td><kbd class="key">T</kbd></td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-insert-comment"/></svg></span> Arrow Annotate</td></tr>
+          </table>
+        </div>
+        <h3 id="input-fixed">คีย์ที่เปลี่ยนไม่ได้</h3>
+        <ul>
+          <li><kbd class="key">1</kbd>–<kbd class="key">9</kbd> = ใช้ W/L preset ลำดับที่ 1–9 ของ modality นั้นกับช่องที่ active (อ่านตามตำแหน่งปุ่ม ใช้ได้แม้แป้นพิมพ์เป็นภาษาไทย · แป้นตัวเลข numpad ต้องเปิด NumLock · Shift/Ctrl + ตัวเลข ไม่นับ)</li>
+          <li><kbd class="key">Delete</kbd> = ลบค่าวัด/annotation ที่เลือก · <kbd class="key">Esc</kbd> = ยกเลิกการวาดที่กำลังทำ</li>
+          <li><kbd class="key">Ctrl+P</kbd> = เปิดหน้าต่างพิมพ์ของ Viewer (แทนการพิมพ์ทั้งหน้าเว็บ)</li>
+          <li>คีย์ลัดที่ตั้งเองอ่านตามตำแหน่งปุ่มบนแป้น ใช้ได้แม้แป้นพิมพ์เป็นภาษาไทย · ไม่ทำงานขณะพิมพ์ในช่องข้อความ, ขณะหน้าต่างใด ๆ เปิดอยู่ (Settings, Print, DICOM Tags) หรือเมื่อเครื่องมือนั้นใช้กับช่องที่ active ไม่ได้ (เช่น CTR บนภาพ CT) · เครื่องมือที่ซ่อนจาก toolbar ยังเรียกด้วยคีย์ลัดได้</li>
+        </ul>
+        <p>เปลี่ยนคีย์ลัดได้ที่ <a href="#set-input-shortcuts">Settings › ปุ่มลัด</a></p>
+
+        <h2 id="input-touch">จอสัมผัส</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>อุปกรณ์</th><th>1 นิ้ว</th><th>2 นิ้ว</th><th>3 นิ้ว</th></tr>
+            <tr><td>คอมพิวเตอร์จอสัมผัส</td><td>เครื่องมือของปุ่มซ้าย</td><td>บีบ = Zoom · ลาก = Pan</td><td>ลาก = เลื่อนภาพ</td></tr>
+            <tr><td>มือถือ / แท็บเล็ต</td><td>Pan</td><td>บีบ = Zoom</td><td>— (ใช้แถบเลื่อนภาพ)</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================================ 7 -->
+      <section class="page" id="toolbar">
+        <p class="crumb">เครื่องมือ (Toolbar)</p>
+        <h1>ภาพรวม Toolbar</h1>
+        <p class="lead">แถบเครื่องมือด้านบนเรียงจากซ้ายไปขวา: ตัวเลือกผังหน้าจอ → หมวดเครื่องมือ 8 หมวด → ความเร็ว cine → ตั้งค่า</p>
+        <figure>
+          <img src="img/toolbar-1.webp" alt="Toolbar ครึ่งซ้าย" loading="lazy" />
+          <figcaption>Toolbar ครึ่งซ้าย</figcaption>
+        </figure>
+        <figure>
+          <img src="img/toolbar-2.webp" alt="Toolbar ครึ่งขวา" loading="lazy" />
+          <figcaption>Toolbar ครึ่งขวา</figcaption>
+        </figure>
+
+        <h2 id="toolbar-how">การใช้ปุ่มบน Toolbar</h2>
+        <ul>
+          <li>ชี้เมาส์ที่ปุ่มเพื่อดูชื่อและคำอธิบาย เช่น “Length — วัดระยะ”</li>
+          <li><b>ปุ่มเครื่องมือ</b> (เช่น Zoom, Length): คลิกเพื่อผูกกับปุ่มซ้ายของเมาส์ (ปุ่มเป็นสีไฮไลต์) · คลิกอีกครั้งเพื่อปล่อย</li>
+          <li><b>ปุ่มคำสั่ง</b> (เช่น Invert, Undo): ทำงานทันทีกับช่องที่ active</li>
+          <li><b>ปุ่มเปิด/ปิด</b> (เช่น Scale bar): สลับการแสดงผล</li>
+          <li><b>หมวดแบบเมนู</b> Measure / ROI / Annotate: ปุ่มหลักแสดงเครื่องมือล่าสุดของหมวด กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-drop-down"/></svg></span> เพื่อเลือกเครื่องมืออื่นในหมวด · เปิด Viewer ใหม่ปุ่มหลักกลับเป็นตัวแรกของหมวด · หมวดที่เหลือเครื่องมือเดียวไม่มี ▾</li>
+          <li><b>ปุ่มแบบแผง</b> (W/L presets, W/L histogram, Colormap, Slab): มีเมนู/แผงของตัวเอง ไม่อยู่ในเมนู ▾ และตั้งคีย์ลัดไม่ได้</li>
+          <li>ปุ่มที่ใช้ไม่ได้กับช่องนั้นจะถูกซ่อน (เช่น CTR ใช้กับ CR/DX เท่านั้น) · ระหว่างโหลดภาพ toolbar กดไม่ได้</li>
+        </ul>
+
+        <h2 id="toolbar-layout">ผังหน้าจอ: Template · Layout · Sync</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>หน้าที่</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-menu-open"/></svg></span></td><td>แสดง / ซ่อนแถบข้าง</td></tr>
+            <tr><td><span class="vk"><span class="t">▦ ▾</span></span> Template</td><td>เลือกผังสำเร็จรูป (รายการด้านล่าง)</td></tr>
+            <tr><td><span class="vk"><span class="t">MPR เปิด</span></span></td><td>เปิด/ปิด crosshair — แสดงเฉพาะผัง MPR และผังที่มีระนาบ 3 ช่อง (ดู <a href="#mpr">MPR</a>)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ref-line"/></svg></span> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ref-line-off"/></svg></span> Ref Line</td><td>แสดงเส้นอ้างอิงตำแหน่งระนาบของช่อง active บนช่อง CT/MR อื่นในกลุ่ม sync เดียวกัน — แสดงเมื่อกลุ่ม sync มีช่อง CT/MR 2D 2–3 ช่องที่คำอธิบาย series มีชื่อระนาบ (axial / coronal / sagittal) ไม่ใช่ topogram และมีมากกว่า 10 ภาพ · เปิดแล้วช่องเหล่านั้นถูกโหลดใหม่เป็น volume (series ที่ลากลงช่องระหว่างเปิดก็เป็น volume) · ปิด = โหลดกลับเป็น 2D ที่ภาพเดิม · เปิดอัตโนมัติได้ที่ Settings › Layout</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-border-all"/></svg></span> Layout</td><td>เลือกจำนวนช่อง 1x1 ถึง 3x3 รวม 1x4 และ 2x4 (เลือกแล้ว template กลายเป็น Manual)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-sync"/></svg></span> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-sync-disabled"/></svg></span> Sync</td><td>เปิด/ปิดการ sync ทุกกลุ่ม (เลื่อนภาพ, pan/zoom, W/L) — กลุ่ม A–D และการล็อกตั้งที่ปุ่มของแต่ละช่อง · ค่าเริ่มต้นปิด (ตั้งให้เปิดตั้งแต่เปิด Viewer ได้ที่ Settings › Layout)</td></tr>
+          </table>
+        </div>
+        <div class="phones">
+          <figure>
+            <img src="img/template-menu.webp" alt="เมนู Template" loading="lazy" />
+            <figcaption>เมนู Template</figcaption>
+          </figure>
+          <figure>
+            <img src="img/layout-menu.webp" alt="เมนู Layout" loading="lazy" />
+            <figcaption>เมนู Layout</figcaption>
+          </figure>
+        </div>
+        <div class="tbl">
+          <table>
+            <tr><th>Template</th><th>ผัง</th></tr>
+            <tr><td>Manual / Default</td><td>จัดเอง / ผังเริ่มต้นตามชนิดการตรวจ</td></tr>
+            <tr><td>MPR</td><td>1x3: axial | coronal | sagittal พร้อม crosshair</td></tr>
+            <tr><td>Axial / Coronal / Sagittal primary</td><td>ระนาบหลักช่องใหญ่ + อีกสองระนาบ</td></tr>
+            <tr><td>3D four up · 3D main · 3D primary · 3D only</td><td>ภาพ 3D ร่วมกับระนาบ MPR หรือ 3D อย่างเดียว (ดู <a href="#vr3d">3D</a>)</td></tr>
+            <tr><td>Fusion · Fusion MPR · Fusion prior</td><td>ผัง PET/CT — ต้องมีทั้งภาพ PET (หรือ NM) และ CT (หรือ MR) ในการตรวจ มิฉะนั้นขึ้น “Template Fusion ต้องมีทั้งภาพ PET (หรือ NM) และ CT (หรือ MR) ใน Study นี้” (ดู <a href="#petct">PET/CT</a>)</td></tr>
+            <tr><td>Compare 1x2 · Compare 2x1</td><td>เทียบกับการตรวจครั้งก่อน (ดู <a href="#compare">Compare</a>)</td></tr>
+          </table>
+        </div>
+
+        <h2 id="toolbar-categories">หมวดเครื่องมือ</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>หมวด</th><th>เครื่องมือ</th><th>ดูต่อ</th></tr>
+            <tr><td>Navigate</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-three-d-rotation"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-zoom-in"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-open-with"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-search"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-scan-search"/></svg></span></td><td><a href="#navigate-nav">Navigate</a></td></tr>
+            <tr><td>Window/Level</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-contrast"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-wl-presets"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-wl-region"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-bar-chart"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-invert-image"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-palette"/></svg></span></td><td><a href="#navigate-wl">Window/Level</a></td></tr>
+            <tr><td>Measure ▾</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-straighten"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-angle"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-bidirectional"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-cobb-angle"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-height-difference"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-cardiothoracic-ratio"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ultrasound-directional"/></svg></span></td><td><a href="#measure-tools">Measure</a></td></tr>
+            <tr><td>ROI ▾</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-crop-square"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ellipse-roi"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-circle"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-lasso-select"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-spline"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-livewire"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-box"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-cylinder"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-crosshair"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-pipette"/></svg></span></td><td><a href="#measure-roi">ROI</a></td></tr>
+            <tr><td>Annotate ▾</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-insert-comment"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-type"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-spine-label"/></svg></span></td><td><a href="#annotate-annotate">Annotate</a></td></tr>
+            <tr><td>Edit</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-undo2"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-redo2"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-border-clear"/></svg></span></td><td><a href="#annotate-edit">Edit</a></td></tr>
+            <tr><td>View</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-ruler"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-move"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-palette-colorbar"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-compass"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-layers3"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-axis3d"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-crop"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-fit-screen"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-screen-lock-landscape"/></svg></span></td><td><a href="#annotate-view">View</a></td></tr>
+            <tr><td>More</td><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-star"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-copy"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-printer"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-tags"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-calibration"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-layout-template"/></svg></span></td><td><a href="#more">More</a></td></tr>
+          </table>
+        </div>
+
+        <h2 id="toolbar-right">ปลายขวาของ Toolbar</h2>
+        <ul>
+          <li><span class="vk"><span class="t">5 FPS</span></span> <b>Cine FPS</b> — ความเร็วเล่น cine 1–30 ภาพ/วินาที (มีผลเฉพาะครั้งนี้ ค่าเริ่มต้นตั้งที่ Settings › Layout) — เมื่อ toolbar แคบจะเป็นปุ่มเปิดแถบเลื่อน</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-more-horiz"/></svg></span> <b>เครื่องมืออื่น</b> — แสดงเมื่อหน้าต่างแคบ หมวดที่ยุบจะอยู่ในเมนูนี้ (ยุบตามลำดับ More → Navigate → View → Edit → Annotate) · ถ้าเครื่องมือที่เลือกอยู่ในเมนู ปุ่มจะแสดงไอคอนของเครื่องมือนั้น</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-settings"/></svg></span> <b>ตั้งค่า Viewer</b> — ดู <a href="#settings">Viewer Settings</a></li>
+        </ul>
+        <div class="tip"><p>ซ่อน / เรียงลำดับเครื่องมือ หรือดึงเครื่องมือออกจากเมนู ▾ มาเป็นปุ่มเดี่ยวได้ที่ <a href="#set-input-toolbar">Settings › Toolbar</a></p></div>
+      </section>
+
+      <!-- ================================================================ 8 -->
+      <section class="page" id="navigate">
+        <p class="crumb">เครื่องมือ (Toolbar)</p>
+        <h1>Navigate และ Window/Level</h1>
+        <p class="lead">เครื่องมือเลื่อน ซูม ขยายภาพ และปรับความสว่าง/ความคมชัด (Window/Level) สีภาพ</p>
+
+        <h2 id="navigate-nav">Navigate</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>การใช้งาน</th><th>ใช้กับ</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-three-d-rotation"/></svg></span> 3D</td><td>ลากเพื่อหมุนภาพ 3D</td><td>ช่อง 3D</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-zoom-in"/></svg></span> Zoom <kbd class="key">Z</kbd></td><td>ลากขึ้น/ลงเพื่อย่อ/ขยาย</td><td>2D · MPR · 3D</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-open-with"/></svg></span> Pan <kbd class="key">P</kbd></td><td>ลากเพื่อเลื่อนภาพ</td><td>2D · MPR · 3D</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-search"/></svg></span> Magnify <kbd class="key">M</kbd></td><td>กดปุ่มซ้ายค้าง = แว่นขยายใต้เมาส์</td><td>2D</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-scan-search"/></svg></span> Advanced Magnify</td><td>วางแว่นขยายค้างบนภาพ — ลากเพื่อย้าย · ลากจุดที่ขอบปรับขนาด · คลิกขวาในแว่นเลือกกำลังขยาย · วัดในแว่นได้ · เอาออก: เมนูคลิกขวา, Clear หรือเลือกแล้วกด Delete</td><td>2D · MPR</td></tr>
+          </table>
+        </div>
+
+        <h2 id="navigate-wl">Window/Level</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>การใช้งาน</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-contrast"/></svg></span> W/L <kbd class="key">W</kbd></td><td>ลากซ้าย-ขวา / ขึ้น-ลงเพื่อปรับ Window และ Level (ค่าเริ่มต้นใช้ปุ่มขวาของเมาส์ได้เลย)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-wl-presets"/></svg></span> W/L presets</td><td>เลือกค่า W/L สำเร็จรูป (ดูหัวข้อถัดไป)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-wl-region"/></svg></span> W/L Region</td><td>ลากกรอบบนภาพ — ระบบตั้ง W/L จากค่าพิกเซลต่ำสุด/สูงสุดในกรอบ (กรอบหายเอง ไม่บันทึก)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-bar-chart"/></svg></span> W/L histogram</td><td>เปิดแผง histogram ของภาพ ปรับ W/L ด้วยแถบเลื่อนหรือพิมพ์ค่า</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-invert-image"/></svg></span> Invert <kbd class="key">I</kbd></td><td>สลับสีขาว-ดำของช่องที่ active</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-palette"/></svg></span> Colormap</td><td>ใส่สีเทียม: Grayscale, Hot iron, Rainbow (jet), HSV, Cool to warm, Viridis, Inferno</td></tr>
+          </table>
+        </div>
+
+        <h3 id="navigate-presets">W/L presets</h3>
+        <figure class="narrow">
+          <img src="img/wl-presets.webp" alt="เมนู W/L presets" loading="lazy" />
+          <figcaption>เมนู W/L presets ของภาพ CT — ตัวเลขด้านขวาคือคีย์ลัด 1–9</figcaption>
+        </figure>
+        <ul>
+          <li><b>จากเครื่องตรวจ (DICOM)</b> — ค่า W/L ที่บันทึกมาในไฟล์ (ค่าแรกคือค่าตอนเปิดภาพ)</li>
+          <li><b>ของฉัน (CT)</b> — preset ของคุณตาม modality · CT มีค่าเริ่มต้น Brain W80/L40, Subdural W200/L75, Stroke W40/L40, Lung W1500/L-600, Mediastinum W350/L50, Abdomen W400/L50, Liver W150/L30, Bone W2000/L500</li>
+          <li>กด <kbd class="key">1</kbd>–<kbd class="key">9</kbd> เพื่อใช้ preset ตามลำดับได้ทันที · แก้ไข/เพิ่ม preset ที่ <a href="#set-display-wl">Settings › Window/Level</a></li>
+          <li>ค่าเริ่มต้นมีเฉพาะ CT — modality อื่น (MR, CR, DX, MG, US …) ยังไม่มี preset ของฉัน จะแสดง “ไม่มี preset สำหรับ …” ให้ใช้ส่วน “จากเครื่องตรวจ” หรือเพิ่มเองใน Settings</li>
+        </ul>
+
+        <h3 id="navigate-histogram">W/L histogram</h3>
+        <figure class="narrow">
+          <img src="img/wl-histogram.webp" alt="แผง W/L histogram" loading="lazy" />
+          <figcaption>แผง “W/L แบบ histogram”</figcaption>
+        </figure>
+        <ul>
+          <li>ช่อง 2D = histogram ของภาพที่แสดงอยู่ · ช่อง MPR = histogram ของทั้ง volume (สุ่มตัวอย่าง) · ต้องมีช่องที่มีภาพก่อน (“เลือกช่องที่มีภาพ 2D หรือ MPR ก่อน”)</li>
+          <li>ลากจุดทั้งสองข้างของแถบเลื่อน (ค่าต่ำสุด/สูงสุด) หรือพิมพ์ Window / Level — ภาพเปลี่ยนทันที</li>
+          <li><b>อัตโนมัติ</b> = ตัดค่าปลายสุด 0.5% ทั้งสองด้าน · <b>ทั้งช่วง</b> = ใช้ช่วงค่าพิกเซลทั้งหมด</li>
+          <li>แผงลากย้ายได้ที่หัวแผง ยังลาก W/L บนภาพได้ขณะแผงเปิด · ปิดด้วย <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span> หรือกดปุ่มเดิม</li>
+        </ul>
+
+        <h3 id="navigate-colormap">Colormap</h3>
+        <figure class="narrow">
+          <img src="img/colormap.webp" alt="เมนู Colormap" loading="lazy" />
+          <figcaption>เมนู Colormap</figcaption>
+        </figure>
+        <p>ใช้กับภาพ 2D และ MPR (ไม่ใช้กับ 3D) · ภาพที่มีสีเทียมจะแสดงแท่งสี (Colorbar) ที่ขอบซ้ายของช่อง ซึ่งลากเพื่อปรับ W/L ได้ · เลือก Grayscale เพื่อกลับเป็นขาวดำ · บนมือถือใช้ได้กับภาพขาวดำ</p>
+      </section>
+
+      <!-- ================================================================ 9 -->
+      <section class="page" id="measure">
+        <p class="crumb">เครื่องมือ (Toolbar)</p>
+        <h1>Measure และ ROI — การวัด</h1>
+        <p class="lead">เครื่องมือวัดระยะ มุม พื้นที่ และค่าพิกเซล พร้อมวิธีแก้ไข ลบ และดูรายการค่าวัด — ค่าวัดบันทึกให้อัตโนมัติ</p>
+        <figure>
+          <img src="img/measure.webp" alt="ตัวอย่างค่าวัดบนภาพ" loading="lazy" />
+          <figcaption>ตัวอย่าง Length, Angle และ Probe บนภาพ CT</figcaption>
+        </figure>
+
+        <h2 id="measure-tools">Measure ▾</h2>
+        <figure class="narrow">
+          <img src="img/menu-measure.webp" alt="เมนู Measure" loading="lazy" />
+          <figcaption>เมนู Measure (เครื่องมือเฉพาะ modality จะแสดงเมื่อเปิดภาพชนิดนั้น)</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>เครื่องมือ</th><th>วิธีวาด</th><th>หมายเหตุ</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-straighten"/></svg></span> Length <kbd class="key">L</kbd></td><td>ลาก (หรือคลิก 2 จุด)</td><td>ระยะทาง (mm)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-angle"/></svg></span> Angle <kbd class="key">A</kbd></td><td>คลิก 3 จุด</td><td>มุม (องศา)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-bidirectional"/></svg></span> Bidirectional <kbd class="key">B</kbd></td><td>ลากแกนยาว แกนสั้นตั้งฉากสร้างให้ ปรับด้วยจุดจับ</td><td>แกนยาว × แกนสั้น</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-cobb-angle"/></svg></span> Cobb Angle</td><td>ลากเส้น 2 เส้น</td><td>มุมระหว่าง 2 เส้น (กระดูกสันหลังคด)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-height-difference"/></svg></span> Height</td><td>ลากเส้น</td><td>ความต่างระดับแนวตั้งบนจอ (เส้นเอียงจะสั้นกว่า Length)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-cardiothoracic-ratio"/></svg></span> CTR</td><td>ลากเส้น 2 เส้นลำดับใดก็ได้ — เส้นที่กว้างกว่า = ทรวงอก</td><td>อัตราส่วนหัวใจต่อทรวงอก (นับเฉพาะแนวนอน) ค่าเกิน 0.5 เป็นสีส้ม · ภาพ AP เตือน “AP view — CTR อาจสูงกว่าจริง” · <b>CR/DX เท่านั้น</b></td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ultrasound-directional"/></svg></span> US Directional</td><td>วัดในกรอบ Doppler / M-mode</td><td><b>US เท่านั้น</b> — วาดนอกกรอบจะถูกลบ · วัดบน B-mode ใช้ Length</td></tr>
+          </table>
+        </div>
+
+        <h2 id="measure-roi">ROI ▾</h2>
+        <figure class="narrow">
+          <img src="img/menu-roi.webp" alt="เมนู ROI" loading="lazy" />
+          <figcaption>เมนู ROI (PET VOI แสดงเมื่อมีช่อง PET แบบ volume)</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>เครื่องมือ</th><th>วิธีวาด</th><th>ผล</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-crop-square"/></svg></span> Rect ROI <kbd class="key">R</kbd></td><td>ลากมุมถึงมุม</td><td>พื้นที่ ค่าเฉลี่ย ต่ำสุด สูงสุด SD ในกรอบ</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ellipse-roi"/></svg></span> Ellipse ROI <kbd class="key">E</kbd></td><td>ลากมุมถึงมุม</td><td>สถิติในวงรี</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-circle"/></svg></span> Circle ROI <kbd class="key">C</kbd></td><td>ลากมุมถึงมุม</td><td>สถิติในวงกลม</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-lasso-select"/></svg></span> Freehand ROI</td><td>กดค้างแล้ววาด</td><td>รูปปิด = พื้นที่และสถิติ + เส้นรอบรูป · เส้นเปิด = ความยาว</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-spline"/></svg></span> Spline ROI</td><td>คลิกทีละจุด ดับเบิลคลิก/คลิกจุดแรกเพื่อปิด</td><td>เส้นโค้งผ่านจุดที่คลิก</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-livewire"/></svg></span> Livewire</td><td>คลิกทีละจุด</td><td>เส้นวิ่งตามขอบอวัยวะเอง</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-box"/></svg></span> PET VOI box · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-cylinder"/></svg></span> PET VOI circle</td><td>วาดกล่อง/ทรงกระบอก 3D ครอบก้อน</td><td>SUV ในปริมาตร (ดู <a href="#petct-voi">PET VOI</a>) · เฉพาะช่อง PET MPR / Fusion</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-crosshair"/></svg></span> Probe <kbd class="key">V</kbd></td><td>คลิกจุด</td><td>ค่าพิกเซล (CT = HU) ค้างบนภาพ</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-pipette"/></svg></span> Drag Probe</td><td>กดค้างแล้วลาก</td><td>ค่าพิกเซลใต้เมาส์ หายเมื่อปล่อย (ไม่บันทึก)</td></tr>
+          </table>
+        </div>
+
+        <p>บนระนาบ MPR ที่หมุนเอียง (oblique) ROI จะแสดง “Area: คำนวณบนระนาบเอียงไม่ได้” — วัดพื้นที่ได้บนระนาบตั้งฉากเท่านั้น</p>
+
+        <h2 id="measure-edit">แก้ไขและลบค่าวัด</h2>
+        <ul>
+          <li><b>เลือก</b>: คลิกที่ค่าวัด (เปลี่ยนเป็นสีเขียว) หรือคลิกแถวในแท็บ “ค่าวัด” (กระโดดไปยังภาพนั้นด้วย)</li>
+          <li><b>แก้ไข</b>: ลากจุดจับของค่าวัด · <b>ลบ</b>: เลือกแล้วกด <kbd class="key">Delete</kbd></li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-border-clear"/></svg></span> <b>Clear</b>: ลบทุก annotation บนภาพปัจจุบันของช่อง active ในครั้งเดียว</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-undo2"/></svg></span> Undo <kbd class="key">Ctrl+Z</kbd> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-redo2"/></svg></span> Redo <kbd class="key">Ctrl+Y</kbd> ย้อน/ทำซ้ำได้ทั้งการวาด ลบ และ Clear</li>
+          <li>ค่าวัดของผู้ใช้อื่นแสดงเป็นอีกสีและล็อกไว้ (อ่านอย่างเดียว) — Delete และ Clear จะข้าม</li>
+          <li>สี ความหนาเส้น ขนาดตัวอักษร และทศนิยม ตั้งที่ <a href="#set-other-annotation">Settings › Annotation</a></li>
+        </ul>
+        <div class="note"><p><b>บันทึกอัตโนมัติ</b> — ค่าวัดถูกบันทึกบนเซิร์ฟเวอร์ราว 1 วินาทีหลังวาด/แก้ไข ไม่มีปุ่มบันทึก · ยกเว้นเปิดจาก HIS หรือภาพที่ไม่มีข้อมูล Study/Series (เช่น Secondary Capture บางชนิด) ค่าวัดจะหายเมื่อปิด viewer</p></div>
+
+        <h2 id="measure-list">รายการค่าวัด (แท็บ ค่าวัด)</h2>
+        <figure class="narrow">
+          <img src="img/meas-tab.webp" alt="แท็บค่าวัด" loading="lazy" />
+          <figcaption>แท็บ “ค่าวัด” ในแถบข้าง — คอลัมน์ VP (ช่อง), Serie, เครื่องมือ, ค่า, Slice</figcaption>
+        </figure>
+        <ul>
+          <li>คลิกแถวเพื่อเลือกค่าวัดและกระโดดไปยังภาพนั้น · เลือกแล้วกด Delete เพื่อลบ</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-download"/></svg></span> <b>Export CSV</b> = ดาวน์โหลดค่าวัดทั้งตาราง (พร้อมสถิติของ ROI) เป็นไฟล์ CSV เปิดใน Excel ได้ — ในไฟล์ไม่มีชื่อผู้ป่วย/HN มีเฉพาะ Study UID และ Accession ต่อแถว · ทศนิยมตาม Settings › Annotation · ระบบบันทึก audit ทุกครั้งที่ส่งออก</li>
+          <li>มีบนคอมพิวเตอร์เท่านั้น (ไม่มีบนมือถือ/แท็บเล็ต)</li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 10 -->
+      <section class="page" id="annotate">
+        <p class="crumb">เครื่องมือ (Toolbar)</p>
+        <h1>Annotate · Edit · View</h1>
+        <p class="lead">เขียนข้อความและลูกศรบนภาพ ติดป้ายกระดูกสันหลัง ย้อน/ทำซ้ำ และสลับการแสดงผลต่าง ๆ บนภาพ</p>
+
+        <h2 id="annotate-annotate">Annotate ▾</h2>
+        <figure class="narrow">
+          <img src="img/menu-annotate.webp" alt="เมนู Annotate" loading="lazy" />
+          <figcaption>เมนู Annotate</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>เครื่องมือ</th><th>การใช้งาน</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-insert-comment"/></svg></span> Arrow Annotate <kbd class="key">T</kbd></td><td>ลากลูกศร แล้วพิมพ์ข้อความในกล่องของเบราว์เซอร์ที่ขึ้นมา (กด OK) · ดับเบิลคลิกข้อความเพื่อแก้</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-type"/></svg></span> Text Label</td><td>คลิกจุด แล้วพิมพ์ข้อความ</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-spine-label"/></svg></span> Spine Label</td><td>คลิกกระดูกสันหลังทีละปล้อง ระบบตั้งชื่อ C1…S1 ต่อกันให้ (CT / MR / CR / DX)</td></tr>
+          </table>
+        </div>
+        <h3 id="annotate-spine">ตัวเลือก Spine Label</h3>
+        <ul>
+          <li>เมื่อเลือก Spine Label จะมีปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-spine"/></svg></span><svg class="ic" aria-hidden="true"><use href="#m-arrow-drop-down"/></svg> “ตัวเลือก Spine Label” เพิ่มบน toolbar (เปิดให้ครั้งแรกอัตโนมัติ)</li>
+          <li>เลือก <b>นับลง ↓ / นับขึ้น ↑</b> และเลือก <b>ป้ายถัดไป</b> จากตารางชื่อปล้อง · ปุ่มแดง “ลบป้ายกระดูกทั้งชุด” (Undo คืนได้)</li>
+          <li>คลิกป้ายที่วางแล้วเพื่อ “เปลี่ยนชื่อป้าย” — สวิตช์ “เลื่อนป้ายอื่นตาม (Renumber)” เปิดเป็นค่าเริ่มต้น</li>
+        </ul>
+
+        <h2 id="annotate-edit">Edit</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>หน้าที่</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-undo2"/></svg></span> Undo <kbd class="key">Ctrl+Z</kbd></td><td>ย้อนการแก้ไขล่าสุด (ประวัติเดียวรวมทุกช่อง)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-redo2"/></svg></span> Redo <kbd class="key">Ctrl+Y</kbd></td><td>ทำซ้ำสิ่งที่ย้อนไป — วาดใหม่แล้วรายการ Redo จะถูกล้าง</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-border-clear"/></svg></span> Clear</td><td>ลบ annotation ทั้งหมดบนภาพนี้ (Undo ครั้งเดียวคืนทั้งหมด) และปิด crosshair</td></tr>
+          </table>
+        </div>
+
+        <h2 id="annotate-view">View</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>หน้าที่</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-ruler"/></svg></span> Scale bar</td><td>แสดงแถบมาตราส่วนสีเหลืองที่ขอบล่างและขอบขวา</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-move"/></svg></span> Orientation labels</td><td>แสดงอักษรทิศ A/P/R/L/H/F ที่ขอบภาพ (เปิดเป็นค่าเริ่มต้น — ปุ่มนี้สลับเฉพาะครั้งนี้ ตั้งถาวรที่ Settings › Layout) · ภาพที่ไม่มีข้อมูลทิศ ภาพ 3D และภาพบนมือถือไม่แสดง</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-palette-colorbar"/></svg></span> Colorbar</td><td>แท่งสีที่ขอบซ้ายของช่อง Fusion (ชั้น PET) / ภาพที่ใส่ Colormap / PET-NM — ลากบนแท่งเพื่อปรับ W/L ชี้เพื่อดูค่า (เปิดเป็นค่าเริ่มต้น — ตั้งถาวรที่ Settings › Layout)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-compass"/></svg></span> Orientation cube</td><td>กล่องบอกทิศในช่อง 3D</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-layers3"/></svg></span> Slab (MIP/MinIP/AIP)</td><td>ภาพฉายแบบหนา — ดู <a href="#mpr-slab">Slab</a></td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-axis3d"/></svg></span> Reset oblique (MPR)</td><td>ปรับระนาบ MPR ที่หมุนเอียงกลับตั้งฉาก (ซ่อนเป็นค่าเริ่มต้น เปิดได้ใน Settings › Toolbar)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-crop"/></svg></span> Volume crop</td><td>ตัดก้อน 3D ด้วยกล่อง — ดู <a href="#vr3d-crop">Volume crop</a></td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-fit-screen"/></svg></span> Mammo fit</td><td>จัดภาพ MG ทุกช่องให้เข้าคู่ (MG เท่านั้น)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-screen-lock-landscape"/></svg></span> Mammo lock</td><td>ซูม/เลื่อนภาพ MG ไปพร้อมกัน (ข้าง R/L เลื่อนสวนกันในแนวนอน) — ต้องมีภาพ MG ที่รู้ข้างและท่าอย่างน้อย 2 ช่อง · เปิดให้เองเมื่อระบบจัดผัง MG เสร็จ</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================================ 11 -->
+      <section class="page" id="more">
+        <p class="crumb">เครื่องมือ (Toolbar)</p>
+        <h1>More — Key image, Print, Tags, Layout</h1>
+        <p class="lead">ปักภาพสำคัญ คัดลอกภาพ พิมพ์ ดู DICOM tag ปรับมาตราส่วน และบันทึกผังหน้าจอ</p>
+
+        <h2 id="more-keyimage"><svg class="ic" aria-hidden="true"><use href="#l-star"/></svg> Key image</h2>
+        <p class="meta"><span><b>คีย์ลัด</b> <kbd class="key">K</kbd></span></p>
+        <ol class="steps">
+          <li>เลื่อนไปยังภาพที่ต้องการในช่อง 2D แล้วกด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-star"/></svg></span> Key image หรือ <kbd class="key">K</kbd></li>
+          <li>กล่อง “โน้ตของ Key image” ขึ้นมา — พิมพ์โน้ต (ไม่บังคับ ไม่เกิน 500 ตัวอักษร) แล้วกด <b class="ui">บันทึก</b></li>
+          <li>ภาพนั้นมีป้าย ★ Key image และอยู่ในรายการ Key images ของแถบข้าง (ปุ่มบน toolbar เป็นสีไฮไลต์เมื่ออยู่บนภาพที่ปักไว้)</li>
+          <li>กดซ้ำบนภาพเดิมเพื่อเอาออก หรือใช้ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-trash2"/></svg></span> ในรายการ</li>
+        </ol>
+        <div class="phones">
+          <figure>
+            <img src="img/keyimage-note.webp" alt="กล่องโน้ตของ Key image" loading="lazy" />
+            <figcaption>กล่องโน้ตของ Key image</figcaption>
+          </figure>
+          <figure>
+            <img src="img/keyimage-star.webp" alt="ป้าย Key image บนภาพ" loading="lazy" />
+            <figcaption>ป้าย ★ Key image บนภาพ</figcaption>
+          </figure>
+        </div>
+        <p>ปักได้เฉพาะภาพ 2D (ไม่ใช่ MPR/3D — ขึ้น “ปัก key image ได้เฉพาะภาพ 2D”) และไม่ได้กับภาพที่ server ย่อให้บนมือถือ · key image บันทึกบนเซิร์ฟเวอร์ ผู้ใช้อื่นเห็นได้ (ป้ายสีฟ้า) · พิมพ์เฉพาะ key image ได้จากหน้าต่าง Print · เปิดจาก HIS ปักได้แต่ไม่ถูกบันทึก</p>
+
+        <h2 id="more-copy"><svg class="ic" aria-hidden="true"><use href="#l-copy"/></svg> Copy image</h2>
+        <p>คัดลอกภาพที่เห็น (รวมค่าวัดและ overlay) ลง clipboard เพื่อวางในเอกสารหรือแชท — ขึ้น “คัดลอกภาพแล้ว” · ถ้าเว็บไม่ใช่ https ระบบดาวน์โหลดเป็นไฟล์ PNG แทน (“บันทึกภาพเป็นไฟล์ PNG แล้ว …”) · มีในเมนูคลิกขวาด้วย</p>
+
+        <h2 id="more-print"><svg class="ic" aria-hidden="true"><use href="#l-printer"/></svg> Print</h2>
+        <p class="meta"><span><b>คีย์ลัด</b> <kbd class="key">Ctrl+P</kbd></span></p>
+        <figure>
+          <img src="img/print.webp" alt="หน้าต่างพิมพ์" loading="lazy" />
+          <figcaption>หน้าต่างพิมพ์พร้อมภาพตัวอย่างหน้ากระดาษ</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ตัวเลือก</th><th>ค่า</th></tr>
+            <tr><td>ขอบเขต</td><td>ช่องที่เลือก / ทุกช่องบนจอ (n) / Key images (n)</td></tr>
+            <tr><td>ภาพต่อหน้า</td><td>ตามจอ (R×C) หรือ 1 · 2 · 4 · 6 · 8 · 9 · 12</td></tr>
+            <tr><td>แนวกระดาษ · กระดาษ</td><td>แนวตั้ง / แนวนอน · A4 / Letter</td></tr>
+            <tr><td>ข้อความมุมภาพ · คำบรรยายใต้ภาพ</td><td>แสดงข้อมูลมุมภาพ และ Series Description ใต้ภาพ</td></tr>
+          </table>
+        </div>
+        <p>กด <b class="ui">พิมพ์</b> แล้วเลือกเครื่องพิมพ์หรือ “บันทึกเป็น PDF” · ท้ายกระดาษระบุ “พิมพ์โดย ‹ชื่อผู้ใช้› เมื่อ ‹วันเวลา›” และ “สำหรับอ้างอิง ไม่ใช่เพื่อการวินิจฉัย” · ภาพเล็กจนไม่คมจะเตือน “ภาพจะพิมพ์ที่ประมาณ … dpi” — ดับเบิลคลิกขยายช่องก่อนพิมพ์ หรือลดภาพต่อหน้า · ECG พิมพ์ขนาดจริงได้ (ตั้ง Scale 100% ไม่เลือก Fit to page ในกล่องพิมพ์ของเบราว์เซอร์) · Key image ที่เตรียมไม่ได้จะถูกข้าม · ทุกครั้งที่พิมพ์ระบบบันทึก audit · ไม่มีบนมือถือ</p>
+
+        <h2 id="more-tags"><svg class="ic" aria-hidden="true"><use href="#l-tags"/></svg> DICOM Tags</h2>
+        <figure>
+          <img src="img/dicom-tags.webp" alt="หน้าต่าง DICOM Tags" loading="lazy" />
+          <figcaption>หน้าต่าง DICOM Tags ของภาพในช่องที่เลือก</figcaption>
+        </figure>
+        <ul>
+          <li>แสดงทุก tag ของภาพ: Tag, VR, Keyword, ค่า · เลื่อนแถบด้านบนเพื่อดู instance อื่นใน series</li>
+          <li>ช่องค้นหา tag / keyword / ค่า · คลิกเพื่อเปิด sequence (ทีละชั้น หน้าละ 50 item) · ชี้แถวเพื่อ “คัดลอกค่า” · ปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-content-copy"/></svg></span> คัดลอกทั้งตาราง · หัวหน้าต่างบอกจำนวน element และขนาดไฟล์ · หน้าต่างลอย ลากย้าย/ย่อขยายได้ และใช้ Viewer ต่อได้ขณะเปิด · เปิดจากเมนูคลิกขวาได้ด้วย</li>
+        </ul>
+
+        <h2 id="more-calibrate"><svg class="ic" aria-hidden="true"><use href="#c-calibration"/></svg> Calibrate</h2>
+        <ol class="steps">
+          <li>วาดเส้น <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-straighten"/></svg></span> Length บนวัตถุที่รู้ขนาดจริง (เลือกเส้นนั้น)</li>
+          <li>กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-calibration"/></svg></span> Calibrate แล้วกรอก “ความยาวจริง (mm)” กด <b class="ui">ตั้งค่า</b></li>
+          <li>ระบบแจ้ง “Calibrate แล้ว: เส้นนี้ = X mm” และภาพมีป้าย “ผู้ใช้ Calibrate เอง”</li>
+        </ol>
+        <p>ใช้กับภาพ 2D เท่านั้น มีผลเฉพาะครั้งนี้ — เหมาะกับภาพที่ไม่มีข้อมูลขนาดพิกเซล · ภาพที่มี PixelSpacing จาก DICOM หรือ US Region อยู่แล้วจะไม่ให้ทับ (“ภาพนี้มี PixelSpacing จาก DICOM อยู่แล้ว — ไม่ต้อง calibrate”) · ยังไม่ได้วาดเส้นจะขึ้น “วาดเส้น Length บนวัตถุที่รู้ขนาดจริงในภาพนี้ก่อน”</p>
+
+        <h2 id="more-layout"><svg class="ic" aria-hidden="true"><use href="#l-layout-template"/></svg> Layout (workspace / hanging protocol)</h2>
+        <figure class="narrow">
+          <img src="img/hanging-menu.webp" alt="เมนู Layout" loading="lazy" />
+          <figcaption>เมนู Layout</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>รายการ</th><th>หน้าที่</th></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-save"/></svg></span> Save workspace</td><td>บันทึกหน้าจอนี้ (template, ผัง, series และภาพในแต่ละช่อง) ไว้เปิดการตรวจนี้ครั้งหน้า — ไม่เก็บ W/L, zoom, Fusion, SEG/RT, phase · ยังไม่มีภาพในช่องใดขึ้น “ยังไม่มีภาพในช่องไหนเลย — ไม่มีอะไรให้บันทึก” · เปิดจาก HIS บันทึกไม่ได้</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-rotate-ccw"/></svg></span> Reset layout</td><td>ลบ workspace แล้วจัดหน้าจอใหม่ตามกฎ</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-bookmark-plus"/></svg></span> Save as protocol</td><td>สร้าง hanging protocol จากหน้าจอนี้ ใช้กับการตรวจลักษณะเดียวกันครั้งต่อไป — เปิดฟอร์มกฎที่เติมเงื่อนไขจากหน้าจอให้แล้ว (description ครอบด้วย <code>^…$</code> ให้ตรงเป๊ะ ลบออกได้ถ้าอยากให้กว้างขึ้น) กด <b class="ui">บันทึก</b> = บันทึกขึ้นเซิร์ฟเวอร์ทันที กฎใหม่อยู่บนสุด (สูงสุด 30 กฎ) — ดู <a href="#compare-hanging">Hanging protocol</a></td></tr>
+          </table>
+        </div>
+        <figure>
+          <img src="img/save-protocol.webp" alt="หน้าต่าง Save as protocol" loading="lazy" />
+          <figcaption>หน้าต่าง Save as protocol — เงื่อนไขเติมจากหน้าจอปัจจุบัน แก้ได้ก่อนบันทึก</figcaption>
+        </figure>
+        <div class="tip"><p>ซ่อน Save workspace / Reset layout / Save as protocol ครบทั้ง 3 ตัวใน <a href="#set-input-toolbar">Settings › Toolbar</a> = ปุ่ม Layout หายจาก toolbar</p></div>
+      </section>
+
+      <!-- ================================================================ 12 -->
+      <section class="page" id="mpr">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>MPR · Crosshair · Slab</h1>
+        <p class="lead">ดูภาพตัดสามระนาบ (axial / coronal / sagittal) จาก series CT/MR เดียว หมุนระนาบเอียง และทำภาพฉายแบบหนา (MIP / MinIP / AIP)</p>
+        <figure>
+          <img src="img/mpr.webp" alt="ผัง MPR" loading="lazy" />
+          <figcaption>Template MPR — axial | coronal | sagittal พร้อมเส้น crosshair (ข้อมูลทดสอบ 4D-Lung TCIA)</figcaption>
+        </figure>
+
+        <h2 id="mpr-open">เปิดภาพ MPR</h2>
+        <ol class="steps">
+          <li>เลือก Template <b>MPR</b> (หรือ Axial / Coronal / Sagittal primary) จาก toolbar — ระบบเลือก series ที่เหมาะสมให้</li>
+          <li>หรือคลิก series ที่มีป้าย <b style="color:#ffd600">MPR</b> ขณะอยู่ในผัง MPR เพื่อสร้างผังใหม่จาก series นั้น</li>
+          <li>ตั้งให้ CT/MR เปิดเป็น MPR อัตโนมัติได้ที่ <a href="#set-display-layout">Settings › Layout</a></li>
+        </ol>
+        <ul>
+          <li>ป้าย MPR บนภาพย่อแสดงเมื่อ series เป็น CT/MR ตั้งแต่ 40 ภาพ และระบบตรวจแล้วว่าภาพเรียงเป็น volume ได้</li>
+          <li>series ที่ทำไม่ได้จะขึ้น “Series นี้ทำ MPR / 3D ไม่ได้” แล้วกลับไปใช้ผัง Default</li>
+          <li>ป้ายระนาบ (axial / coronal / sagittal) อยู่มุมขวาบนของแต่ละช่อง · ทุกช่องระนาบมีแถบเลื่อนภาพ</li>
+        </ul>
+
+        <h2 id="mpr-crosshair">Crosshair และระนาบเอียง (Oblique)</h2>
+        <ul>
+          <li>ปุ่ม <span class="vk"><span class="t">MPR เปิด</span></span> / <span class="vk"><span class="t">MPR ปิด</span></span> บน toolbar เปิด/ปิด crosshair (ผัง MPR เปิดให้เองตอนจัดผัง · ปิดเองเมื่อช่องระนาบเหลือน้อยกว่า 3 ช่อง · ผัง Fusion ไม่มี crosshair แต่ Fusion MPR มี)</li>
+          <li>เมื่อเปิด: ปุ่มซ้าย = ย้ายจุดตัด, <kbd class="key">Shift</kbd> + ลากซ้าย = W/L</li>
+          <li>ชี้ที่เส้น crosshair จะเห็นจุดจับ 2 แบบ: <b>วงกลม</b> = หมุนระนาบ (oblique) · <b>สี่เหลี่ยม</b> = ปรับความหนา slab</li>
+          <li>ระนาบที่หมุนเอียงแล้วจะมีปุ่ม <span class="vk y"><svg class="ic" aria-hidden="true"><use href="#c-reset-oblique"/></svg></span> Reset oblique ใต้ปุ่มรีเซ็ตมุมมอง — ปรับทุกระนาบกลับตั้งฉาก (คงซูม ตำแหน่ง และ slab)</li>
+          <li>ต้องมีภาพ 2D อย่างน้อย 3 ช่อง มิฉะนั้นขึ้น “Crosshair ต้องมีภาพ 2D อย่างน้อย 3 ช่อง”</li>
+        </ul>
+
+        <h2 id="mpr-slab"><svg class="ic" aria-hidden="true"><use href="#l-layers3"/></svg> Slab — MIP / MinIP / AIP</h2>
+        <figure class="narrow">
+          <img src="img/slab-menu.webp" alt="เมนู Slab" loading="lazy" />
+          <figcaption>เมนู Slab — เลือกความหนาและโหมดภาพฉาย</figcaption>
+        </figure>
+        <ul>
+          <li>เลือกความหนา 5 / 10 / 20 / 40 mm และโหมด Normal, <b>MIP</b> (ค่าสูงสุด — หลอดเลือด ก้อนในปอด), <b>MinIP</b> (ค่าต่ำสุด — ทางเดินหายใจ), <b>Average (AIP)</b></li>
+          <li>ลากจุดจับสี่เหลี่ยมบนเส้น crosshair ปรับความหนาได้ละเอียดโดยคงโหมดที่เลือก · ช่องที่ยัง Normal เมนูจะเสนอ 20 mm</li>
+          <li>ใช้กับช่อง MPR และภาพ 2D CT/MR ได้ (ภาพ 2D จะถูกโหลดเป็น volume ก่อน — “ภาพ 2D จะถูกโหลดเป็น volume ก่อน (CT/MR)”)</li>
+          <li>ช่อง Fusion ใช้ Slab ไม่ได้ · series ที่ภาพไม่ครบชุดหรือระยะห่างไม่เท่ากันจะขึ้น “Series นี้โหลดเป็น volume ไม่ได้ … ใช้ Slab ไม่ได้”</li>
+          <li>กด <span class="vk y"><svg class="ic" aria-hidden="true"><use href="#m-restore"/></svg></span> รีเซ็ตมุมมอง เพื่อกลับเป็น Normal</li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 13 -->
+      <section class="page" id="vr3d">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>3D Volume Rendering</h1>
+        <p class="lead">แสดงภาพ 3 มิติจาก series CT / MR / PET พร้อม preset ตามงานตรวจ ปรับคุณภาพและแสง และตัดก้อน 3D</p>
+        <figure>
+          <img src="img/3d.webp" alt="ผัง 3D four up" loading="lazy" />
+          <figcaption>Template 3D four up — axial, ภาพ 3D, coronal, sagittal</figcaption>
+        </figure>
+
+        <h2 id="vr3d-open">เปิดภาพ 3D</h2>
+        <ul>
+          <li>เลือก Template <b>3D four up</b> / <b>3D main</b> / <b>3D primary</b> / <b>3D only</b></li>
+          <li>หรือในผังธรรมดา เปลี่ยนตัวเลือก <span class="vk"><span class="t">2D ▾</span></span> บนช่องเป็น 3D (CT/MR/PT/NM ที่มีมากกว่า 19 ภาพ) — ทำไม่ได้จะขึ้น “Series นี้ทำ 3D ไม่ได้”</li>
+          <li>เมาส์ในช่อง 3D: ซ้าย = หมุน · <kbd class="key">Shift</kbd>+ซ้าย = Pan · ขวา = W/L · ล้อ = Zoom</li>
+        </ul>
+
+        <h2 id="vr3d-preset">Preset ตามงานตรวจ</h2>
+        <p>ช่อง 3D มีตัวเลือก preset (กลุ่ม BONE / CARDIO VASCULAR / CHEST SOFT TISSUE / MRI SPECIAL) ระบบเลือกค่าเริ่มต้นจากคำสำคัญในคำอธิบาย series และส่วนของร่างกาย (BodyPartExamined) ตามลำดับนี้</p>
+        <div class="tbl">
+          <table>
+            <tr><th>การตรวจ</th><th>Preset เริ่มต้น</th></tr>
+            <tr><td>CTA ที่มีคำว่า aorta / AAA / iliac</td><td>CT-AAA</td></tr>
+            <tr><td>CTPA / pulmonary</td><td>CT-Pulmonary-Arteries</td></tr>
+            <tr><td>CT coronary / cardiac / heart</td><td>CT-Coronary-Arteries</td></tr>
+            <tr><td>CTA อื่น ๆ (vessel, run-off, circle of Willis)</td><td>CT-Chest-Vessels (CTA แขนขาที่มีคำกระดูก = CT-Bone)</td></tr>
+            <tr><td>CT กระดูก ข้อ ศีรษะ (ไม่รวมคอ), Pelvis non-contrast</td><td>CT-Bone</td></tr>
+            <tr><td>CT ปอด / HRCT</td><td>CT-Lung · ทางเดินหายใจ (airway, trachea) = CT-Air</td></tr>
+            <tr><td>CT ช่องท้อง เชิงกราน คอ อวัยวะภายใน</td><td>CT-Soft-Tissue · มีคำว่า liver / portal / venous = CT-Liver-Vasculature</td></tr>
+            <tr><td>CT ทรวงอกฉีดสี · CT อื่น ๆ</td><td>CT-Chest-Contrast-Enhanced · CT-Soft-Tissue</td></tr>
+            <tr><td>MR angio / MRA / MRV / TOF / ฉีด Gadolinium</td><td>MR-Angio (มีคำว่า MIP = MR-MIP)</td></tr>
+            <tr><td>MR DTI / DWI / ADC / diffusion</td><td>DTI-FA-Brain</td></tr>
+            <tr><td>MR T2 / FLAIR / brain / head · MR อื่น ๆ</td><td>MR-T2-Brain · MR-Default</td></tr>
+            <tr><td>PET และ modality อื่น</td><td>CT-Soft-Tissue</td></tr>
+          </table>
+        </div>
+
+        <h2 id="vr3d-quality"><svg class="ic" aria-hidden="true"><use href="#m-tune"/></svg> คุณภาพและแสงของภาพ 3D</h2>
+        <figure class="narrow">
+          <img src="img/vr-settings.webp" alt="แผงคุณภาพและแสงของภาพ 3D" loading="lazy" />
+          <figcaption>แผง “คุณภาพและแสงของภาพ 3D” เปิดจากปุ่มบนช่อง 3D</figcaption>
+        </figure>
+        <ul>
+          <li>ปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-tune"/></svg></span> บนช่อง 3D เปิดแผงปรับ: <b>คุณภาพ (เครื่องนี้)</b> 5 ระดับ จาก ความเร็ว ถึง คุณภาพ (ค่าเริ่มต้น สมดุล · มีผลเมื่อปล่อยเมาส์ · ระหว่างหมุนภาพจะหยาบลงชั่วคราวให้ลื่น · จำค่าต่อคอมพิวเตอร์ ไม่ตามบัญชี)</li>
+          <li><b>แสง / ความทึบ</b>: เงา (Shade), แสงรอบ (Ambient), แสงกระจาย (Diffuse), แสงสะท้อน (Specular) และ “เลื่อนช่วงความทึบ”</li>
+          <li>ปุ่ม “คืนค่า preset” คืนแสง/ความทึบของ preset · เพิ่มคุณภาพแล้วระบบอาจโหลดภาพเพิ่ม (“กำลังโหลดภาพ 3D ใหม่ให้ครบขึ้นตามระดับคุณภาพ”) · แผงไม่ปิดเอง ปิดด้วย × · ค่าแสงที่ปรับติดไปด้วยเมื่อเปลี่ยน preset</li>
+        </ul>
+
+        <h2 id="vr3d-crop"><svg class="ic" aria-hidden="true"><use href="#l-crop"/></svg> Volume crop</h2>
+        <ul>
+          <li>กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-crop"/></svg></span> Volume crop (หมวด View) — ต้องมีช่อง 3D (3D four up / 3D main / 3D primary / 3D only)</li>
+          <li>ลากลูกกลมในช่อง 3D หรือเส้นขอบสีในช่อง MPR เพื่อตัด · ลากที่อื่น = หมุนภาพ · <kbd class="key">Ctrl</kbd>+ลาก = หมุนกล่อง · <kbd class="key">Shift</kbd>+ลาก = เลื่อนภาพ</li>
+          <li>กล่องบางสุด 20 mm · ปิดปุ่ม = เลิกตัด (ระบบจำกล่องไว้)</li>
+        </ul>
+        <p><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-compass"/></svg></span> Orientation cube แสดงทิศในช่อง 3D (เปิดเป็นค่าเริ่มต้น)</p>
+      </section>
+
+      <!-- ================================================================ 14 -->
+      <section class="page" id="petct">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>PET/CT — SUV และ Fusion</h1>
+        <p class="lead">ค่า SUV บนภาพ PET การซ้อนภาพ PET บน CT (Fusion) ภาพ MIP และการวัดปริมาตรก้อนด้วย PET VOI</p>
+        <figure>
+          <img src="img/overview.webp" alt="Template Fusion" loading="lazy" />
+          <figcaption>Template Fusion: CT | PT (บน) / Fusion | PT MIP (ล่าง) — เปิดอัตโนมัติเมื่อการตรวจมีทั้ง PET และ CT</figcaption>
+        </figure>
+
+        <h2 id="petct-suv">ค่า SUV บนช่อง PET</h2>
+        <figure class="narrow">
+          <img src="img/suv.webp" alt="ช่อง PET พร้อม SUV" loading="lazy" />
+          <figcaption>ช่อง PET — บรรทัดสถานะ SUVbw, แท่งสี 0–5 SUV และตัวเลือกชนิด SUV</figcaption>
+        </figure>
+        <ul>
+          <li>บรรทัดใต้ชื่อ series แสดงชนิด SUV ที่ใช้: <b>SUVbw</b> / <b>SUVlbm</b> / <b>SUVbsa</b> — เลือกได้ที่ตัวเลือกชนิด SUV บนช่อง (ชนิดที่คิดไม่ได้จะเลือกไม่ได้ พร้อมเหตุผล)</li>
+          <li>ถ้าคิด SUV ไม่ได้ จะแสดงหน่วย Bq/ml พร้อมเหตุผล เช่น “ไม่มีน้ำหนักผู้ป่วย (PatientWeight)”</li>
+          <li>ค่าเริ่มต้นของช่อง PET คือ SUV 0–5 แบบกลับสี (พื้นขาว จุดจับสารเข้ม) · ชนิด SUV เริ่มต้นตั้งที่ <a href="#set-other-annotation">Settings › Annotation</a> (เปลี่ยนบนช่องมีผลเฉพาะครั้งนี้) · ค่า ROI บนช่อง PET และแท็บค่าวัดแสดงเป็นชนิด SUV ที่เลือก</li>
+        </ul>
+
+        <h2 id="petct-fusion">Fusion — ซ้อน PET บน CT</h2>
+        <figure>
+          <img src="img/fusion-controls.webp" alt="ตัวเลือก Fusion" loading="lazy" />
+          <figcaption>ตัวเลือกบนช่อง Fusion: ระนาบ · Fusion: PT … · แถบความทึบ · W/L: CT/PT</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>Template</th><th>ผัง</th></tr>
+            <tr><td>Fusion</td><td>CT | PT / Fusion | PT MIP</td></tr>
+            <tr><td>Fusion MPR</td><td>Fusion ทั้ง axial / coronal / sagittal + MIP พร้อม crosshair</td></tr>
+            <tr><td>Fusion prior</td><td>Fusion ครั้งนี้ | ครั้งก่อน / MIP | MIP (ต้องมี PET/CT ครั้งก่อน)</td></tr>
+          </table>
+        </div>
+        <ul>
+          <li>ช่อง CT ที่มี PET คู่กัน เลือก “Fusion: PT …” เพื่อซ้อน หรือ “Fusion: ไม่ซ้อน”</li>
+          <li>ชั้น PET แสดงด้วยสี Hot iron · แถบเลื่อนสีส้ม = ความทึบของชั้น PET (ค่าเริ่มต้น 60%) · ตัวเลือก <b>W/L: CT / W/L: PT</b> = ชั้นที่การลาก W/L และตัวเลข W/L มุมล่างอ้างถึง · ช่อง PET ในกลุ่ม sync เลื่อนตามตำแหน่งจริงของ CT (ไม่ใช่สัดส่วน)</li>
+          <li>ชี้เมาส์บนช่อง Fusion เพื่อดูค่า <code>SUVbw x.xx · HU n</code> · ตัวเลือกระนาบ Axial/Coronal/Sagittal เปลี่ยน 3 ช่องพร้อมกัน</li>
+          <li>สอง series ต้องอยู่ใน Frame of Reference เดียวกัน มิฉะนั้นขึ้น “ซ้อน Fusion ไม่ได้: …”</li>
+        </ul>
+
+        <h2 id="petct-mip">ภาพ MIP</h2>
+        <p>
+          ช่อง MIP มีป้าย <span class="vk o"><span class="t">MIP ⟳</span></span> — <b>หมุนล้อเมาส์ = หมุนภาพ</b> · คลิกบนภาพ = ช่องอื่นเลื่อนไปยังจุดที่จับสารสูงสุดตามแนวที่คลิก ·
+          ลากปุ่มขวา = W/L
+        </p>
+
+        <h2 id="petct-voi">PET VOI</h2>
+        <figure>
+          <img src="img/pet-voi.webp" alt="PET VOI บนช่อง Fusion และแผง VOI" loading="lazy" />
+          <figcaption>PET VOI box บนช่อง Fusion MPR — voxel ที่ผ่านเกณฑ์ถูกระบายสี และแผง “VOI บน PET” บนสุดของแท็บค่าวัด</figcaption>
+        </figure>
+        <ol class="steps">
+          <li>เลือก <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-box"/></svg></span> PET VOI box หรือ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-cylinder"/></svg></span> PET VOI circle (หมวด ROI — แสดงเมื่อช่อง active มี PET แบบ volume: PET MPR / Fusion / Fusion MPR)</li>
+          <li>ลากกรอบครอบก้อนบนช่อง PET — ระบบเลือก voxel ในกรอบที่ผ่านเกณฑ์ (ค่าเริ่มต้น <b>41% ของ SUVmax</b> ในกรอบ ตามแนวทาง EANM) แล้วระบายสีบนทุกช่องที่แสดง PET นั้น (ไม่รวม MIP)</li>
+          <li>แผง <b>VOI บน PET</b> บนสุดของแท็บค่าวัด: เกณฑ์เลือก voxel ใช้ร่วมกันทุก VOI (% ของ SUVmax หรือ SUV ≥ ค่าคงที่ — เปลี่ยนแล้วคิดใหม่ทั้งชุด) · ต่อ VOI แสดง SUVmax / SUVpeak (ทรงกลม 1 cm³ แบบ PERCIST) / SUVmean, MTV (ml), TLG และความลึก “n mm (n ภาพ)” · แถวรวม TMTV / TLG</li>
+          <li>ปุ่มในแต่ละ VOI: คลิกชื่อเพื่อแก้ · ⌖ ไปจุด SUVmax / SUVpeak · ขอบบน-ล่าง “ไป” (ดูภาพที่เป็นขอบกล่อง) และ “ตั้ง = ภาพนี้” (ใช้ภาพที่ช่อง PET แสดงอยู่เป็นขอบ) · ลบ · Export CSV ของ VOI ทุกตัว (ไฟล์ <code>pet-voi_‹accession›_‹เวลา›.csv</code> ไม่มีชื่อผู้ป่วย)</li>
+        </ol>
+        <ul>
+          <li>ก้อนชนขอบกล่องจะเตือน “⚠ ก้อนแตะขอบ … — ดูแผง VOI” — กด <b>ขยายให้คลุมก้อน</b> (ขยายความลึกทีละภาพด้านที่ชน สูงสุด 10 cm ต่อด้าน) หรือลากมุมกรอบให้กว้างขึ้น · ขยายถึงเพดานแล้วยังชน = อาจรวมอวัยวะที่ร้อนต่อกัน ให้ตั้งขอบเอง</li>
+          <li>voxel ที่เป็นของ VOI อื่นแล้วไม่นับซ้ำ (“n voxel เป็นของ VOI อื่น”) · ภาพ PET ในกรอบยังโหลดไม่ครบจะคิดใหม่เองเมื่อโหลดเสร็จ · PET ที่คิด SUV ไม่ได้ใช้ VOI ไม่ได้ · วาดบนช่องที่ไม่ใช่ PET volume ขึ้น “VOI ต้องวาดบนช่อง PET แบบ volume (PET MPR / Fusion)”</li>
+        </ul>
+        <div class="warn"><p>ค่า VOI เป็นค่าช่วยวัด ไม่ใช่ผลวินิจฉัย และ<b>ไม่ถูกบันทึก</b> — หายเมื่อปิด viewer · ค่าวัดบนช่อง Fusion เป็น HU ของ CT · workspace ไม่บันทึกการซ้อน Fusion</p></div>
+      </section>
+
+      <!-- ================================================================ 15 -->
+      <section class="page" id="segrt">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>SEG และ RTSTRUCT</h1>
+        <p class="lead">ซ้อนบริเวณที่ตัดไว้ (Segmentation) และโครงร่างอวัยวะจากแผนรังสีรักษา (RT Structure Set) บนภาพต้นทาง — อ่านอย่างเดียว</p>
+
+        <h2 id="segrt-seg">Segmentation (SEG)</h2>
+        <figure>
+          <img src="img/seg.webp" alt="ซ้อน SEG บน PET/CT" loading="lazy" />
+          <figcaption>SEG ซ้อนบน CT / PET / Fusion (สีเขียว) พร้อมแผง Segmentation และค่า SUVmax / MTV / TLG</figcaption>
+        </figure>
+        <ol class="steps">
+          <li>คลิกหรือลากภาพย่อ <b>SEG</b> (“คลิกเพื่อซ้อนบนภาพ”) — ระบบซ้อนบนทุกช่องที่แสดง series ต้นทาง (ภาพย่อมีกรอบสีเขียว)</li>
+          <li>กดป้าย <span class="vk"><span class="t">SEG</span></span> บนช่องเพื่อเปิดแผง: แสดงในช่องนี้ · ความทึบ · รายการ segment (ติ๊กเปิด/ปิด, สี, ชื่อ)</li>
+          <li>กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-center-focus-strong"/></svg></span> “ไปตำแหน่งค่าสูงสุด” เพื่อกระโดดไปยังบริเวณนั้น · ดูสถิติ SUVmax / SUVmean / MTV / TLG หรือ HU และปริมาตร</li>
+          <li>คลิกภาพย่ออีกครั้ง หรือกด “เอาออกทุกช่อง” เพื่อเลิกซ้อน</li>
+        </ol>
+        <ul>
+          <li>ต้องเปิด series ต้นทางก่อน (“เปิด Series … ก่อน แล้วคลิก SEG อีกครั้ง”) · SEG ที่ว่างทุกภาพจะขึ้น “ไม่มีบริเวณที่ตัดไว้”</li>
+          <li>ไม่ซ้อนบนช่อง MIP / 3D · SEG บางชนิดยังไม่รองรับ (ระนาบตั้งฉากหรือเอียงจากภาพต้นทาง, RLE แบบ 1 bit, การบีบอัดบางแบบ, SEG ที่ไม่ระบุ series ต้นทาง, ขนาดภาพไม่ตรง) — การ์ดขึ้น “แสดงไม่ได้ · คลิกเพื่อลองใหม่” พร้อมเหตุผล · สถิติที่ภาพต้นทางยังโหลดไม่ครบขึ้น “สถิติ: รอภาพต้นทางโหลดอีก n ภาพ — เปิดแผงใหม่อีกครั้ง”</li>
+        </ul>
+
+        <h2 id="segrt-rt">RT Structure Set (RTSTRUCT)</h2>
+        <figure>
+          <img src="img/rtstruct.webp" alt="ซ้อน RTSTRUCT บน MR" loading="lazy" />
+          <figcaption>RTSTRUCT ซ้อนบน MR พร้อมแผงรายการ ROI และปริมาตร (ข้อมูลทดสอบ MRI-DIR TCIA)</figcaption>
+        </figure>
+        <ul>
+          <li>คลิกภาพย่อ RTSTRUCT เพื่อซ้อน · กดป้าย <span class="vk"><span class="t">RT</span></span> บนช่องเพื่อเปิดแผง: แสดงในช่องนี้ · ความทึบ · รายการ ROI (ติ๊ก, สี, ชื่อ, ปริมาตร ml) · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-center-focus-strong"/></svg></span> ไปที่ ROI</li>
+          <li>RTSTRUCT แสดงเฉพาะระนาบเดียวกับ contour (ไม่ฉายลงระนาบอื่นใน MPR) และย้ายตาม phase ของภาพ 4D</li>
+          <li>ถ้ายังไม่ได้เปิดภาพต้นทาง ระบบแนะนำให้ “ลาก Series … ลงช่องเพื่อดู RTSTRUCT”</li>
+        </ul>
+        <div class="note"><p>SEG และ RTSTRUCT ยังไม่รองรับบนมือถือ/แท็บเล็ต · RT Plan, Registration และ Presentation State แสดงว่า “ยังไม่รองรับการแสดง”</p></div>
+      </section>
+
+      <!-- ================================================================ 16 -->
+      <section class="page" id="phase">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>4D / Phase / Cine</h1>
+        <p class="lead">ภาพหลายช่วงเวลา (เช่น 4D CT ปอดตามการหายใจ, MR dynamic, cardiac cine) — เลือก phase เล่นวนตาม phase และเล่น cine</p>
+        <figure class="narrow">
+          <img src="img/phase.webp" alt="แผงเลือก Phase" loading="lazy" />
+          <figcaption>ป้าย Phase บนช่อง (30% · 4/10) และแผงเลือก phase</figcaption>
+        </figure>
+
+        <h2 id="phase-use">เลือกและเล่น Phase</h2>
+        <ol class="steps">
+          <li>เมื่อเปิด series ที่มีหลาย phase จะมีป้าย <span class="vk o"><span class="t">30% · 4/10</span></span> บนช่อง (หรือ “Phase 3/6”)</li>
+          <li>คลิกป้ายเพื่อเปิดแผง — เลือก phase จากรายการ หรือกด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-play-arrow"/></svg></span> “เล่นตาม phase” เพื่อเล่นวนทุก phase</li>
+          <li>คีย์ลัด <kbd class="key">[</kbd> / <kbd class="key">]</kbd> = phase ก่อนหน้า / ถัดไป (เฉพาะช่อง 2D ที่มีป้าย Phase) · ปิดแผงด้วย ×, กดป้ายซ้ำ, Esc หรือคลิกนอกแผง (ยังเลื่อนภาพหรือลากในช่องได้ขณะแผงเปิด)</li>
+        </ol>
+        <ul>
+          <li>เปลี่ยน phase แล้วยังคงตำแหน่งภาพ ซูม และ W/L เดิม · เมื่อเปิด Sync ช่องในกลุ่มเดียวกันเปลี่ยน phase ไปพร้อมกัน</li>
+          <li>รองรับทั้งแบบ series ละ phase, ทุก phase ใน series เดียว (ภาพย่อแสดง “N ภาพ × M phase”) และ Enhanced MR/CT</li>
+          <li>ยังไม่มีบนช่อง MPR / volume และมือถือ · ไม่มีกราฟ time-intensity</li>
+        </ul>
+
+        <h2 id="phase-cine">Cine</h2>
+        <ul>
+          <li>กด <span class="vk b"><svg class="ic" aria-hidden="true"><use href="#m-play-arrow"/></svg></span> ที่แถบเลื่อนภาพมุมขวาล่างเพื่อเล่นภาพต่อเนื่อง · <span class="vk o"><svg class="ic" aria-hidden="true"><use href="#m-pause"/></svg></span> หยุด</li>
+          <li>ความเร็วปรับที่ <span class="vk"><span class="t">5 FPS</span></span> บน toolbar · ค่าเริ่มต้น การวนเล่น (Auto Re-Play) และ Yoyo (1 → N → 1) ตั้งที่ <a href="#set-display-layout">Settings › Layout</a></li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 17 -->
+      <section class="page" id="special">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>Multi-frame · ECG · Video · รายงาน</h1>
+        <p class="lead">ภาพเคลื่อนไหวหลายเฟรม (US / XA) และ overlay, คลื่นไฟฟ้าหัวใจ, วิดีโอ DICOM, รายงาน PDF / SR และภาพ Secondary Capture</p>
+
+        <h2 id="special-multiframe">ภาพ Multi-frame และ Overlay</h2>
+        <figure>
+          <img src="img/overlay-60xx.webp" alt="ภาพ XA multi-frame พร้อม overlay" loading="lazy" />
+          <figcaption>ภาพ XA multi-frame พร้อม overlay (กรอบและข้อความ “ALL”) — ข้อมูลจำลอง LOADTEST-OVL</figcaption>
+        </figure>
+        <ul>
+          <li>ภาพ US / XA ที่มีหลายเฟรมในไฟล์เดียวจะโหลดทั้งไฟล์ครั้งเดียว — แถบโหลดแสดง “กำลังโหลดไฟล์ …% (… MB)”</li>
+          <li>เลื่อนเฟรมด้วยล้อเมาส์ / แถบเลื่อน หรือกด <span class="vk b"><svg class="ic" aria-hidden="true"><use href="#m-play-arrow"/></svg></span> เล่น (ไม่เล่นอัตโนมัติ)</li>
+          <li><b>Overlay</b> ในไฟล์ DICOM (กราฟิกหรือข้อความที่เครื่องตรวจฝังมา) แสดงเสมอ ตามเฟรม และติดไปกับ Copy image / Print</li>
+          <li>ภาพ US ที่มี US Region วัด Length ได้เลย · วัดในกรอบ Doppler/M-mode ใช้ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-ultrasound-directional"/></svg></span> US Directional</li>
+        </ul>
+
+        <h2 id="special-ecg">ECG Waveform</h2>
+        <figure>
+          <img src="img/ecg.webp" alt="ECG 12 lead" loading="lazy" />
+          <figcaption>ECG 12 lead บนกระดาษกราฟ พร้อมค่าจากเครื่อง (ข้อมูลจำลอง LOADTEST-ECG)</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ตัวควบคุม</th><th>ค่า</th></tr>
+            <tr><td>กลุ่ม</td><td>เช่น RHYTHM / MEDIAN BEAT (เมื่อไฟล์มีหลายกลุ่ม)</td></tr>
+            <tr><td>ความเร็วกระดาษ</td><td>25 mm/s · 50 mm/s</td></tr>
+            <tr><td>ความสูงต่อ mV</td><td>5 · 10 · 20 mm/mV</td></tr>
+            <tr><td>ซูม</td><td>ย่อ / 100% / ขยาย (0.5–4 เท่า)</td></tr>
+            <tr><td><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-straighten"/></svg></span> Caliper</td><td>เลือก “ชนิด caliper”: <b>ช่วงเวลา</b> (ลากได้ทั้งแกนเวลาและ mV — แสดง ms, mV และอัตราหัวใจ) หรือ <b>QTc</b> (ลาก QT ตั้งแต่ต้น Q ถึงจบ T แล้วลาก RR จาก R ถึง R ถัดไป) · ลากปุ่มกลางหรือ 2 นิ้วเลื่อนแผ่น · Esc / Delete ลบตัวที่เลือก · ปุ่ม “ล้าง caliper” · สลับกลุ่มแล้ว caliper ถูกล้าง</td></tr>
+          </table>
+        </div>
+        <ul>
+          <li>แถบ QTc แสดง Bazett / Fridericia จากช่วง RR และ QT ที่วัด · แผง “ค่าจากเครื่อง” แสดงค่าที่เครื่อง ECG คำนวณมา (ถ้ามี)</li>
+          <li>ครบ 12 lead และยาว ≥ 5 วินาที แสดงผัง 3×4 + แถบ lead II · caliper ไม่ถูกบันทึก · พิมพ์ขนาดจริงได้</li>
+        </ul>
+
+        <h2 id="special-video">วิดีโอ DICOM</h2>
+        <figure>
+          <img src="img/video.webp" alt="วิดีโอ DICOM" loading="lazy" />
+          <figcaption>วิดีโอ DICOM เล่นด้วยตัวเล่นของเบราว์เซอร์ (ข้อมูลจำลอง LOADTEST-VIDEO)</figcaption>
+        </figure>
+        <ul>
+          <li>ภาพย่อวิดีโอมีไอคอนฟิล์มและความยาว mm:ss · ครั้งแรกระบบอาจต้องเตรียมไฟล์ (“กำลังเตรียมวิดีโอ…” → “กำลังเตรียมวิดีโอ 40%”) Viewer ถามสถานะทุก 2 วินาทีแล้วเล่นได้เอง · ไฟล์ที่เตรียมไว้อ่านไม่ได้ เซิร์ฟเวอร์จะเตรียมใหม่ให้เอง</li>
+          <li>ใช้ปุ่มเล่น กรอ ปรับเสียงของเบราว์เซอร์ · ดับเบิลคลิก = ขยายช่อง</li>
+          <li>เตรียมไม่สำเร็จ: ขึ้น “เตรียมวิดีโอไม่สำเร็จ” พร้อมปุ่ม “ดาวน์โหลดไฟล์ต้นฉบับ (DICOM)”</li>
+        </ul>
+
+        <h2 id="special-reports">รายงาน PDF · SR · Secondary Capture</h2>
+        <ul>
+          <li><b>รายงาน PDF</b> (การ์ด “รายงาน PDF 1 ฉบับ”): แสดงในช่อง มีปุ่มหน้าก่อน/ถัดไป ย่อ/ขยาย และตัวเลือก ขนาดจริง / พอดีหน้า / พอดีความกว้าง / 50–200%</li>
+          <li>การตรวจที่มีรายงานและมีหลาย series จะเปิดเป็น 1x2 (ภาพ | รายงาน) อัตโนมัติ</li>
+          <li><b>Structured Report</b> (การ์ด “รายงาน SR 1 ฉบับ”): แสดงเป็นโครงสร้างหัวข้อ · รายงานปริมาณรังสี (Dose Report) แสดงการ์ดสรุป DAP รวม, Dose (RP) รวม, เวลา Fluoro และตาราง event</li>
+          <li><b>Secondary Capture</b>: แสดงเป็นภาพปกติ — ภาพที่ไม่มีข้อมูล Study/Series จะวัดได้แต่ไม่บันทึก และปัก key image ไม่ได้</li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 18 -->
+      <section class="page" id="compare">
+        <p class="crumb">โหมดดูภาพขั้นสูง</p>
+        <h1>Compare · Mammo · Hanging</h1>
+        <p class="lead">เทียบกับการตรวจครั้งก่อน การจัดภาพ Mammography และการจัดผังหน้าจออัตโนมัติด้วย workspace / hanging protocol</p>
+
+        <h2 id="compare-prior">เทียบกับการตรวจครั้งก่อน</h2>
+        <figure>
+          <img src="img/compare.webp" alt="Compare 1x2" loading="lazy" />
+          <figcaption>Template Compare 1x2 — การตรวจครั้งนี้ (ซ้าย) กับครั้งก่อน (ขวา) เลื่อนภาพไปพร้อมกัน</figcaption>
+        </figure>
+        <ul>
+          <li>เลือก Template <b>Compare 1x2</b> หรือ <b>Compare 2x1</b> — ระบบเลือก series ที่ตรงกันจากการตรวจครั้งก่อน (modality ต้องตรง แล้วให้คะแนนจากความคล้ายของคำอธิบาย ส่วนของร่างกาย ความใหม่ และจำนวนภาพ) ให้ช่องที่ 2 และเปิด sync กลุ่ม A · series ที่คลิกล่าสุดคือ “series หลัก” ที่ใช้หาคู่</li>
+          <li>คลิก series ในแถบข้างเพื่อเปลี่ยนภาพเทียบ · หาไม่เจอจะขึ้น “ไม่พบ Series ที่ตรงกันใน Study ก่อนหน้า — ลากเลือกเอง”</li>
+          <li>ไม่มีการตรวจครั้งก่อน: “ไม่มี Study ก่อนหน้าให้เทียบ” · เปิดการตรวจอื่นทั้งการตรวจได้จาก <a href="#sidebar-header">ช่องประวัติการตรวจ</a></li>
+        </ul>
+
+        <h2 id="compare-mammo">Mammography</h2>
+        <figure>
+          <img src="img/mammo.webp" alt="ผัง Mammography 2x4" loading="lazy" />
+          <figcaption>การตรวจ MG ที่มีครั้งก่อน — 2x4: แถวบนครั้งก่อน แถวล่างครั้งนี้ เรียง RMLO | LMLO | RCC | LCC ผนังอกชนกันกลางคู่ (ข้อมูลจำลอง LOADTEST-MG)</figcaption>
+        </figure>
+        <ul>
+          <li>การตรวจ MG ที่มีภาพมาตรฐานตั้งแต่ 2 ภาพ ระบบจัดเป็น 1x4 <code>RMLO | LMLO | RCC | LCC</code> (มีครั้งก่อนที่มีภาพ MG ≥ 2 = 2x4 แถวบนเป็นครั้งก่อน) · ท่าที่ไม่มีภาพ = ช่องว่าง (ไม่ใช้ series อื่นแทน)</li>
+          <li>ข้างและท่าอ่านจาก tag ImageLaterality / ViewPosition ถ้าเครื่องไม่ใส่จะเดาจากชื่อ series (เช่น “R CC”, “LMLO”, “RIGHT MLO”) · CAD, PDF และ SR ของการตรวจไม่ถูกจัดเข้าช่อง</li>
+          <li>เมื่อภาพโหลดครบ ระบบ<b>จัดกล้อง</b>: ภาพข้าง R ผนังอกชิดขอบขวาของช่อง ข้าง L ชิดขอบซ้าย (คู่ R | L หันหลังชนกัน) · CC กึ่งกลางแนวตั้ง MLO ชิดบน · ทุกช่องสเกลเดียวกัน (mm ต่อพิกเซลเท่ากัน — เทียบขนาด 2 ข้าง/ปีก่อนได้ตรง) · ภาพกลับหัวหรือกลับด้านถูกพลิกให้ตาม PatientOrientation</li>
+          <li>จัดเสร็จระบบเปิด <b>Mammo lock</b> ให้เอง — ซูม/เลื่อนช่องหนึ่ง ช่องอื่นตาม (R/L เลื่อนสวนกัน) · Sync ปกติไม่ใช้กับคู่ R/L</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-fit-screen"/></svg></span> <b>Mammo fit</b> = จัดภาพ MG ทุกช่องให้เข้าคู่อีกครั้ง (หลังซูมหรือเปลี่ยนขนาดหน้าต่าง) · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-screen-lock-landscape"/></svg></span> <b>Mammo lock</b> = เปิด/ปิดการซูม/เลื่อนพร้อมกัน · รีเซ็ตมุมมองของช่อง = คืนภาพตามปกติ · ไม่จัดบนมือถือ/แท็บเล็ต</li>
+        </ul>
+        <figure class="narrow">
+          <img src="img/mammo-view.webp" alt="ปุ่ม Mammo fit และ Mammo lock บน toolbar" loading="lazy" />
+          <figcaption>หมวด View เมื่อช่อง active เป็นภาพ MG — ปุ่ม Mammo fit และ Mammo lock (ติดอยู่) ต่อท้าย</figcaption>
+        </figure>
+
+        <h2 id="compare-hanging">Workspace และ Hanging protocol</h2>
+        <p>ตอนเปิดการตรวจ ระบบเลือกผังหน้าจอตามลำดับนี้:</p>
+        <ol class="steps">
+          <li><b>Workspace</b> ที่คุณบันทึกไว้ของการตรวจนี้ (<span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-layout-template"/></svg></span> Layout › <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-save"/></svg></span> Save workspace)</li>
+          <li><b>Hanging protocol</b> ของคุณ — กฎที่ตรงเงื่อนไข (modality, ส่วนของร่างกาย, คำอธิบาย) กฎแรกที่ตรงจะถูกใช้</li>
+          <li><b>Template ตาม modality</b> ที่ตั้งไว้ใน Settings › Layout</li>
+          <li><b>กฎในตัวระบบ</b>: Mammography, PET/CT Fusion, รายงาน (1x2) หรือ 1x1</li>
+        </ol>
+        <ul>
+          <li>สร้าง hanging protocol จากหน้าจอปัจจุบัน: <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-layout-template"/></svg></span> Layout › <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-bookmark-plus"/></svg></span> Save as protocol · แก้ไขกฎละเอียดที่ <a href="#set-other-hanging">Settings › Hanging</a></li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-rotate-ccw"/></svg></span> Reset layout = ลบ workspace ของการตรวจนี้แล้วจัดใหม่</li>
+          <li>เปิดจาก HIS บันทึก workspace ไม่ได้ · workspace และ hanging protocol ใช้บน desktop เท่านั้น (มือถือ/แท็บเล็ตเปิด 1x1 series แรกเสมอ)</li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 19 -->
+      <section class="page" id="settings">
+        <p class="crumb">ตั้งค่า (Viewer Settings)</p>
+        <h1>ภาพรวม Viewer Settings</h1>
+        <p class="lead">ปรับ Viewer ให้เหมาะกับการทำงานของคุณ — ค่าที่บันทึกเก็บบนเซิร์ฟเวอร์ตามบัญชีผู้ใช้ เปิดจากคอมพิวเตอร์เครื่องไหนก็ได้ค่าเดิม (ยกเว้นคุณภาพภาพ 3D ที่จำต่อเครื่อง) · เก็บเฉพาะค่าที่ต่างจากค่าเริ่มต้น ค่าที่ไม่ได้แก้จะตาม Viewer รุ่นใหม่เอง</p>
+        <figure>
+          <img src="img/set-mouse.webp" alt="หน้าต่าง Viewer Settings" loading="lazy" />
+          <figcaption>หน้าต่าง Viewer Settings (เปิดที่แท็บ เมาส์)</figcaption>
+        </figure>
+
+        <h2 id="settings-open">เปิดหน้าต่างตั้งค่า</h2>
+        <ul>
+          <li>กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-settings"/></svg></span> “ตั้งค่า Viewer” ที่ปลายขวาของ toolbar (ไม่มีบนมือถือ/แท็บเล็ต)</li>
+          <li>มี 9 แท็บ: <a href="#set-input-mouse">เมาส์</a> · <a href="#set-input-toolbar">Toolbar</a> · <a href="#set-input-shortcuts">ปุ่มลัด</a> · <a href="#set-display-wl">Window/Level</a> · <a href="#set-display-layout">Layout</a> · <a href="#set-other-annotation">Annotation</a> · <a href="#set-other-overlay">Overlay</a> · <a href="#set-other-hanging">Hanging</a> · <a href="#set-other-general">ทั่วไป</a></li>
+          <li>การเปลี่ยนส่วนใหญ่แสดงผลทันทีเพื่อให้ลองดูก่อนบันทึก (เมาส์, toolbar, คีย์ลัด, W/L preset, Annotation, Overlay, Cine, ภาษา) · ส่วนที่มีผลครั้งถัดไปที่เปิดการตรวจ: Template ตาม modality, เปิดเป็น MPR อัตโนมัติ, Ref Line อัตโนมัติ, Sync ตอนเปิด, Orientation cube และกฎ Hanging</li>
+          <li>ปิดหน้าต่างได้ด้วยปุ่ม บันทึก / ยกเลิก / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span> เท่านั้น (Esc หรือคลิกนอกหน้าต่างไม่ปิด) · ขณะเปิดอยู่คีย์ลัดของ Viewer ไม่ทำงาน</li>
+        </ul>
+
+        <h2 id="settings-buttons">ปุ่มท้ายหน้าต่าง</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>ปุ่ม</th><th>หน้าที่</th></tr>
+            <tr><td><b class="ui">บันทึก</b></td><td>บันทึกค่าทั้งหมดบนเซิร์ฟเวอร์แล้วปิดหน้าต่าง — ค่าที่ไม่ถูกต้องถูกจัดการให้เงียบ ๆ (preset ไม่มีชื่อถูกทิ้ง ชื่อยาวเกิน 40 ตัวถูกตัด W/L นอกช่วงถูกปรับ กฎ Hanging ที่ regex ผิดถูกทิ้ง) · บันทึกไม่สำเร็จ = หน้าต่างไม่ปิดและขึ้นข้อความสีแดง (ค่าทั้งหมดต้องไม่เกิน 32 KB)</td></tr>
+            <tr><td><b class="ui">ยกเลิก</b> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span></td><td>คืนค่าเดิมก่อนเปิดหน้าต่าง แล้วปิด</td></tr>
+            <tr><td><b class="ui">รีเซ็ตแท็บนี้</b></td><td>คืนค่าเริ่มต้นของแท็บที่เปิดอยู่ (ยังไม่บันทึกจนกด บันทึก) — ระวัง: แท็บ Window/Level ลบ modality ที่เพิ่มเองเหลือชุด CT · แท็บ Hanging ลบกฎทุกตัว · แท็บ ทั่วไป คืนเฉพาะภาษา · ไม่แตะคุณภาพ 3D</td></tr>
+            <tr><td><b class="ui">รีเซ็ตทั้งหมด</b></td><td>ลบค่าที่บันทึกทั้งหมด (รวมกฎ Hanging และภาษา) กลับเป็นค่าเริ่มต้น<b>ทันที โดยไม่ถามยืนยัน</b> แล้วปิดหน้าต่าง · ไม่ลบ workspace ค่าวัด key image และคุณภาพ 3D</td></tr>
+            <tr><td><b class="ui">ส่งออก</b></td><td>ดาวน์โหลดไฟล์ <code>viewer-preferences.json</code> (เฉพาะค่าที่ต่างจากค่าเริ่มต้น ตามที่แสดงในหน้าต่างขณะนั้นแม้ยังไม่บันทึก · ไม่รวมคุณภาพ 3D) — ใช้สำรองหรือแบ่งปันให้เพื่อนร่วมงาน · ผู้ใช้ HIS ส่งออกได้</td></tr>
+            <tr><td><b class="ui">นำเข้า</b></td><td>เลือกไฟล์ .json ที่ส่งออกไว้ (ไม่เกิน 256 KB) — <b>แทนที่ค่าทั้งหมด</b> ไม่รวมกับค่าเดิม (ค่าที่ไม่มีในไฟล์กลับเป็นค่าเริ่มต้น รวมภาษาและกฎ Hanging — ส่งออกค่าของตัวเองเก็บไว้ก่อน) · แสดงผลให้ดูก่อน ขึ้น “นำเข้า ‹ไฟล์› แล้ว — กดบันทึกเพื่อเก็บค่า” ต้องกด บันทึก จึงเก็บ · ไฟล์ผิดขึ้น “ไฟล์นี้ไม่ใช่ค่าตั้งของ viewer หรือมาจาก viewer รุ่นใหม่กว่า”</td></tr>
+          </table>
+        </div>
+        <div class="warn"><p>เปิด Viewer จาก HIS: ได้ค่าเริ่มต้นทุกครั้ง มีแถบแจ้ง “เปิดจาก HIS — บัญชีนี้ใช้ร่วมกันหลายคน ปรับค่าได้เฉพาะหน้าต่างนี้ แต่บันทึกไม่ได้” และปุ่ม บันทึก / รีเซ็ตทั้งหมด ถูกปิด · คุณภาพภาพ 3D (แท็บ Layout) จำค่าแยกต่อคอมพิวเตอร์และมีผลทันที ไม่ขึ้นกับปุ่ม บันทึก/ยกเลิก/ส่งออก/นำเข้า · มือถือ/แท็บเล็ตเปิดหน้าต่างนี้ไม่ได้ แต่ใช้ค่าที่บันทึกไว้ (รวมภาษา)</p></div>
+      </section>
+
+      <!-- ================================================================ 20 -->
+      <section class="page" id="set-input">
+        <p class="crumb">ตั้งค่า (Viewer Settings)</p>
+        <h1>เมาส์ · Toolbar · ปุ่มลัด</h1>
+        <p class="lead">กำหนดหน้าที่ของปุ่มเมาส์ การแสดงและลำดับเครื่องมือบน toolbar และคีย์ลัด</p>
+
+        <h2 id="set-input-mouse">แท็บ เมาส์</h2>
+        <p>กำหนดแยก 3 กลุ่ม: <b>2D (stack)</b>, <b>MPR</b>, <b>3D</b> — แต่ละกลุ่มเลือกหน้าที่ของ ปุ่มซ้าย / ปุ่มขวา / ปุ่มกลาง และล้อเมาส์</p>
+        <ul>
+          <li>ตัวเลือกปุ่ม: Pan, Zoom, Window/Level, Rotate (3D — เฉพาะกลุ่ม 3D), — ไม่ใช้ — · ค่าเริ่มต้น 2D/MPR: ซ้าย Pan · ขวา Window/Level · กลาง Zoom · ล้อ เลื่อนภาพ (scroll) · 3D: ซ้าย Rotate (3D)</li>
+          <li>ล้อเมาส์ (2D, MPR): เลื่อนภาพ (scroll) หรือ Zoom · ในช่อง 3D ล้อเมาส์ = Zoom เสมอ</li>
+          <li>MPR และ 3D: <kbd class="key">Shift</kbd> + ลากปุ่มซ้าย = Pan เสมอ · ตั้งปุ่มขวาเป็น “— ไม่ใช้ —” เพื่อให้คลิกขวาเปิดเมนูได้ทันที (Shift + คลิกขวา เปิดเมนูได้เสมอ)</li>
+          <li>เปลี่ยนค่าแล้วเครื่องมือที่เลือกค้างบน toolbar จะถูกปล่อย · การเลือกเครื่องมือบน toolbar ใช้ปุ่มซ้ายแทนชั่วคราว</li>
+        </ul>
+
+        <h2 id="set-input-toolbar">แท็บ Toolbar</h2>
+        <figure>
+          <img src="img/set-toolbar.webp" alt="แท็บ Toolbar" loading="lazy" />
+          <figcaption>แท็บ Toolbar — แสดง/ซ่อน ปุ่มเดี่ยว และเรียงลำดับเครื่องมือในแต่ละหมวด</figcaption>
+        </figure>
+        <figure>
+          <img src="img/toolbar-pinned.webp" alt="Toolbar หลังตั้ง Length เป็นปุ่มเดี่ยว" loading="lazy" />
+          <figcaption>Toolbar หลังติ๊ก “ปุ่มเดี่ยว” ให้ Length — Length กลายเป็นปุ่มของตัวเองข้างปุ่มเมนู Measure ▾</figcaption>
+        </figure>
+        <ul>
+          <li><b>แสดง</b> (สวิตช์) = แสดงเครื่องมือบน toolbar — เครื่องมือที่ซ่อนยังใช้ผ่านคีย์ลัดได้</li>
+          <li><b>ปุ่มเดี่ยว</b> (หมวด Measure / ROI / Annotate) = ดึงเครื่องมือออกจากเมนู ▾ มาเป็นปุ่มบน toolbar</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-upward"/></svg></span> / <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-downward"/></svg></span> = เลื่อนลำดับในเมนู / บน toolbar</li>
+          <li>เครื่องมือ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-axis3d"/></svg></span> Reset oblique (MPR) ซ่อนเป็นค่าเริ่มต้น เปิดได้ที่นี่ · รายการแสดงทุกเครื่องมือของทั้ง 8 หมวดไม่ว่าช่องปัจจุบันจะใช้ได้หรือไม่ · ปุ่มแบบแผง (W/L presets, histogram, Colormap, Slab) ซ่อน/เรียงได้แต่ไม่มีคีย์ลัด · ซ่อน Save workspace / Reset layout / Save as protocol ครบ 3 ตัว = ปุ่ม Layout หายจาก toolbar · ปุ่ม Template, MPR, Ref Line, Layout grid, Sync, FPS ปรับที่นี่ไม่ได้</li>
+        </ul>
+
+        <h2 id="set-input-shortcuts">แท็บ ปุ่มลัด</h2>
+        <figure>
+          <img src="img/set-shortcuts.webp" alt="แท็บ ปุ่มลัด" loading="lazy" />
+          <figcaption>แท็บ ปุ่มลัด — คลิกช่องคีย์แล้วกดคีย์ใหม่</figcaption>
+        </figure>
+        <figure>
+          <img src="img/shortcuts-dup.webp" alt="ช่องคีย์กำลังรอคีย์ และข้อความคีย์ซ้ำ" loading="lazy" />
+          <figcaption>ช่องคีย์ของ Angle ขณะรอคีย์ “กดคีย์… (Esc ยกเลิก)” — กด Z ที่ Zoom ใช้อยู่แล้วขึ้น “Z ซ้ำกับ “Zoom” — ลบของตัวนั้นก่อน”</figcaption>
+        </figure>
+        <ol class="steps">
+          <li>คลิกช่องคีย์ของคำสั่ง — ช่องเปลี่ยนเป็น “กดคีย์… (Esc ยกเลิก)”</li>
+          <li>กดคีย์หรือคีย์ผสมที่ต้องการ (เช่น <kbd class="key">Shift+K</kbd>) · กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-close"/></svg></span> เพื่อไม่ใช้คีย์ลัดสำหรับคำสั่งนั้น</li>
+          <li>กด <b class="ui">บันทึก</b></li>
+        </ol>
+        <ul>
+          <li>คีย์ซ้ำกับคำสั่งอื่นจะขึ้น “… ซ้ำกับ … — ลบของตัวนั้นก่อน” · คีย์ต้องห้ามขึ้น “… ใช้ไม่ได้ (browser หรือ viewer ใช้อยู่แล้ว)”</li>
+          <li>ตั้งได้: A–Z, 0, F1–F12, Home / End / PageUp / PageDown / Insert / Space และเครื่องหมาย <code>. , / ; ' [ ] - = \ `</code> เดี่ยว ๆ หรือร่วมกับ Ctrl / Alt / Shift (Cmd บน Mac นับเป็น Ctrl) · กดแค่ Ctrl/Shift/Alt ระบบจะรอคีย์จริง · คลิกช่องเดิมซ้ำหรือคลิกที่อื่น = ยกเลิก</li>
+          <li>ใช้ไม่ได้: Delete, Backspace, Tab, ลูกศร, Enter, Esc, 1–9 (W/L preset), F5, F11, F12 และคีย์ของเบราว์เซอร์ เช่น Ctrl+W/T/N/R/L/D/P/F/S/O/H/J/U/A/C/V/X/0/-/=, Ctrl+Tab, Ctrl+PageUp/PageDown, Ctrl+Shift+I/J/C/R/W/T/N, Alt+←/→, Alt+Home, Alt+D, Alt+F4</li>
+          <li>นอกจากเครื่องมือทุกหมวดแล้ว ยังตั้งคีย์ให้คำสั่งของช่องภาพได้: หมุน 90° ตามเข็ม / ทวนเข็ม, พลิกแนวนอน / แนวตั้ง, รีเซ็ตมุมมอง, Phase ก่อนหน้า / ถัดไป</li>
+          <li>ค่าเริ่มต้นดูที่ <a href="#input-keys">คีย์ลัดเริ่มต้น</a></li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 21 -->
+      <section class="page" id="set-display">
+        <p class="crumb">ตั้งค่า (Viewer Settings)</p>
+        <h1>Window/Level · Layout</h1>
+        <p class="lead">จัดการ W/L preset ของแต่ละ modality และผังหน้าจอ/พฤติกรรมตอนเปิด Viewer</p>
+
+        <h2 id="set-display-wl">แท็บ Window/Level</h2>
+        <figure>
+          <img src="img/set-wl.webp" alt="แท็บ Window/Level" loading="lazy" />
+          <figcaption>แท็บ Window/Level — preset ของ CT (ลำดับ 1–9 = คีย์ลัด)</figcaption>
+        </figure>
+        <ol class="steps">
+          <li>เลือก <b>Modality</b> (หรือพิมพ์ modality ใหม่ A–Z / 0–9 ไม่เกิน 16 ตัวในช่อง “เพิ่ม modality” แล้วกด <b class="ui">เพิ่ม</b>) · ค่าเริ่มต้นมีเฉพาะ CT 8 ชุด · ลบ modality ทั้งรายการไม่ได้ ทำได้แค่ลบ preset จนว่าง</li>
+          <li>แก้ <b>ชื่อ</b>, <b>Window</b>, <b>Level</b> ของแต่ละ preset · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-upward"/></svg></span> เลื่อนขึ้น (ลำดับ = ปุ่ม 1–9) · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-delete"/></svg></span> ลบ</li>
+          <li>กด <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-add"/></svg></span> <b>เพิ่ม preset</b> (ได้ “Preset n” W400 / L40 — สูงสุด 9 ต่อ modality) แล้วกด บันทึก</li>
+        </ol>
+        <p>preset ที่ไม่มีชื่อจะถูกทิ้งตอนบันทึก (ชื่อยาวเกิน 40 ตัวถูกตัด) · Window 1–65536 · Level −32768–65535 (ค่านอกช่วงถูกปรับให้โดยไม่เตือน) · มีปุ่มเลื่อนขึ้นอย่างเดียว · ค่า W/L ที่มากับไฟล์ DICOM ยังเลือกได้จากส่วน “จากเครื่องตรวจ” ในเมนู W/L presets</p>
+
+        <h2 id="set-display-layout">แท็บ Layout</h2>
+        <figure>
+          <img src="img/set-layout.webp" alt="แท็บ Layout" loading="lazy" />
+          <figcaption>แท็บ Layout — ตัวอย่างตั้ง CT ให้เปิดเป็น MPR</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ส่วน</th><th>ตั้งค่า</th></tr>
+            <tr><td>Template ตอนเปิด study ตาม modality</td><td>ค่าเริ่มต้นว่าง — พิมพ์ modality แล้วกด <b class="ui">+ เพิ่ม</b> ได้แถวใหม่ (ค่าเริ่ม MPR) ลบด้วย <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-delete"/></svg></span> · เลือกได้ Default (1x1), MPR, Axial / Coronal / Sagittal primary, 3D four up / main / primary / only, Fusion, Fusion MPR, Fusion prior · ใช้เฉพาะ desktop</td></tr>
+            <tr><td>ตอนเปิด viewer</td><td>CT/MR เปิดเป็น MPR อัตโนมัติ (ถ้าไม่ได้ตั้ง template ของ modality นั้นไว้) — ปิด · เปิด Ref Line อัตโนมัติเมื่อเข้าเกณฑ์ — ปิด · เปิด Sync ไว้ตั้งแต่เปิด viewer — ปิด · เปิด Orientation cube ถ้าเป็น 3D — เปิด · เปิดตัวอักษรทิศ (A/P/R/L) บนภาพ 2D — เปิด · Colorbar บนภาพ Fusion / Colormap / PET — เปิด (ปุ่มบน toolbar สลับเฉพาะครั้งนี้)</td></tr>
+            <tr><td>คุณภาพภาพ 3D ของเครื่องนี้</td><td>5 ระดับ ความเร็ว — สมดุล — คุณภาพ (ค่าเริ่ม สมดุล · มีผลเมื่อปล่อยเมาส์ · จำต่อคอมพิวเตอร์ ไม่ขึ้นกับ บันทึก/ยกเลิก/รีเซ็ต/ส่งออก) · ปรับจากปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-tune"/></svg></span> บนช่อง 3D ได้เช่นกัน</td></tr>
+            <tr><td>Cine เริ่มต้น</td><td>FPS 1–30 (ค่าเริ่มต้น 5 — แถบ FPS บน toolbar ใช้เฉพาะครั้งนี้) · Auto Re-Play (จบแล้ววนเล่นใหม่ — เปิด; ปิด = เล่นถึงภาพสุดท้ายแล้วหยุด) · Yoyo (เล่นไปแล้วย้อนกลับ — ปิด; เปิดโดยไม่ Re-Play = ไปและกลับอย่างละรอบ) · มีผลทันทีแม้กำลังเล่นอยู่</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================================ 22 -->
+      <section class="page" id="set-other">
+        <p class="crumb">ตั้งค่า (Viewer Settings)</p>
+        <h1>Annotation · Overlay · Hanging · ทั่วไป</h1>
+        <p class="lead">หน้าตาของค่าวัด ข้อมูลมุมภาพ กฎจัดผังหน้าจอ และภาษา</p>
+
+        <h2 id="set-other-annotation">แท็บ Annotation</h2>
+        <figure>
+          <img src="img/set-annotation.webp" alt="แท็บ Annotation" loading="lazy" />
+          <figcaption>แท็บ Annotation</figcaption>
+        </figure>
+        <div class="tbl">
+          <table>
+            <tr><th>ตั้งค่า</th><th>ค่าเริ่มต้น</th></tr>
+            <tr><td>สี: ปกติ / ตอนเลือก / ของผู้ใช้อื่น</td><td>เหลือง <code>#ffff00</code> / เขียว <code>#00dc00</code> / ฟ้า <code>#82beff</code></td></tr>
+            <tr><td>กล่องดำหลังป้ายกระดูกสันหลัง (Spine Label) · กล่องดำหลังข้อความและตัวเลขค่าวัด</td><td>เปิดทั้งคู่ (สวิตช์แยกกัน)</td></tr>
+            <tr><td>ความหนาเส้น</td><td>1 px (1–5)</td></tr>
+            <tr><td>ขนาดตัวอักษร</td><td>14 px (10–24)</td></tr>
+            <tr><td>ทศนิยม (ตัวเลขบนภาพ + แท็บ ค่าวัด)</td><td>2 (เลือก 0 / 1 / 2) — ใช้กับไฟล์ CSV ด้วย</td></tr>
+            <tr><td>ชนิด SUV ของค่าวัดบน PET</td><td>SUVbw — น้ำหนักตัว (เลือก SUVlbm — มวลกายไร้ไขมัน สูตร Janmahasatian หรือ SUVbsa — พื้นที่ผิวกาย สูตร DuBois ได้) · เปลี่ยนบนช่อง PET มีผลเฉพาะครั้งนั้น</td></tr>
+          </table>
+        </div>
+
+        <h2 id="set-other-overlay">แท็บ Overlay</h2>
+        <figure>
+          <img src="img/set-overlay.webp" alt="แท็บ Overlay" loading="lazy" />
+          <figcaption>แท็บ Overlay — เลือกข้อมูลที่แสดงมุมซ้ายล่างและขวาล่างของภาพ (รายการเลือกได้หลายข้อ)</figcaption>
+        </figure>
+        <ul>
+          <li>ตั้งได้เฉพาะมุมซ้ายล่างและขวาล่าง (มุมบนเป็นปุ่มควบคุมของช่อง) · เลือกข้อมูลได้: ชื่อผู้ป่วย, HN, เพศ / อายุ, Modality, Zoom, Window / Level, ลำดับภาพ — ไม่เกิน 6 บรรทัดต่อมุม (เกินถูกตัด) · ไม่เลือกเลย = “— ไม่แสดง —”</li>
+          <li>ลำดับบรรทัด = ลำดับที่เลือก (จะเรียงใหม่ให้เอาออกแล้วเลือกใหม่) · ค่าเริ่มต้น: มุมซ้ายล่าง Zoom, W/L, ลำดับภาพ · มุมขวาล่าง ไม่แสดง · บนภาพแสดงเป็น “HN …”, “Zoom: n%”, “W: … L: …”, “Img: n / N” — ข้อมูลที่ภาพไม่มีจะข้ามบรรทัดนั้น และลำดับภาพไม่แสดงในช่อง 3D</li>
+        </ul>
+
+        <h2 id="set-other-hanging">แท็บ Hanging</h2>
+        <figure>
+          <img src="img/set-hanging.webp" alt="แท็บ Hanging" loading="lazy" />
+          <figcaption>แท็บ Hanging — รายการกฎจัดผังหน้าจอ (สวิตช์เปิดใช้ ชื่อ สรุปเงื่อนไข และปุ่มจัดการ)</figcaption>
+        </figure>
+        <figure>
+          <img src="img/set-hanging-rule.webp" alt="ฟอร์มแก้กฎ Hanging" loading="lazy" />
+          <figcaption>ฟอร์มแก้กฎ — เงื่อนไขของ study, ผัง, series ของแต่ละช่อง และส่วน “ทดสอบกับ study ที่เปิดอยู่”</figcaption>
+        </figure>
+        <ul>
+          <li>แต่ละกฎมีสวิตช์เปิดใช้ ชื่อ และสรุปเงื่อนไข · ปุ่ม <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-upward"/></svg></span> <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-arrow-downward"/></svg></span> เรียงลำดับ (กฎแรกที่ตรงถูกใช้) · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-edit"/></svg></span> แก้ · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-content-copy"/></svg></span> ทำซ้ำ · <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-delete"/></svg></span> ลบ</li>
+          <li><span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-add"/></svg></span> <b>เพิ่มกฎ</b> (สูงสุด 30 — กฎใหม่ชื่อ “Protocol ใหม่” ผัง 1x2 ต่อท้ายรายการ): ชื่อกฎ (≤ 60 ตัว) · <b>Modality หลัก</b> (≤ 10 ตัว คั่นด้วยคอมมา) · Body part / Study description (regex ≤ 200 ตัว ไม่สนตัวพิมพ์ ช่องว่าง = ไม่ใช้เงื่อนไข) · <b>series อย่างน้อย</b> (1–99) · Layout: Grid 1x1–3x3 หรือ template MPR / 3D / Fusion (กลุ่มนี้ระบบเลือก series หลักเอง ไม่มีช่องให้กำหนด) · แต่ละช่อง: <b>ว่าง</b> (checkbox) · <b>จาก</b> (study นี้ / prior ล่าสุด / prior ครั้งที่ 2 / prior ครั้งที่ 3) · Modality · Series description (regex) · <b>ตัวที่</b> (1–99 — เมื่อหลาย series ตรงเงื่อนไขใช้ตัวที่เท่าไร นับเฉพาะที่ช่องก่อนหน้ายังไม่ใช้) · <b>ข้าง</b> R / L · <b>ท่า</b> (CC, MLO, ML, LM, XCCL, XCCM, FB, SIO, LMO, AT, CV) — ใส่ข้างหรือท่าแล้วช่องนั้นไม่ใช้ series สำรอง (หาไม่เจอ = ว่าง) · <b>Prior: study description (regex)</b> โผล่เมื่อมีช่องที่ “จาก” = prior · ไอคอน ⓘ อธิบาย regex และ “ตัวที่”</li>
+          <li>กฎที่ regex ผิดรูปแบบหรือยาวเกินมีป้าย “ไม่สมบูรณ์ — จะถูกทิ้งตอนบันทึก” (ชื่อว่างบันทึกเป็น “Protocol”) · regex ของช่องที่ผิดไม่มีป้าย — ตอนบันทึกเงื่อนไขช่องนั้นหายกลายเป็น “series ใดก็ได้” · ตอนแก้กฎมีส่วน “ทดสอบกับ study ที่เปิดอยู่” บอกว่ากฎตรงไหม และช่องไหนได้ series อะไร (ตัวสำรอง / ไม่มี prior / ไม่มีภาพข้างท่านี้) · ทำซ้ำได้ชื่อต่อท้าย “(copy)” · ลบทันทีไม่ถามยืนยัน (กด ยกเลิก เพื่อคืน)</li>
+          <li>สร้างกฎจากหน้าจอปัจจุบันได้เร็วที่สุดด้วย <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-layout-template"/></svg></span> Layout › <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-bookmark-plus"/></svg></span> Save as protocol</li>
+        </ul>
+
+        <h2 id="set-other-general">แท็บ ทั่วไป — ภาษา</h2>
+        <figure class="narrow">
+          <img src="img/set-general.webp" alt="แท็บ ทั่วไป" loading="lazy" />
+          <figcaption>แท็บ ทั่วไป — เลือกภาษา ไทย (TH) / English (EN)</figcaption>
+        </figure>
+        <p>ป้าย “ภาษา / Language” เป็นสองภาษาเสมอ · ภาษาเปลี่ยนทันทีโดยไม่ต้องโหลดใหม่ (ค่าเริ่มต้นภาษาไทย) แต่ต้องกด บันทึก จึงจำ — ยกเลิก = กลับภาษาเดิม · ศัพท์เฉพาะทาง (Series, W/L, MPR, ROI, SUV …), ชื่อเครื่องมือบน toolbar, หัวหน้าต่าง “Viewer Settings”, ชื่อแท็บ, วันที่ ตัวเลข และข้อความผิดพลาดจากเซิร์ฟเวอร์ คงเดิมทั้งสองภาษา · ข้อความบนภาพ (annotation) วาดใหม่ตามภาษา · มือถือใช้ภาษาที่บันทึกไว้จาก desktop</p>
+        <figure>
+          <img src="img/en-ui.webp" alt="Toolbar ภาษาอังกฤษ" loading="lazy" />
+          <figcaption>Toolbar และคำอธิบายปุ่มเมื่อเลือก English — ชื่อเครื่องมือคงเดิม คำอธิบายเปลี่ยนภาษา</figcaption>
+        </figure>
+      </section>
+
+      <!-- ================================================================ 23 -->
+      <section class="page" id="mobile">
+        <p class="crumb">อื่น ๆ</p>
+        <h1>ใช้งานบนมือถือ / แท็บเล็ต</h1>
+        <p class="lead">บนมือถือและแท็บเล็ต Viewer ปรับเป็นโหมดเรียบง่ายสำหรับดูภาพเร็ว ประหยัดหน่วยความจำ</p>
+        <div class="phones">
+          <figure class="phone">
+            <img src="img/mobile.webp" alt="Viewer บนมือถือ" loading="lazy" />
+            <figcaption>Viewer บนมือถือ — ช่องเดียว toolbar 5 ปุ่ม</figcaption>
+          </figure>
+          <figure class="phone">
+            <img src="img/mobile-sidebar.webp" alt="แถบข้างบนมือถือ" loading="lazy" />
+            <figcaption>แถบข้างบนมือถือ (แตะ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-menu"/></svg></span> เพื่อเปิด)</figcaption>
+          </figure>
+        </div>
+        <ul>
+          <li>แสดงทีละ 1 ช่อง (1×1) แบบ stack · ภาพเป็น JPEG ที่เซิร์ฟเวอร์สร้างให้ ความละเอียดลดลง (เช่น CR/DX 1024 px, MG 1536 px — โหลดเร็ว) · ภาพ multi-frame กางทีละเฟรม</li>
+          <li>Toolbar มี 5 ปุ่ม: <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-contrast"/></svg></span> W/L, <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-wl-presets"/></svg></span> W/L presets, <span class="vk"><svg class="ic" aria-hidden="true"><use href="#c-invert-image"/></svg></span> Invert, <span class="vk"><svg class="ic" aria-hidden="true"><use href="#l-palette"/></svg></span> Colormap, FPS</li>
+          <li>แถบข้างปิดอยู่ตอนเริ่ม แตะ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-menu"/></svg></span> เพื่อเปิด แตะ <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-menu-open"/></svg></span> หรือพื้นหลังเพื่อปิด · ไม่มีแท็บค่าวัด</li>
+          <li>1 นิ้ว = เลื่อนภาพ (Pan) · บีบ 2 นิ้ว = Zoom · เลื่อนเฟรมด้วยแถบเลื่อนภาพ</li>
+          <li><b>ไม่มีบนมือถือ</b>: MPR, 3D, Fusion, SEG/RTSTRUCT, Print, ปัก key image, workspace, Viewer Settings, เมนูคลิกขวา, การวัด · Key image ดูและกระโดดจากแถบข้างได้ · ค่าตั้งที่บันทึกจาก desktop (ภาษา, W/L preset) ยังถูกใช้</li>
+        </ul>
+      </section>
+
+      <!-- ================================================================ 24 -->
+      <section class="page" id="faq">
+        <p class="crumb">อื่น ๆ</p>
+        <h1>คำถามที่พบบ่อย</h1>
+        <p class="lead">อาการที่พบบ่อย สาเหตุ และวิธีแก้</p>
+
+        <h2 id="faq-open">การเปิดและการโหลด</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>อาการ</th><th>สาเหตุ / วิธีแก้</th></tr>
+            <tr><td>กด Open Viewer แล้วไม่มีหน้าต่าง</td><td>เบราว์เซอร์บล็อกป๊อปอัป — อนุญาตป๊อปอัปของเว็บไซต์ VNA</td></tr>
+            <tr><td>ขึ้น “ไม่พบ Study หรือ Study นี้อยู่นอกขอบเขตแผนกของคุณ”</td><td>การตรวจถูกลบ อยู่นอกแผนก หรือเป็น VIP ของผู้อื่น</td></tr>
+            <tr><td>กดปุ่ม toolbar ไม่ได้</td><td>กำลังโหลดภาพอยู่ — รอให้แถบความคืบหน้าหายไป</td></tr>
+            <tr><td>ไม่มีปุ่มเต็มจอ</td><td>ใช้ F11 ของเบราว์เซอร์</td></tr>
+            <tr><td>ปุ่ม Layout (workspace) หายจาก toolbar</td><td>Save workspace / Reset layout / Save as protocol ถูกซ่อนครบทั้ง 3 ใน Settings › Toolbar — เปิดอย่างน้อย 1 ตัว</td></tr>
+            <tr><td>ปุ่มบน toolbar หายไปบางส่วน</td><td>หน้าต่างแคบ — ปุ่มถูกยุบเข้าเมนู <span class="vk"><svg class="ic" aria-hidden="true"><use href="#m-more-horiz"/></svg></span> · หรือถูกซ่อนใน Settings › Toolbar · หรือใช้ไม่ได้กับภาพชนิดนั้น</td></tr>
+          </table>
+        </div>
+
+        <h2 id="faq-view">การดูภาพ</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>อาการ</th><th>สาเหตุ / วิธีแก้</th></tr>
+            <tr><td>series ไม่มีป้าย MPR / ขึ้น “Series นี้ทำ MPR / 3D ไม่ได้”</td><td>ภาพน้อยกว่า 40 ภาพ ระยะห่างไม่เท่ากัน หรือมีหลาย echo ปนกัน — ดูแบบ 2D</td></tr>
+            <tr><td>ปุ่มขวาของเมาส์ไม่เปิดเมนู</td><td>ปุ่มขวาใช้ปรับ W/L — กด <kbd class="key">Shift</kbd> + คลิกขวา หรือตั้งปุ่มขวาเป็น “— ไม่ใช้ —”</td></tr>
+            <tr><td>ซ้อน Fusion ไม่ได้</td><td>PET และ CT อยู่คนละ Frame of Reference</td></tr>
+            <tr><td>คลิก SEG แล้วไม่ซ้อน</td><td>ยังไม่ได้เปิด series ต้นทาง หรือ SEG ไม่มีบริเวณที่ตัดไว้ / เป็นชนิดที่ยังไม่รองรับ</td></tr>
+            <tr><td>ปุ่มลูกศรบนคีย์บอร์ดไม่เลื่อนภาพ</td><td>ใช้ล้อเมาส์หรือแถบเลื่อนภาพแทน (ลูกศรสงวนไว้)</td></tr>
+            <tr><td>กด 1–9 แล้ว W/L preset ไม่เปลี่ยน</td><td>modality นั้นยังไม่มี preset (ค่าเริ่มต้นมีเฉพาะ CT — เพิ่มใน Settings › Window/Level) · ช่องที่ active ไม่มีภาพ · หรือกดพร้อม Shift/Ctrl</td></tr>
+            <tr><td>ภาพ MG ไม่เรียง 1x4 / ช่องว่าง</td><td>series ไม่มีข้อมูลข้างและท่า (ImageLaterality / ViewPosition) และชื่อ series ไม่บอก เช่น “R CC” — ลากภาพเอง</td></tr>
+          </table>
+        </div>
+
+        <h2 id="faq-save">การบันทึก</h2>
+        <div class="tbl">
+          <table>
+            <tr><th>คำถาม</th><th>คำตอบ</th></tr>
+            <tr><td>ค่าวัดหายเมื่อเปิดใหม่</td><td>เปิดจาก HIS หรือภาพไม่มีข้อมูล Study/Series — ค่าวัดไม่ถูกบันทึกในกรณีนี้ · PET VOI และ ECG caliper ไม่บันทึกเสมอ</td></tr>
+            <tr><td>ต้องกดบันทึกค่าวัดไหม</td><td>ไม่ต้อง — บันทึกอัตโนมัติราว 1 วินาทีหลังแก้ไข</td></tr>
+            <tr><td>ผู้อื่นเห็นค่าวัด / key image ของฉันไหม</td><td>เห็น (แสดงเป็นอีกสีและแก้ไม่ได้)</td></tr>
+            <tr><td>ลบค่าวัดของคนอื่นได้ไหม</td><td>ไม่ได้ — ค่าวัดของผู้อื่นล็อกไว้ (อ่านอย่างเดียว) Delete และ Clear จะข้าม</td></tr>
+            <tr><td>นำเข้าไฟล์ค่าตั้งของเพื่อนแล้วค่าของฉันหาย</td><td>นำเข้าแทนที่ค่าทั้งหมด — ส่งออกค่าของตัวเองเก็บไว้ก่อนนำเข้า แล้วกด ยกเลิก ถ้ายังไม่ได้บันทึก</td></tr>
+            <tr><td>ค่าตั้งของฉันใช้กับเครื่องอื่นได้ไหม</td><td>ได้ — เก็บบนเซิร์ฟเวอร์ตามบัญชี (ยกเว้นคุณภาพ 3D ซึ่งจำต่อเครื่อง) · ใช้ ส่งออก / นำเข้า เพื่อแบ่งปันให้ผู้อื่น</td></tr>
+          </table>
+        </div>
+      </section>
+    </main>
+    <footer class="doc-foot">Vantyx DICOM Viewer · คู่มือการใช้งาน · ข้อมูล ณ 14 ตุลาคม 2569</footer>
+
+    <div class="lightbox" role="dialog" aria-label="ภาพขยาย"><img alt="" /><p></p></div>
+    <script src="assets/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,136 @@
+/* เมนู "หน้าทั้งหมด" — ใช้ร่วมทุกหน้าใน presentation (markup สร้างโดย site-nav.js)
+   ปุ่มใช้สีตัวอักษรของแถบที่วางอยู่ (currentColor) จึงเข้ากับทั้งแถบมืดและสว่าง
+   แผงรายการเป็นโทน navy ของแบรนด์เสมอ ไม่ว่าหน้านั้นจะอยู่โหมดไหน */
+.sn {
+  position: relative;
+  flex: none;
+}
+.sn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 8px 0 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.sn-btn:hover,
+.sn-btn:focus-visible,
+.sn.is-open .sn-btn {
+  border-color: #22d3ee;
+  background: rgba(34, 211, 238, 0.1);
+  outline: none;
+}
+.sn-ic,
+.sn-caret {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  flex: none;
+}
+.sn-caret {
+  transition: transform 0.15s ease;
+}
+.sn.is-open .sn-caret {
+  transform: rotate(180deg);
+}
+
+.sn-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 100;
+  width: min(340px, calc(100vw - 48px));
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding: 6px 8px 8px;
+  border-radius: 12px;
+  background: #13203a;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  box-shadow: 0 18px 44px rgba(2, 6, 23, 0.45);
+  text-align: left;
+  color: #e2e8f0;
+}
+.sn-panel[hidden] {
+  display: none;
+}
+.sn .sn-group {
+  margin: 12px 12px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+}
+.sn .sn-group:first-child {
+  margin-top: 6px;
+}
+.sn .sn-item {
+  position: relative;
+  display: block;
+  padding: 8px 12px 8px 10px;
+  border-left: 3px solid transparent;
+  border-radius: 8px;
+  color: #e2e8f0;
+  text-decoration: none;
+}
+.sn .sn-item:hover,
+.sn .sn-item:focus-visible {
+  background: rgba(34, 211, 238, 0.1);
+  color: #e2e8f0;
+  text-decoration: none;
+  outline: none;
+}
+.sn .sn-item b {
+  display: block;
+  padding-right: 64px;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #ffffff;
+}
+.sn .sn-item span {
+  display: block;
+  margin-top: 1px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #94a3b8;
+}
+.sn .sn-item.is-current {
+  background: rgba(34, 211, 238, 0.14);
+  border-left-color: #22d3ee;
+}
+.sn .sn-item em {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  padding: 0 8px;
+  border: 1px solid rgba(34, 211, 238, 0.45);
+  border-radius: 999px;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 18px;
+  color: #22d3ee;
+}
+
+/* จอแคบ: เหลือไอคอน — แผงกว้างเกือบเต็มจอ ชิดขวาใต้ปุ่ม */
+@media (max-width: 560px) {
+  .sn-label {
+    display: none;
+  }
+  .sn-btn {
+    padding: 0 4px 0 8px;
+  }
+}
+@media print {
+  .sn {
+    display: none;
+  }
+}

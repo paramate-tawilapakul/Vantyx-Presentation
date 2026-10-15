@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vantyx VNA · Architecture</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/site-nav.css">
+  <script src="shared/site-nav.js" defer></script>
+  <script>
+    // ธีม dark / light: ค่าที่ผู้ใช้เลือกเก็บใน localStorage คีย์เดียวกับคู่มือ VNA / Viewer (เลือกที่ไหนก็ตามกันทุกหน้า)
+    // ไม่มีค่า = ตามระบบปฏิบัติการ · ตั้งก่อน render กันจอกะพริบ
+    ;(function () {
+      var KEY = 'vantyx-doc-theme'
+      var root = document.documentElement
+      function saved() {
+        try {
+          return localStorage.getItem(KEY)
+        } catch (e) {
+          return null
+        }
+      }
+      function system() {
+        return window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      }
+      function apply(t) {
+        root.setAttribute('data-theme', t)
+        var btn = document.querySelector('.theme-btn')
+        if (btn) {
+          var label = t === 'dark' ? 'Switch to Light' : 'Switch to Dark'
+          btn.title = label
+          btn.setAttribute('aria-label', label)
+        }
+      }
+      var s = saved()
+      apply(s === 'light' || s === 'dark' ? s : system())
+      document.addEventListener('DOMContentLoaded', function () {
+        apply(root.getAttribute('data-theme'))
+        document.querySelector('.theme-btn').addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+          apply(next)
+          try {
+            localStorage.setItem(KEY, next)
+          } catch (e) {}
+        })
+      })
+      // คู่มือ / หน้านี้ในแท็บอื่นเปลี่ยนธีม → ตามทันที
+      window.addEventListener('storage', function (e) {
+        if (e.key === KEY && (e.newValue === 'light' || e.newValue === 'dark')) apply(e.newValue)
+      })
+      // ยังไม่เคยเลือกเอง = ตามระบบปฏิบัติการเมื่อเปลี่ยน
+      if (window.matchMedia) {
+        var mq = matchMedia('(prefers-color-scheme: dark)')
+        var onChange = function () {
+          var v = saved()
+          if (v !== 'light' && v !== 'dark') apply(system())
+        }
+        if (mq.addEventListener) mq.addEventListener('change', onChange)
+      }
+    })()
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      color-scheme: light;
+      --color-paper: #f5f5f5; --color-paper-2: #ececec; --color-card: #ffffff; --page-bg: #f5f5f5;
+      --color-ink: #2d3142; --color-muted: #4f5d75; --color-soft: #5a6580;
+      --color-rule: rgba(45,49,66,0.12); --line-8: rgba(45,49,66,0.08); --line-10: rgba(45,49,66,0.10);
+      --line-25: rgba(45,49,66,0.25); --code-bg: rgba(45,49,66,0.06);
+      --color-accent: #bf4520; --color-accent-tint: rgba(191,69,32,0.08); --color-link: #2e5aa8;
+      --dd0: #2d3142; --dd1: #2e5aa8; --dd2: #4f5d75; --dd3: #5a6580; --dd4: #bf4520; --dd5: #f1f1f1; --dd6: #f5f5f5; --dd7: #ffffff; --dd8: rgba(191,69,32,0.05); --dd9: rgba(191,69,32,0.08); --dd10: rgba(191,69,32,0.4); --dd11: rgba(191,69,32,0.5); --dd12: rgba(45,49,66,0.02); --dd13: rgba(45,49,66,0.03); --dd14: rgba(45,49,66,0.05); --dd15: rgba(45,49,66,0.1); --dd16: rgba(45,49,66,0.2); --dd17: rgba(45,49,66,0.22); --dd18: rgba(45,49,66,0.3); --dd19: rgba(45,49,66,0.4); --dd20: rgba(79,93,117,0.5);
+      --font-sans: 'Geist', 'Noto Sans Thai', system-ui, sans-serif;
+      --font-serif: 'Instrument Serif', 'Noto Sans Thai', serif;
+      --font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+    }
+    /* dark: ตามระบบเมื่อ JS ปิด (data-theme ไม่ถูกตั้ง) และเมื่อเลือกเอง */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { color-scheme: dark; --color-paper: #0b1220; --color-paper-2: #13203a; --color-card: #13203a; --color-ink: #e2e8f0; --color-muted: #94a3b8; --color-soft: #7f8ea6; --color-rule: rgba(148,163,184,0.20); --line-8: rgba(148,163,184,0.14); --line-10: rgba(148,163,184,0.18); --line-25: rgba(148,163,184,0.34); --code-bg: rgba(148,163,184,0.12); --color-accent: #f08a59; --color-accent-tint: rgba(240,138,89,0.10); --color-link: #739fdf; --page-bg: linear-gradient(rgba(34,211,238,0.035) 1px, transparent 1px) 0 0 / 32px 32px, linear-gradient(90deg, rgba(34,211,238,0.035) 1px, transparent 1px) 0 0 / 32px 32px, radial-gradient(1100px 600px at 100% -10%, #123f52 0%, transparent 60%), #0b1220; --dd0: #e2e8f0; --dd1: #739fdf; --dd2: #94a3b8; --dd3: #7f8ea6; --dd4: #f08a59; --dd5: #0f1624; --dd6: #0b1220; --dd7: #13203a; --dd8: rgba(240,138,89,0.05); --dd9: rgba(240,138,89,0.08); --dd10: rgba(240,138,89,0.4); --dd11: rgba(240,138,89,0.5); --dd12: rgba(226,232,240,0.02); --dd13: rgba(226,232,240,0.03); --dd14: rgba(226,232,240,0.05); --dd15: rgba(226,232,240,0.1); --dd16: rgba(226,232,240,0.2); --dd17: rgba(226,232,240,0.22); --dd18: rgba(226,232,240,0.3); --dd19: rgba(226,232,240,0.4); --dd20: rgba(148,163,184,0.5); }
+    }
+    :root[data-theme="dark"] { color-scheme: dark; --color-paper: #0b1220; --color-paper-2: #13203a; --color-card: #13203a; --color-ink: #e2e8f0; --color-muted: #94a3b8; --color-soft: #7f8ea6; --color-rule: rgba(148,163,184,0.20); --line-8: rgba(148,163,184,0.14); --line-10: rgba(148,163,184,0.18); --line-25: rgba(148,163,184,0.34); --code-bg: rgba(148,163,184,0.12); --color-accent: #f08a59; --color-accent-tint: rgba(240,138,89,0.10); --color-link: #739fdf; --page-bg: linear-gradient(rgba(34,211,238,0.035) 1px, transparent 1px) 0 0 / 32px 32px, linear-gradient(90deg, rgba(34,211,238,0.035) 1px, transparent 1px) 0 0 / 32px 32px, radial-gradient(1100px 600px at 100% -10%, #123f52 0%, transparent 60%), #0b1220; --dd0: #e2e8f0; --dd1: #739fdf; --dd2: #94a3b8; --dd3: #7f8ea6; --dd4: #f08a59; --dd5: #0f1624; --dd6: #0b1220; --dd7: #13203a; --dd8: rgba(240,138,89,0.05); --dd9: rgba(240,138,89,0.08); --dd10: rgba(240,138,89,0.4); --dd11: rgba(240,138,89,0.5); --dd12: rgba(226,232,240,0.02); --dd13: rgba(226,232,240,0.03); --dd14: rgba(226,232,240,0.05); --dd15: rgba(226,232,240,0.1); --dd16: rgba(226,232,240,0.2); --dd17: rgba(226,232,240,0.22); --dd18: rgba(226,232,240,0.3); --dd19: rgba(226,232,240,0.4); --dd20: rgba(148,163,184,0.5); }
+
+    /* SVG: สีเดิมใน attribute → ตัวแปรที่สลับตามธีม */
+    svg.dd [fill="#2d3142"] { fill: var(--dd0); } svg.dd [stroke="#2d3142"] { stroke: var(--dd0); }
+    svg.dd [fill="#2e5aa8"] { fill: var(--dd1); } svg.dd [stroke="#2e5aa8"] { stroke: var(--dd1); }
+    svg.dd [fill="#4f5d75"] { fill: var(--dd2); } svg.dd [stroke="#4f5d75"] { stroke: var(--dd2); }
+    svg.dd [fill="#5a6580"] { fill: var(--dd3); } svg.dd [stroke="#5a6580"] { stroke: var(--dd3); }
+    svg.dd [fill="#bf4520"] { fill: var(--dd4); } svg.dd [stroke="#bf4520"] { stroke: var(--dd4); }
+    svg.dd [fill="#f1f1f1"] { fill: var(--dd5); } svg.dd [stroke="#f1f1f1"] { stroke: var(--dd5); }
+    svg.dd [fill="#f5f5f5"] { fill: var(--dd6); } svg.dd [stroke="#f5f5f5"] { stroke: var(--dd6); }
+    svg.dd [fill="#ffffff"] { fill: var(--dd7); } svg.dd [stroke="#ffffff"] { stroke: var(--dd7); }
+    svg.dd [fill="rgba(191,69,32,0.05)"] { fill: var(--dd8); } svg.dd [stroke="rgba(191,69,32,0.05)"] { stroke: var(--dd8); }
+    svg.dd [fill="rgba(191,69,32,0.08)"] { fill: var(--dd9); } svg.dd [stroke="rgba(191,69,32,0.08)"] { stroke: var(--dd9); }
+    svg.dd [fill="rgba(191,69,32,0.4)"] { fill: var(--dd10); } svg.dd [stroke="rgba(191,69,32,0.4)"] { stroke: var(--dd10); }
+    svg.dd [fill="rgba(191,69,32,0.5)"] { fill: var(--dd11); } svg.dd [stroke="rgba(191,69,32,0.5)"] { stroke: var(--dd11); }
+    svg.dd [fill="rgba(45,49,66,0.02)"] { fill: var(--dd12); } svg.dd [stroke="rgba(45,49,66,0.02)"] { stroke: var(--dd12); }
+    svg.dd [fill="rgba(45,49,66,0.03)"] { fill: var(--dd13); } svg.dd [stroke="rgba(45,49,66,0.03)"] { stroke: var(--dd13); }
+    svg.dd [fill="rgba(45,49,66,0.05)"] { fill: var(--dd14); } svg.dd [stroke="rgba(45,49,66,0.05)"] { stroke: var(--dd14); }
+    svg.dd [fill="rgba(45,49,66,0.1)"] { fill: var(--dd15); } svg.dd [stroke="rgba(45,49,66,0.1)"] { stroke: var(--dd15); }
+    svg.dd [fill="rgba(45,49,66,0.2)"] { fill: var(--dd16); } svg.dd [stroke="rgba(45,49,66,0.2)"] { stroke: var(--dd16); }
+    svg.dd [fill="rgba(45,49,66,0.22)"] { fill: var(--dd17); } svg.dd [stroke="rgba(45,49,66,0.22)"] { stroke: var(--dd17); }
+    svg.dd [fill="rgba(45,49,66,0.3)"] { fill: var(--dd18); } svg.dd [stroke="rgba(45,49,66,0.3)"] { stroke: var(--dd18); }
+    svg.dd [fill="rgba(45,49,66,0.4)"] { fill: var(--dd19); } svg.dd [stroke="rgba(45,49,66,0.4)"] { stroke: var(--dd19); }
+    svg.dd [fill="rgba(79,93,117,0.5)"] { fill: var(--dd20); } svg.dd [stroke="rgba(79,93,117,0.5)"] { stroke: var(--dd20); }
+
+    body { font-family: var(--font-sans); background: var(--page-bg); background-attachment: fixed; min-height: 100vh; padding: 3rem 2rem; color: var(--color-ink); }
+    .container { max-width: 1650px; margin: 0 auto; }
+    .header { margin-bottom: 2.5rem; }
+    .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .header-eyebrow { font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.75rem; }
+    .header-actions { display: flex; align-items: center; gap: 0.875rem; flex: none; }
+    /* ← หน้าแรก — แบบเดียวกับลิงก์ใน topbar ของคู่มือ (กลับไป presentation/index.html) */
+    .top-link { font-size: 0.875rem; color: var(--color-muted); text-decoration: none; white-space: nowrap; }
+    .top-link:hover, .top-link:focus-visible { color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 560px) { .top-link { display: none; } }  /* จอแคบ: หน้าแรกอยู่ในเมนู "หน้าทั้งหมด" แล้ว */
+    .theme-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--color-rule); background: transparent; color: var(--color-ink); cursor: pointer; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+    .theme-btn:hover, .theme-btn:focus-visible { background: var(--line-8); border-color: var(--color-muted); outline: none; }
+    .theme-btn svg { width: 22px; height: 22px; fill: currentColor; }
+    /* โหมดสว่างแสดงพระจันทร์ (สลับไปมืด) · โหมดมืดแสดงดวงอาทิตย์ — เหมือนปุ่มในคู่มือ */
+    .theme-btn .ic-light { display: none; }
+    :root[data-theme="dark"] .theme-btn .ic-light { display: block; }
+    :root[data-theme="dark"] .theme-btn .ic-dark { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme]) .theme-btn .ic-light { display: block; }
+      :root:not([data-theme]) .theme-btn .ic-dark { display: none; }
+    }
+    h1 { font-family: var(--font-mono); font-size: clamp(1.75rem, 3vw + 1rem, 2.5rem); font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.75rem; }
+    .subtitle { font-size: 1rem; line-height: 1.7; color: var(--color-muted); max-width: 74ch; }
+    .intro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem 1.75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line-10); }
+    .intro .zone { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-ink); margin-bottom: 0.35rem; }
+    .intro p { font-size: 0.875rem; line-height: 1.65; color: var(--color-muted); }
+    .deploy-note { margin-top: 1rem; font-size: 0.875rem; line-height: 1.65; color: var(--color-muted); }
+    .deploy-note strong { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--color-ink); margin-right: 0.5rem; }
+    @media (max-width: 900px) { .intro { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 560px) { .intro { grid-template-columns: 1fr; } }
+    .diagram-container { width: 100%; background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 8px; padding: 1.5rem; overflow-x: auto; }
+    svg.dd { width: 100%; min-width: 1600px; display: block; }  /* == viewBox width: never scale the type ramp down */
+    @media print {
+      .diagram-container { overflow-x: visible; }
+      svg.dd { min-width: 0; }
+      .header-actions { display: none; }
+    }
+    .cards { display: grid; grid-template-columns: 1.1fr 1fr 0.9fr; gap: 1rem; margin-top: 1.5rem; }
+    .cards + .cards { margin-top: 1rem; }
+    @media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+    .card { background: var(--color-card); border-radius: 6px; border: 1px solid var(--color-rule); padding: 1.25rem; }
+    .card .eyebrow { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.5rem; }
+    .card-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.875rem; padding-bottom: 0.875rem; border-bottom: 1px solid var(--line-8); }
+    .card-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .card-dot.coral { background: var(--color-accent); }
+    .card-dot.link  { background: var(--color-link); }
+    .card-dot.muted { background: var(--color-muted); }
+    .card h3 { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.005em; }
+    .card ul { list-style: none; color: var(--color-muted); font-size: 0.875rem; line-height: 1.65; }
+    .card li { margin-bottom: 0.45rem; padding-left: 0.875rem; position: relative; }
+    .card li::before { content: '—'; position: absolute; left: 0; color: var(--line-25); font-size: 0.75rem; }
+    code { font-family: var(--font-mono); font-size: 0.78em; color: var(--color-ink); background: var(--code-bg); border-radius: 3px; padding: 0.05em 0.3em; }
+    .footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line-10); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--color-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="header-top">
+        <p class="header-eyebrow">Architecture · faithful detail · 15-10-2026</p>
+        <div class="header-actions">
+          <button type="button" class="theme-btn" title="Switch to Dark" aria-label="Switch to Dark">
+            <svg class="ic-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1"/></svg>
+            <svg class="ic-light" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0z"/></svg>
+          </button>
+          <a class="top-link" href="index.html">← หน้าแรก</a>
+          <div class="site-nav" data-current="arch"></div>
+        </div>
+      </div>
+      <h1>Vantyx VNA architecture in detail</h1>
+      <p class="subtitle">Vantyx คือ VNA/PACS แบบ self-hosted: modality หรือ PACS ของโรงพยาบาลส่ง DICOM เข้า Orthanc แล้ว event pipeline จะ index แต่ละ study ลง PostgreSQL ส่วน pixel data เก็บใน SeaweedFS S3 ผู้ใช้เปิดงานผ่าน web client และ DICOM viewer บน browser และ HIS เชื่อมด้วย HL7 v2 ทั้งระบบรันเป็น Docker Compose stack เดียว (25 services — ภาพนี้วาด 22 component แบ่งเป็น 4 โซน)</p>
+      <div class="intro">
+        <div><p class="zone">Clients & external</p><p>ผู้ใช้และระบบภายนอก: web client, DICOM viewer, HIS ของโรงพยาบาล และ modality / PACS</p></div>
+        <div><p class="zone">Web tier</p><p>ทางเข้าของ browser: edge (Cloudflare หรือ LAN) → nginx กระจายโหลดแบบ least_conn → JWT Auth → Fastify API ×3 พร้อม Redis, PostgreSQL และ Logs DB</p></div>
+        <div><p class="zone">Event pipeline</p><p>งาน async ผ่าน RabbitMQ: publisher รับ event, consumer index study, transcoder ทำวิดีโอ, HL7 Worker คุยกับ HIS และ cronjob ดูแลระบบ</p></div>
+        <div><p class="zone">Archive & backup</p><p>ที่เก็บภาพ: Orthanc + index DB, SeaweedFS (hot ssd / cold hdd) + filer DB และ pgBackRest ที่สำรอง 3 database</p></div>
+      </div>
+      <p class="deploy-note"><strong>Deploy</strong>เครื่องนี้เป็น dev/demo เปิดผ่าน Cloudflare tunnel · โรงพยาบาลใช้ VM เดียว (S1) หรือ HA 2 เครื่อง + witness (L1) ภายใน LAN ไม่ผ่าน Cloudflare</p>
+    </div>
+
+    <div class="diagram-container">
+        <svg class="dd" viewBox="0 0 1600 1016" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="vantyx-architecture-title vantyx-architecture-desc">
+          <title id="vantyx-architecture-title">Vantyx VNA architecture in detail</title>
+          <desc id="vantyx-architecture-desc">Detailed architecture of the Vantyx VNA: browsers reach a three-replica Fastify API through a Cloudflare tunnel (or the hospital LAN on-premise), nginx and a JWT gate; modalities send DICOM to Orthanc, whose stable-study events flow through worker-publisher and RabbitMQ to the consumer, transcoder and HL7 workers; data lives in four PostgreSQL databases, Redis and SeaweedFS, three of them backed up by pgBackRest.</desc>
+          <defs>
+            <marker id="vantyx-architecture-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+            <marker id="vantyx-architecture-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+            <marker id="vantyx-architecture-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto-start-reverse"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+          </defs>
+          <rect width="100%" height="100%" fill="#f5f5f5"/>
+          <!-- Zones (behind everything) -->
+          <rect x="40" y="56" width="224" height="728" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.1)" stroke-width="0.8"/>
+          <rect x="52" y="60" width="108" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="106" y="69" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.14em">CLIENTS &amp; EXTERNAL</text>
+          <rect x="296" y="56" width="1248" height="296" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.1)" stroke-width="0.8"/>
+          <rect x="308" y="60" width="56" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="336" y="69" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.14em">WEB TIER</text>
+          <rect x="296" y="376" width="1248" height="248" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.1)" stroke-width="0.8"/>
+          <rect x="308" y="380" width="88" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="352" y="389" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.14em">EVENT PIPELINE</text>
+          <rect x="296" y="664" width="1248" height="280" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.1)" stroke-width="0.8"/>
+          <rect x="308" y="668" width="100" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="358" y="677" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.14em">ARCHIVE &amp; BACKUP</text>
+          <!-- Connectors (drawn before nodes) -->
+          <path d="M 240,120 L 320,120" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow-link)"/>
+          <path d="M 240,224 L 320,224" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow-link)"/>
+          <path d="M 496,200 L 576,200" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 752,200 L 832,200" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1008,200 L 1088,200" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1008,104 L 1344,104" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1240,168 L 1240,144 Q 1240,136 1248,136 L 1344,136" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1264,200 L 1344,200" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1232,232 L 1232,696" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1152,232 L 1152,548 Q 1152,556 1144,556 L 1008,556" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 152,152 L 152,192" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 152,408 L 152,256" fill="none" stroke="#2e5aa8" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow-link)"/>
+          <path d="M 240,428 L 320,428" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow-link)"/>
+          <path d="M 320,452 L 240,452" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 496,428 L 832,428" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-start="url(#vantyx-architecture-arrow)" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 448,408 L 448,304 Q 448,296 456,296 L 1104,296 Q 1112,296 1112,288 L 1112,232" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 920,536 L 920,472" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1008,448 L 1144,448 a 8,8 0 0,1 16,0 L 1224,448 a 8,8 0 0,1 16,0 L 1344,448" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 832,452 L 672,452 Q 664,452 664,460 L 664,536" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1344,424 L 1312,424 Q 1304,424 1304,416 L 1304,232 Q 1304,224 1312,224 L 1344,224" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1432,408 L 1432,328" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 664,600 L 664,720 a 8,8 0 0,1 0,16 L 664,824" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1400,600 L 1400,720 Q 1400,728 1392,728 L 1264,728" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 240,728 L 1088,728" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow-link)"/>
+          <path d="M 1120,696 L 1120,588 Q 1120,580 1112,580 L 1008,580" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1128,760 L 1128,848 Q 1128,856 1120,856 L 1008,856" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1104,760 L 1104,784 Q 1104,792 1096,792 L 712,792 Q 704,792 704,800 L 704,824" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 576,856 L 496,856" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1344,872 L 1008,872" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1408,888 L 1408,912 Q 1408,920 1400,920 L 416,920 Q 408,920 408,912 L 408,888" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <path d="M 1520,848 L 1552,848 Q 1560,848 1560,840 L 1560,224 Q 1560,216 1552,216 L 1520,216" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <!-- Arrow labels: opaque mask, 6px clear of the stroke -->
+          <rect x="254" y="102" width="52" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="280" y="111" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">HTTP(S)</text>
+          <rect x="254" y="206" width="52" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="280" y="215" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">HTTP(S)</text>
+          <rect x="500" y="182" width="72" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="536" y="191" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">:8090 · :81</text>
+          <rect x="768" y="182" width="48" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="792" y="191" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">BEARER</text>
+          <rect x="1020" y="182" width="56" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1048" y="191" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">VERIFIED</text>
+          <rect x="1130" y="86" width="92" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1176" y="95" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">SESSION · DENY</text>
+          <rect x="1276" y="118" width="40" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1296" y="127" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">CACHE</text>
+          <rect x="1288" y="182" width="32" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1304" y="191" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">SQL</text>
+          <rect x="1238" y="594" width="56" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1266" y="603" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">DICOMWEB</text>
+          <rect x="1034" y="538" width="84" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1076" y="547" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">AUDIT · VIDEO</text>
+          <rect x="158" y="166" width="72" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="194" y="175" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">OPEN VIEWER</text>
+          <rect x="158" y="326" width="68" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="192" y="335" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">LAUNCH URL</text>
+          <rect x="248" y="410" width="64" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="280" y="419" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">ADT · ORM</text>
+          <rect x="248" y="458" width="64" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="280" y="467" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">ORU · ACK</text>
+          <rect x="630" y="410" width="68" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="664" y="419" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">HL7 QUEUES</text>
+          <rect x="748" y="278" width="64" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="780" y="287" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">X-API-KEY</text>
+          <rect x="926" y="498" width="52" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="952" y="507" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">PUBLISH</text>
+          <rect x="1040" y="430" width="72" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1076" y="439" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">STUDY · LOG</text>
+          <rect x="670" y="494" width="64" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="702" y="503" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">TRANSCODE</text>
+          <rect x="1310" y="350" width="92" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="1356" y="359" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">EMPI · STUDIES</text>
+          <rect x="1438" y="362" width="36" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="1456" y="371" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">LOGS</text>
+          <rect x="670" y="642" width="56" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="698" y="651" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">MP4 · S3</text>
+          <rect x="1288" y="710" width="64" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1320" y="719" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">RECONCILE</text>
+          <rect x="358" y="710" width="84" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="400" y="719" fill="#2e5aa8" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">C-STORE :4242</text>
+          <rect x="1126" y="634" width="80" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="1166" y="643" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">STUDY STABLE</text>
+          <rect x="1044" y="838" width="40" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1064" y="847" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">INDEX</text>
+          <rect x="866" y="774" width="68" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="900" y="783" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">S3 · DICOM</text>
+          <rect x="508" y="838" width="56" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="536" y="847" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">METADATA</text>
+          <rect x="1176" y="854" width="48" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1200" y="863" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">BACKUP</text>
+          <rect x="736" y="902" width="48" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="760" y="911" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">BACKUP</text>
+          <rect x="1506" y="370" width="48" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="1530" y="379" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.06em">BACKUP</text>
+          <!-- Nodes -->
+          <!-- web -->
+          <rect x="64" y="88" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="64" y="88" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="72" y="96" width="20" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="82" y="105" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
+          <text x="152" y="126" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Web Client</text>
+          <text x="152" y="141" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">React 19 · Vite 7 · MUI 6</text>
+          <!-- viewer -->
+          <rect x="64" y="192" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="64" y="192" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="72" y="200" width="20" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="82" y="209" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">UI</text>
+          <text x="152" y="230" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">DICOM Viewer</text>
+          <text x="152" y="245" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">Cornerstone3D v4 · React 19</text>
+          <!-- his -->
+          <rect x="64" y="408" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="64" y="408" width="176" height="64" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.3)" stroke-width="1"/>
+          <rect x="72" y="416" width="28" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.22)" stroke-width="0.8"/>
+          <text x="86" y="425" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">EXT</text>
+          <text x="152" y="446" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Hospital HIS</text>
+          <text x="152" y="461" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">HL7 v2 · MLLP</text>
+          <!-- modality -->
+          <rect x="64" y="696" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="64" y="696" width="176" height="64" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.3)" stroke-width="1"/>
+          <rect x="72" y="704" width="28" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.22)" stroke-width="0.8"/>
+          <text x="86" y="713" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">EXT</text>
+          <text x="152" y="734" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Modality / PACS</text>
+          <text x="152" y="749" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">CT · MR · US · PACS</text>
+          <!-- cf -->
+          <rect x="320" y="88" width="176" height="168" rx="6" fill="#f5f5f5"/>
+          <rect x="320" y="88" width="176" height="168" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.3)" stroke-width="1"/>
+          <rect x="328" y="96" width="32" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.22)" stroke-width="0.8"/>
+          <text x="344" y="105" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">EDGE</text>
+          <text x="408" y="134" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Cloudflare Tunnel</text>
+          <text x="408" y="149" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">demo host · cloudflared</text>
+          <text x="408" y="165" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">vna/viewer.ptvantyx.com</text>
+          <line x1="336" y1="180" x2="392" y2="180" stroke="rgba(45,49,66,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <line x1="424" y1="180" x2="480" y2="180" stroke="rgba(45,49,66,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <text x="408" y="182.5" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.14em">OR</text>
+          <text x="408" y="202" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">On-premise LAN</text>
+          <text x="408" y="217" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">hospital LAN · static IP</text>
+          <text x="408" y="233" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">S1 / L1 · no cloudflared</text>
+          <!-- nginx -->
+          <rect x="576" y="160" width="176" height="80" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="160" width="176" height="80" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="584" y="168" width="36" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="602" y="177" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">PROXY</text>
+          <text x="664" y="198" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">nginx</text>
+          <text x="664" y="213" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">load balance · least_conn</text>
+          <text x="664" y="229" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">proxy_cache · auth_request</text>
+          <!-- jwt -->
+          <rect x="832" y="88" width="176" height="168" rx="6" fill="#f5f5f5"/>
+          <rect x="832" y="88" width="176" height="168" rx="6" fill="rgba(191,69,32,0.05)" stroke="rgba(191,69,32,0.5)" stroke-width="1" stroke-dasharray="4,4"/>
+          <rect x="840" y="96" width="32" height="12" rx="2" fill="none" stroke="rgba(191,69,32,0.4)" stroke-width="0.8"/>
+          <text x="856" y="105" fill="#bf4520" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">AUTH</text>
+          <text x="920" y="154" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">JWT Auth</text>
+          <text x="920" y="169" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">@fastify/jwt</text>
+          <text x="920" y="185" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">access 30 m · refresh 3 d</text>
+          <text x="920" y="201" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">rotation + reuse detect</text>
+          <text x="920" y="217" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">authorize() · AE scope</text>
+          <!-- api -->
+          <rect x="1088" y="168" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1088" y="168" width="176" height="64" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+          <rect x="1096" y="176" width="28" height="12" rx="2" fill="none" stroke="rgba(191,69,32,0.5)" stroke-width="0.8"/>
+          <text x="1110" y="185" fill="#bf4520" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">API</text>
+          <text x="1176" y="206" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Fastify API ×3</text>
+          <text x="1176" y="221" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">Fastify 5 · Node 24 · :3000</text>
+          <!-- redis -->
+          <rect x="1344" y="88" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1344" y="88" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="1352" y="96" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="1362" y="105" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">KV</text>
+          <text x="1432" y="126" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Redis 7.4</text>
+          <text x="1432" y="141" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">cache · sessions · limits</text>
+          <!-- pg -->
+          <rect x="1344" y="176" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1344" y="176" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="1352" y="184" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="1362" y="193" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+          <text x="1432" y="214" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">PostgreSQL 18</text>
+          <text x="1432" y="229" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">postgres-vantyx :5432</text>
+          <!-- logs -->
+          <rect x="1344" y="264" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1344" y="264" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="1352" y="272" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="1362" y="281" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+          <text x="1432" y="302" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Logs DB</text>
+          <text x="1432" y="317" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">postgres-logs · 90 d</text>
+          <!-- hl7 -->
+          <rect x="320" y="408" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="320" y="408" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="328" y="416" width="28" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="342" y="425" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">HL7</text>
+          <text x="408" y="446" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">HL7 Worker</text>
+          <text x="408" y="461" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">MLLP :2575 · ACK</text>
+          <!-- rabbit -->
+          <rect x="832" y="408" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="832" y="408" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="840" y="416" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="850" y="425" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">MQ</text>
+          <text x="920" y="446" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">RabbitMQ 4</text>
+          <text x="920" y="461" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">vhost vna · quorum + DLQ</text>
+          <!-- consumer -->
+          <rect x="1344" y="408" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1344" y="408" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="1352" y="416" width="40" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="1372" y="425" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">WORKER</text>
+          <text x="1432" y="446" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">worker-consumer</text>
+          <text x="1432" y="461" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">EMPI · upsert studies</text>
+          <!-- transcoder -->
+          <rect x="576" y="536" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="536" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="584" y="544" width="40" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="604" y="553" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">WORKER</text>
+          <text x="664" y="574" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">worker-transcoder</text>
+          <text x="664" y="589" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">ffmpeg → H.264 MP4</text>
+          <!-- publisher -->
+          <rect x="832" y="536" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="832" y="536" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="840" y="544" width="40" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="860" y="553" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">WORKER</text>
+          <text x="920" y="574" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">worker-publisher</text>
+          <text x="920" y="589" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">:3001 · /publish /logs</text>
+          <!-- cronjob -->
+          <rect x="1344" y="536" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1344" y="536" width="176" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="1352" y="544" width="32" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.4)" stroke-width="0.8"/>
+          <text x="1368" y="553" fill="#2d3142" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">CRON</text>
+          <text x="1432" y="574" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">worker-cronjob</text>
+          <text x="1432" y="589" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">prune · monitor · tier</text>
+          <!-- orthanc -->
+          <rect x="1088" y="696" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1088" y="696" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="1096" y="704" width="36" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="1114" y="713" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">DICOM</text>
+          <text x="1176" y="734" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Orthanc VNA</text>
+          <text x="1176" y="749" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">DICOM :4242 · REST :8042</text>
+          <!-- filer -->
+          <rect x="320" y="824" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="320" y="824" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="328" y="832" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="338" y="841" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+          <text x="408" y="862" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Filer DB</text>
+          <text x="408" y="877" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">postgres-filer :5430</text>
+          <!-- seaweed -->
+          <rect x="576" y="824" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="824" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="584" y="832" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="594" y="841" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">S3</text>
+          <text x="664" y="862" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">SeaweedFS S3</text>
+          <text x="664" y="877" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">hot ssd · cold hdd · :8333</text>
+          <!-- index -->
+          <rect x="832" y="824" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="832" y="824" width="176" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="840" y="832" width="20" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.5)" stroke-width="0.8"/>
+          <text x="850" y="841" fill="#4f5d75" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">DB</text>
+          <text x="920" y="862" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">Orthanc Index DB</text>
+          <text x="920" y="877" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">postgres-vantyx-gateway</text>
+          <!-- pgbr -->
+          <rect x="1344" y="824" width="176" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="1344" y="824" width="176" height="64" rx="6" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.2)" stroke-width="1" stroke-dasharray="4,3"/>
+          <rect x="1352" y="832" width="40" height="12" rx="2" fill="none" stroke="rgba(45,49,66,0.22)" stroke-width="0.8"/>
+          <text x="1372" y="841" fill="#5a6580" font-size="7" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle" letter-spacing="0.08em">BACKUP</text>
+          <text x="1432" y="862" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif" text-anchor="middle">pgBackRest</text>
+          <text x="1432" y="877" fill="#4f5d75" font-size="9" font-family="'Geist Mono', ui-monospace, Menlo, monospace" text-anchor="middle">WAL · full + diff</text>
+          <!-- Legend strip -->
+          <line x1="40" y1="968" x2="1560" y2="968" stroke="rgba(45,49,66,0.1)" stroke-width="0.8"/>
+          <text x="40" y="991" fill="#4f5d75" font-size="8" font-family="'Geist Mono', ui-monospace, Menlo, monospace" letter-spacing="0.14em">LEGEND</text>
+          <rect x="112" y="983" width="14" height="10" rx="2" fill="rgba(191,69,32,0.08)" stroke="#bf4520" stroke-width="1"/>
+          <text x="132" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Focal · API hub</text>
+          <rect x="241" y="983" width="14" height="10" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <text x="261" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Application / worker</text>
+          <rect x="397" y="983" width="14" height="10" rx="2" fill="rgba(191,69,32,0.05)" stroke="rgba(191,69,32,0.5)" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="417" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Auth gate</text>
+          <rect x="493" y="983" width="14" height="10" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75" stroke-width="1"/>
+          <text x="513" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Store / queue</text>
+          <rect x="611" y="983" width="14" height="10" rx="2" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.3)" stroke-width="1"/>
+          <text x="631" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">External</text>
+          <rect x="702" y="983" width="14" height="10" rx="2" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.2)" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="722" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Backup sidecar</text>
+          <line x1="825" y1="988" x2="839" y2="988" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow-link)"/>
+          <text x="845" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">External traffic</text>
+          <line x1="959" y1="988" x2="973" y2="988" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#vantyx-architecture-arrow)"/>
+          <text x="979" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Internal call</text>
+          <line x1="1077" y1="988" x2="1091" y2="988" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#vantyx-architecture-arrow)"/>
+          <text x="1097" y="991" fill="#4f5d75" font-size="9" font-family="'Geist', 'Noto Sans Thai', system-ui, sans-serif">Return · periodic · backup</text>
+        </svg>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <p class="eyebrow">Entry points</p>
+        <div class="card-header"><span class="card-dot coral"></span><h3>ทางเข้า 3 ทาง</h3></div>
+        <ul>
+          <li>Browser → nginx <code>:8090</code> (API + เว็บ) / <code>:81</code> (viewer) → JWT Auth → Fastify API 3 replicas (<code>least_conn</code>) — ทางเข้า nginx มี 2 แบบตามที่ deploy:</li>
+          <li>Cloudflare tunnel (เครื่อง demo นี้ <code>vna.ptvantyx.com</code>) หรือ on-premise: browser ใน LAN โรงพยาบาลเข้า nginx ตรงด้วย static IP (VM แบบ S1 / L1 ไม่รัน cloudflared ถ้าใช้ http ธรรมดาต้องตั้ง <code>COOKIE_SECURE=false</code>)</li>
+          <li>HL7: HIS → MLLP <code>:2575</code> เปิดตรงบน host ไม่ผ่าน nginx — HL7 Worker ตอบ ACK เอง แล้วเรียก API ด้วย <code>x-api-key</code></li>
+          <li>DICOM: modality / PACS → Orthanc <code>:4242</code> รับเฉพาะ AE ที่ลงทะเบียนใน Settings › DICOM Nodes</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Auth</p>
+        <div class="card-header"><span class="card-dot coral"></span><h3>JWT Auth กับ session</h3></div>
+        <ul>
+          <li>access token 30 นาที (ส่งใน JSON body) + refresh token 3 วัน ใน httpOnly cookie ที่ใช้ได้เฉพาะ <code>/api/v1/auth</code></li>
+          <li>session เก็บใน Redis <code>refresh:&lt;user&gt;:&lt;session&gt;</code> หมุน token ทุกครั้งที่ refresh และจับการใช้ token ซ้ำ ทุกครั้งที่ revoke จะเขียน denylist ไว้ด้วย</li>
+          <li>token มี permissions, แผนก และ AE-Title scope → <code>authorize()</code> + study-scope guard ถ้า study อยู่นอก scope จะตอบ 404</li>
+          <li>รูปภาพและ DICOMweb ก็ตรวจ token เหมือนกัน (<code>IMAGE_AUTH_MODE=enforce</code> + nginx <code>auth_request</code>)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Image delivery</p>
+        <div class="card-header"><span class="card-dot link"></span><h3>ภาพไปถึง viewer</h3></div>
+        <ul>
+          <li>viewer ขอภาพแบบ WADO-RS ผ่าน API proxy (<code>/dicom-web/*</code>, GET only + allow-list) → Orthanc ด้วย Basic auth — Cornerstone <code>beforeSend</code> refresh token ก่อนส่ง และดึงพร้อมกันได้ 24 ภาพ</li>
+          <li>nginx <code>proxy_cache</code> (named volume) ตรวจ token ด้วย <code>auth_request</code> (cache ผล 60 วินาที) แล้วตอบ frame จาก cache — cache HIT ไม่ถึง Node และ Orthanc</li>
+          <li>Orthanc เก็บแบบ JPEG-LS lossless ตั้งแต่ ingest (เครื่องนี้ 21.3 → 7.1 GB)</li>
+          <li>multi-frame เช่น US cine โหลดทั้งไฟล์ครั้งเดียวแบบ <code>wadouri:</code> ไม่ดึงทีละ frame — ประวัติผู้ป่วยโหลดแบบ light (ดึง instance ของ series เมื่อเปิดดู)</li>
+          <li>DICOM video → worker-transcoder ทำ MP4 เก็บใน <code>video-cache</code> · มือถือ/แท็บเล็ตใช้ภาพ <code>/rendered</code> JPEG แบบ 1×1</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <p class="eyebrow">HL7 v2</p>
+        <div class="card-header"><span class="card-dot link"></span><h3>เชื่อมต่อ HIS</h3></div>
+        <ul>
+          <li>HIS ส่ง ADT/ORM ทาง MLLP :2575 → HL7 Worker ตอบ ACK แล้วส่งต่อเข้าคิว RabbitMQ <code>hl7.inbound</code></li>
+          <li>consumer ในตัว HL7 Worker เรียก <code>POST /api/v1/hl7/inbound</code> ด้วย <code>x-api-key</code> — business logic อยู่ใน <code>server/src/modules/hl7/</code></li>
+          <li>เมื่อมี study ใหม่ worker-consumer ส่งเข้า <code>hl7.outbound</code> → HL7 Worker ส่ง ORU^R01 “images available” กลับไปที่ HIS (ไม่แนบ URL)</li>
+          <li>HIS เปิดภาพผ่าน Viewer Launch API: ได้ token ใช้ครั้งเดียว แลกเป็น session ของ integration user</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Event pipeline</p>
+        <div class="card-header"><span class="card-dot muted"></span><h3>RabbitMQ และ workers</h3></div>
+        <ul>
+          <li>Orthanc Lua ยิง webhook เมื่อ study stable → worker-publisher → คิว quorum (<code>x-delivery-limit 5</code> + DLQ)</li>
+          <li>worker-consumer: ดึงรายละเอียดจาก Orthanc → EMPI → upsert <code>studies</code> → ลบ Redis key ระดับผู้ป่วย → <code>system_logs</code> → ส่ง <code>hl7.outbound</code> เมื่อเป็น study ใหม่</li>
+          <li>worker-transcoder: วิดีโอใน <code>staging/</code> → MP4 และ DICOM video → bucket <code>video-cache</code></li>
+          <li>worker-cronjob (เที่ยงคืน + ทุก 5 นาที): prune, monitor, reconcile Orthanc <code>/changes</code>, tier SeaweedFS hot → cold, sync DICOM Nodes</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Storage &amp; backup</p>
+        <div class="card-header"><span class="card-dot muted"></span><h3>ข้อมูลและการสำรอง</h3></div>
+        <ul>
+          <li>PostgreSQL 18 ×4: vantyx, logs, Orthanc index, filer — pgBackRest สำรอง 3 ตัว (WAL + full รายสัปดาห์ + diff รายวัน → <code>D:/db_backup</code>)</li>
+          <li><code>postgres-logs</code> และไฟล์ DICOM ไม่ได้ backup</li>
+          <li>SeaweedFS buckets: <code>dicom</code> · <code>non-dicom</code> · <code>other-files</code> · <code>video-cache</code> — replication 000 บนเครื่องนี้ (S1 = 001, L1 = 010)</li>
+          <li>ไม่ได้วาด: Portainer, seaweed-init-buckets, container static ของ frontend/viewer, API → SeaweedFS (ไฟล์ non-DICOM), consumer → Redis</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Vantyx VNA · Architecture</span>
+      <span>source: codebase</span>
+    </div>
+
+  </div>
+</body>
+</html>

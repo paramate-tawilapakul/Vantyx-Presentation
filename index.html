@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vantyx — ความสามารถหลัก</title>
+    <title>Vantyx — เอกสารระบบ</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,13 +34,20 @@
         display: flex;
         flex-direction: column;
         background:
-          linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
-          linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 / 32px 32px,
-          radial-gradient(1100px 600px at 85% -10%, #164e63 0%, transparent 60%),
+          linear-gradient(rgba(34, 211, 238, 0.06) 1px, transparent 1px) 0 0 /
+            32px 32px,
+          linear-gradient(90deg, rgba(34, 211, 238, 0.06) 1px, transparent 1px)
+            0 0 / 32px 32px,
+          radial-gradient(
+            1100px 600px at 85% -10%,
+            #164e63 0%,
+            transparent 60%
+          ),
           radial-gradient(900px 500px at 0% 110%, #0e3a4f 0%, transparent 60%),
           var(--navy);
         color: var(--text);
-        font-family: 'IBM Plex Sans Thai', 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
+        font-family:
+          'IBM Plex Sans Thai', 'IBM Plex Sans', 'Segoe UI', Tahoma, sans-serif;
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
       }
@@ -49,7 +57,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 48px 24px;
+        padding: 38px 24px;
         text-align: center;
       }
       .brand {
@@ -89,13 +97,33 @@
         font-size: 16.5px;
         max-width: 640px;
       }
+      /* grid 6 คอลัมน์ การ์ดกว้าง 2 คอลัมน์ (≤ 400px) → แถวละ 3 ใบ
+         แถวสองมี 2 ใบ: ใบที่ 4 เริ่มคอลัมน์ 2 ให้ทั้งแถวอยู่กลาง */
       .choices {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 400px));
+        grid-template-columns: repeat(6, minmax(0, 188px));
         gap: 24px;
         margin-top: 44px;
         width: 100%;
         justify-content: center;
+      }
+      .choices > a.choice {
+        grid-column: span 2;
+      }
+      .choices > a.choice:nth-child(4) {
+        grid-column: 2 / span 2;
+      }
+      /* จอกลาง: แถวละ 2 ใบ ใบที่ 5 อยู่กลางแถวสุดท้าย */
+      @media (max-width: 1100px) {
+        .choices {
+          grid-template-columns: repeat(4, minmax(0, 188px));
+        }
+        .choices > a.choice:nth-child(4) {
+          grid-column: span 2;
+        }
+        .choices > a.choice:nth-child(5) {
+          grid-column: 2 / span 2;
+        }
       }
       a.choice {
         display: flex;
@@ -103,7 +131,7 @@
         text-align: left;
         text-decoration: none;
         color: inherit;
-        padding: 30px 30px 26px;
+        padding: 16px 20px 16px;
         border-radius: 16px;
         background: rgba(19, 32, 58, 0.78);
         border: 1px solid rgba(148, 163, 184, 0.24);
@@ -183,6 +211,10 @@
           gap: 16px;
           margin-top: 32px;
         }
+        .choices > a.choice,
+        .choices > a.choice:nth-child(n) {
+          grid-column: auto;
+        }
         a.choice {
           padding: 24px 22px 22px;
         }
@@ -195,11 +227,36 @@
   <body>
     <main>
       <div class="brand">
-        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vantyx">
+        <svg
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="Vantyx"
+        >
           <rect width="32" height="32" rx="6" fill="#0B1220" stroke="#1E3A5F" />
-          <path d="M 16,27 Q 10.30,16.00 9,5" fill="none" stroke="#22D3EE" stroke-width="1.8" stroke-opacity="0.55" stroke-linecap="round" />
-          <path d="M 16,27 Q 16.00,15.50 16,4" fill="none" stroke="#22D3EE" stroke-width="2.6" stroke-linecap="round" />
-          <path d="M 16,27 Q 21.70,16.00 23,5" fill="none" stroke="#22D3EE" stroke-width="1.8" stroke-opacity="0.55" stroke-linecap="round" />
+          <path
+            d="M 16,27 Q 10.30,16.00 9,5"
+            fill="none"
+            stroke="#22D3EE"
+            stroke-width="1.8"
+            stroke-opacity="0.55"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 16,27 Q 16.00,15.50 16,4"
+            fill="none"
+            stroke="#22D3EE"
+            stroke-width="2.6"
+            stroke-linecap="round"
+          />
+          <path
+            d="M 16,27 Q 21.70,16.00 23,5"
+            fill="none"
+            stroke="#22D3EE"
+            stroke-width="1.8"
+            stroke-opacity="0.55"
+            stroke-linecap="round"
+          />
           <circle cx="16" cy="27" r="1.3" fill="#22D3EE" />
         </svg>
         <div>
@@ -208,26 +265,78 @@
         </div>
       </div>
 
-      <h1>สรุปความสามารถหลัก</h1>
-      <p class="sub">เลือกระบบที่ต้องการดูรายละเอียด</p>
+      <h1>เอกสารระบบ Vantyx</h1>
+      <p class="sub">ภาพรวมสถาปัตยกรรม ความสามารถ และคู่มือการใช้งาน</p>
 
       <div class="choices">
+        <a class="choice" href="vantyx-architecture.html">
+          <span class="eyebrow">System Architecture</span>
+          <h2>สถาปัตยกรรมระบบ</h2>
+          <p>
+            ภาพการทำงานของ Vantyx VNA ทั้งระบบ 22 component ทางเข้า browser /
+            HL7 / DICOM, event pipeline, ที่เก็บภาพ และการสำรองข้อมูล
+          </p>
+          <div class="chips">
+            <span>22 component</span><span>JWT Auth</span><span>HL7 v2</span
+            ><span>Backup</span>
+          </div>
+          <span class="go">เปิดภาพสถาปัตยกรรม</span>
+        </a>
         <a class="choice" href="vna_main_features.html">
           <span class="eyebrow">Vendor Neutral Archive</span>
           <h2>Vantyx VNA</h2>
-          <p>คลังภาพกลางของโรงพยาบาล รับภาพจากทุก PACS เชื่อมต่อ HIS จัดเก็บและสำรองข้อมูลอย่างปลอดภัย</p>
-          <div class="chips"><span>DICOM</span><span>HL7 v2</span><span>On-premise</span><span>PDPA</span></div>
+          <p>
+            คลังภาพกลางของโรงพยาบาล รับภาพจากทุก PACS เชื่อมต่อ HIS
+            จัดเก็บและสำรองข้อมูลอย่างปลอดภัย
+          </p>
+          <div class="chips">
+            <span>DICOM</span><span>HL7 v2</span><span>On-premise</span
+            ><span>PDPA</span>
+          </div>
           <span class="go">ดูความสามารถของ VNA</span>
         </a>
         <a class="choice" href="viewer_main_features.html">
           <span class="eyebrow">Zero-footprint Viewer</span>
           <h2>Vantyx DICOM Viewer</h2>
-          <p>เปิดดูภาพ DICOM ผ่านเว็บเบราว์เซอร์ ครบทั้ง MPR / 3D, PET/CT, Mammography และ ECG พร้อมเทียบกับ OHIF และ MedDream</p>
-          <div class="chips"><span>ไม่ต้องติดตั้ง</span><span>MPR / 3D</span><span>TH / EN</span><span>PDPA</span></div>
+          <p>
+            เปิดดูภาพ DICOM ผ่านเว็บเบราว์เซอร์ ครบทั้ง MPR / 3D, PET/CT,
+            Mammography และ ECG พร้อมเทียบกับ OHIF และ MedDream
+          </p>
+          <div class="chips">
+            <span>ไม่ต้องติดตั้ง</span><span>MPR / 3D</span><span>TH / EN</span
+            ><span>PDPA</span>
+          </div>
           <span class="go">ดูความสามารถของ Viewer</span>
+        </a>
+        <a class="choice" href="user_documentation/index.html">
+          <span class="eyebrow">User Manual</span>
+          <h2>คู่มือการใช้งาน VNA</h2>
+          <p>
+            วิธีใช้งานหน้าเว็บ Vantyx VNA ครบทุกหน้า ทุกเมนู ตั้งแต่เข้าสู่ระบบ
+            ค้นหาภาพ จัดการไฟล์ จนถึงการตั้งค่าระบบ พร้อมภาพประกอบ
+          </p>
+          <div class="chips">
+            <span>ทุกหน้า ทุกเมนู</span><span>ภาพประกอบ</span
+            ><span>ค้นหาได้</span><span>Settings</span>
+          </div>
+          <span class="go">เปิดคู่มือ VNA</span>
+        </a>
+        <a class="choice" href="viewer_documentation/index.html">
+          <span class="eyebrow">Viewer Manual</span>
+          <h2>คู่มือการใช้งาน Viewer</h2>
+          <p>
+            วิธีใช้ Vantyx DICOM Viewer ทุกเมนู ทุกปุ่ม เครื่องมือวัด MPR / 3D,
+            PET/CT, SEG / RTSTRUCT, ECG, วิดีโอ จนถึง Viewer Settings
+            พร้อมภาพประกอบ
+          </p>
+          <div class="chips">
+            <span>ทุกเครื่องมือ</span><span>MPR / 3D</span><span>PET/CT</span
+            ><span>Viewer Settings</span>
+          </div>
+          <span class="go">เปิดคู่มือ Viewer</span>
         </a>
       </div>
     </main>
-    <footer>ข้อมูล ณ 9 ตุลาคม 2569</footer>
+    <footer>Updated 15 October 2026</footer>
   </body>
 </html>

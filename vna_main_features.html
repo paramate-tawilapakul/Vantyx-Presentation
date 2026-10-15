@@ -4,12 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Vantyx VNA — ความสามารถหลัก</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="shared/site-nav.css" />
+    <script src="shared/site-nav.js" defer></script>
     <style>
       :root {
         --navy: #0b1220;
@@ -839,16 +842,8 @@
       .topbar a:hover {
         color: var(--cyan);
       }
-      .topbar a.switch {
-        border: 1px solid rgba(34, 211, 238, 0.45);
-        color: var(--cyan);
-        padding: 6px 14px;
-        border-radius: 999px;
-        font-weight: 600;
-        white-space: nowrap;
-      }
-      .topbar a.switch:hover {
-        background: rgba(34, 211, 238, 0.12);
+      .topbar .sn-btn {
+        color: #cbd5e1;
       }
       @media print {
         .topbar {
@@ -861,7 +856,7 @@
     <div class="topbar">
       <div class="wrap">
         <a href="index.html">← หน้าแรก</a>
-        <a class="switch" href="viewer_main_features.html">ดู DICOM Viewer →</a>
+        <div class="site-nav" data-current="vna"></div>
       </div>
     </div>
     <header class="hero">
