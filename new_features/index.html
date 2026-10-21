@@ -507,8 +507,7 @@
           <code>server/</code> รวมถึง
           <code>server/release_note.txt</code> และเอกสารใน
           <code>task/</code> เพื่อหาฟีเจอร์ที่เพิ่มความสะดวก ประโยชน์ และ UX
-          และทำให้เหนือคู่แข่งในตลาด RIS แยกเป็น 2 หมวด คือ
-          <strong>ไม่ใช้ AI</strong> และ
+          แยกเป็น 2 หมวด คือ <strong>ไม่ใช้ AI</strong> และ
           <strong>ใช้ Ollama Local AI (ไม่เกี่ยวกับงานวินิจฉัย)</strong>
         </p>
         <div class="meta">
@@ -970,16 +969,15 @@
                 <ul>
                   <li>
                     <strong>popup แจ้งเตือนของระบบ</strong> (Notification API)
-                    ที่มุมจอ เมื่อหน้า BRIS ไม่ได้อยู่ด้านหน้า — กดแล้วเปิดเคสนั้นทันที
+                    ที่มุมจอ เมื่อหน้า BRIS ไม่ได้อยู่ด้านหน้า —
+                    กดแล้วเปิดเคสนั้นทันที
                   </li>
                   <li><strong>เสียง</strong> แยก STAT / ปกติ</li>
                   <li>
                     <strong>ตัวเลขบน tab title</strong> เช่น
                     <code>(3) BRIS</code>
                   </li>
-                  <li>
-                    <strong>reload list อัตโนมัติ</strong> เมื่อได้ event
-                  </li>
+                  <li><strong>reload list อัตโนมัติ</strong> เมื่อได้ event</li>
                 </ul>
               </dd>
               <dt>ตอนนี้</dt>
@@ -994,7 +992,8 @@
               <dt>ต้องมีลำโพงไหม</dt>
               <dd>
                 ต้องมีลำโพงหรือหูฟังเฉพาะส่วน <strong>เสียง</strong> — อีก 3
-                ส่วนใช้ได้โดยไม่ต้องมีลำโพง เครื่องที่ไม่มีลำโพงจึงยังได้ประโยชน์;
+                ส่วนใช้ได้โดยไม่ต้องมีลำโพง
+                เครื่องที่ไม่มีลำโพงจึงยังได้ประโยชน์;
                 ควรมีปุ่มปิดเสียงสำหรับห้องที่ไม่ต้องการเสียง
               </dd>
               <dt>ข้อจำกัด</dt>
@@ -1008,8 +1007,9 @@
                     นั้นปลอดภัย; user ต้องกด Allow ครั้งแรก
                   </li>
                   <li>
-                    browser เล่นเสียงได้หลังจาก user คลิกหน้าเว็บอย่างน้อย 1 ครั้ง
-                    (autoplay policy) — ปกติไม่มีปัญหาเพราะ user ใช้งานหน้าอยู่แล้ว
+                    browser เล่นเสียงได้หลังจาก user คลิกหน้าเว็บอย่างน้อย 1
+                    ครั้ง (autoplay policy) — ปกติไม่มีปัญหาเพราะ user
+                    ใช้งานหน้าอยู่แล้ว
                   </li>
                 </ul>
               </dd>
@@ -1059,8 +1059,8 @@
               <dt>การจัดการ</dt>
               <dd>
                 3 ระดับ: ส่วนตัว / ส่วนกลางของแผนก / เฉพาะ modality; เพิ่ม tab
-                Macro ในหน้า Report Template; import / export ได้
-                ใช้ย้าย macro ระหว่าง site; เก็บสถิติการใช้เพื่อเรียงรายการ
+                Macro ในหน้า Report Template; import / export ได้ ใช้ย้าย macro
+                ระหว่าง site; เก็บสถิติการใช้เพื่อเรียงรายการ
               </dd>
               <dt>ตอนนี้</dt>
               <dd>
@@ -1070,8 +1070,8 @@
               </dd>
               <dt>Implementation</dt>
               <dd>
-                keydown handler ใน TinyMCE ตรวจคำก่อน cursor แล้วแทนที่;
-                ตาราง macro (code, content, owner, modality, public flag)
+                keydown handler ใน TinyMCE ตรวจคำก่อน cursor แล้วแทนที่; ตาราง
+                macro (code, content, owner, modality, public flag)
               </dd>
             </dl>
             <div class="tags">
@@ -1175,17 +1175,16 @@
               <dt>ปัญหา</dt>
               <dd>
                 เมื่อพบผลที่ต้องแจ้งแพทย์ผู้ดูแลโดยด่วน BRIS
-                ไม่มีที่บันทึกว่าแจ้งใคร เมื่อไร ทางไหน และผู้รับทราบแล้วหรือยัง —
-                ตรวจสอบย้อนหลังไม่ได้ และไม่มีอะไรเตือนถ้ายังไม่ได้แจ้ง
+                ไม่มีที่บันทึกว่าแจ้งใคร เมื่อไร ทางไหน และผู้รับทราบแล้วหรือยัง
+                — ตรวจสอบย้อนหลังไม่ได้ และไม่มีอะไรเตือนถ้ายังไม่ได้แจ้ง
               </dd>
               <dt>Flow</dt>
               <dd>
                 <ol>
                   <li>
                     <strong>ระบุ</strong> — ตอน sign รังสีแพทย์เลือกระดับ เช่น
-                    Critical / Urgent / Significant
-                    พร้อมเวลาเป้าหมายในการแจ้ง (ตั้งค่าได้ใน System
-                    Configuration)
+                    Critical / Urgent / Significant พร้อมเวลาเป้าหมายในการแจ้ง
+                    (ตั้งค่าได้ใน System Configuration)
                   </li>
                   <li>
                     <strong>สร้างรายการรอแจ้ง</strong> — เข้าหน้า "Critical
@@ -1220,9 +1219,9 @@
               <dt>ตอนนี้</dt>
               <dd>
                 ไม่พบ critical result ทั้ง client และ server; มีแค่ชื่อ property
-                <code>show_readback_service</code> ที่ยังไม่มีโค้ด; severity ที่เลือกตอน
-                sign (<code>OfficialSign.tsx</code>) เก็บเป็นค่าอย่างเดียว ไม่ได้
-                trigger อะไรต่อ
+                <code>show_readback_service</code> ที่ยังไม่มีโค้ด; severity
+                ที่เลือกตอน sign (<code>OfficialSign.tsx</code>)
+                เก็บเป็นค่าอย่างเดียว ไม่ได้ trigger อะไรต่อ
               </dd>
               <dt>ประโยชน์</dt>
               <dd>
@@ -1286,7 +1285,8 @@
               </dd>
               <dt>ต่างจากที่มี</dt>
               <dd>
-                Statistics (iframe ไป <code>STAT_SERVER</code>) เป็นรายงานย้อนหลัง;
+                Statistics (iframe ไป <code>STAT_SERVER</code>)
+                เป็นรายงานย้อนหลัง;
                 <code>TimeAlert.tsx</code> กระพริบเฉพาะคนที่เปิด list;
                 <code>server/src/jobs/scheduler.ts</code> มีแค่งาน cleanup
                 ตอนเที่ยงคืน
@@ -1512,21 +1512,23 @@
                   <li>
                     <strong>ประโยชน์:</strong> ดูประวัติ dose
                     สะสมของผู้ป่วยก่อนสั่งตรวจซ้ำ, แจ้งเตือนเมื่อค่าเกิน DRL
-                    (Diagnostic Reference Level) ของ protocol, รายงาน dose ต่อเครื่อง
-                    / protocol ให้นักฟิสิกส์การแพทย์และงานความปลอดภัยทางรังสีใช้ปรับ
+                    (Diagnostic Reference Level) ของ protocol, รายงาน dose
+                    ต่อเครื่อง / protocol
+                    ให้นักฟิสิกส์การแพทย์และงานความปลอดภัยทางรังสีใช้ปรับ
                     protocol
                   </li>
                   <li>
-                    <strong>ข้อมูลมาจากไหน:</strong> เครื่องส่งค่า dose ออกมาเป็น
-                    RDSR (Radiation Dose Structured Report — DICOM object
-                    มาตรฐาน) ไปที่ PACS; BRIS ต้องมี service รับหรือดึง RDSR
-                    มาอ่านค่าแล้วจับคู่กับ accession
+                    <strong>ข้อมูลมาจากไหน:</strong> เครื่องส่งค่า dose
+                    ออกมาเป็น RDSR (Radiation Dose Structured Report — DICOM
+                    object มาตรฐาน) ไปที่ PACS; BRIS ต้องมี service รับหรือดึง
+                    RDSR มาอ่านค่าแล้วจับคู่กับ accession
                   </li>
                   <li>
-                    <strong>ทำไมไว้ทีหลัง:</strong> BRIS ยังไม่มีส่วนที่รับ DICOM
-                    (ตอนนี้มีแค่ link เปิด viewer), เครื่องรุ่นเก่าหลายรุ่นไม่ส่ง
-                    RDSR (มีแค่ภาพ dose screen ต้องใช้ OCR) และขึ้นกับ PACS /
-                    เครื่องของแต่ละ site — แรงสูงเมื่อเทียบกับประโยชน์ที่ผู้ใช้เห็นทุกวัน
+                    <strong>ทำไมไว้ทีหลัง:</strong> BRIS ยังไม่มีส่วนที่รับ
+                    DICOM (ตอนนี้มีแค่ link เปิด viewer),
+                    เครื่องรุ่นเก่าหลายรุ่นไม่ส่ง RDSR (มีแค่ภาพ dose screen
+                    ต้องใช้ OCR) และขึ้นกับ PACS / เครื่องของแต่ละ site —
+                    แรงสูงเมื่อเทียบกับประโยชน์ที่ผู้ใช้เห็นทุกวัน
                   </li>
                 </ul>
               </li>
@@ -1777,9 +1779,10 @@
               <dt>ปัญหาตอนนี้</dt>
               <dd>
                 Report Search ค้นแบบ keyword (Match Phrase / AND / OR) —
-                ต้องพิมพ์คำให้ตรงกับที่อยู่ในรายงาน แต่เรื่องเดียวกันเขียนได้หลายแบบ:
-                ตัวย่อ, ไทยปนอังกฤษ, คำพ้อง, สะกดต่างกัน เช่น "pleural effusion" /
-                "effusion" / "น้ำในช่องเยื่อหุ้มปอด" → เคสที่ต้องการบางส่วนหาไม่เจอ
+                ต้องพิมพ์คำให้ตรงกับที่อยู่ในรายงาน
+                แต่เรื่องเดียวกันเขียนได้หลายแบบ: ตัวย่อ, ไทยปนอังกฤษ, คำพ้อง,
+                สะกดต่างกัน เช่น "pleural effusion" / "effusion" /
+                "น้ำในช่องเยื่อหุ้มปอด" → เคสที่ต้องการบางส่วนหาไม่เจอ
               </dd>
               <dt>ทำอย่างไร</dt>
               <dd>
@@ -1796,22 +1799,26 @@
                     ใช้แบบ hybrid: รวมคะแนน keyword เดิม + semantic →
                     ผลที่ตรงคำขึ้นก่อน ตามด้วยผลที่ความหมายใกล้
                   </li>
-                  <li>เพิ่มปุ่ม "หาเคสที่ข้อความคล้ายกัน" จากรายงานที่เปิดอยู่</li>
+                  <li>
+                    เพิ่มปุ่ม "หาเคสที่ข้อความคล้ายกัน" จากรายงานที่เปิดอยู่
+                  </li>
                 </ul>
               </dd>
               <dt>ตัวอย่าง</dt>
               <dd>
                 อาจารย์หาเคสสอน "ก้อนที่ตับมีหินปูน" แล้วเจอทั้งรายงานที่เขียน
                 "hepatic mass with calcification" และ "calcified liver lesion" →
-                เพิ่มเข้า Teaching Files ได้ทันที; ใช้หากลุ่มเคสสำหรับงานวิจัยได้ด้วย
+                เพิ่มเข้า Teaching Files ได้ทันที;
+                ใช้หากลุ่มเคสสำหรับงานวิจัยได้ด้วย
               </dd>
               <dt>Implementation</dt>
               <dd>
                 ทำ embedding รายงานเก่าครั้งเดียวแบบ batch
-                แล้วทำเพิ่มทุกครั้งที่ sign (ต่อจาก <code>sendToReportSearch</code>
+                แล้วทำเพิ่มทุกครั้งที่ sign (ต่อจาก
+                <code>sendToReportSearch</code>
                 ที่ส่งรายงานไป search server อยู่แล้ว); เก็บ vector ใน
-                Elasticsearch ที่รองรับอยู่แล้ว (v7.2.12)
-                ถ้าเป็นรุ่นที่มี vector search หรือใช้ vector store แยก
+                Elasticsearch ที่รองรับอยู่แล้ว (v7.2.12) ถ้าเป็นรุ่นที่มี
+                vector search หรือใช้ vector store แยก
               </dd>
               <dt>ขอบเขต</dt>
               <dd>
