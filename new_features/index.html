@@ -501,13 +501,14 @@
     <header class="top">
       <div class="wrap">
         <div class="eyebrow">BRIS · Radiology Information System</div>
-        <h1>ฟีเจอร์ใหม่ เรียงตามความคุ้มค่า</h1>
+        <h1>ข้อเสนอฟีเจอร์ใหม่ เรียงตามความคุ้มค่า</h1>
         <p class="lead">
           ผลการสำรวจ source code ทั้ง <code>client/</code> และ
           <code>server/</code> รวมถึง
           <code>server/release_note.txt</code> และเอกสารใน
           <code>task/</code> เพื่อหาฟีเจอร์ที่เพิ่มความสะดวก ประโยชน์ และ UX
-          แยกเป็น 2 หมวด คือ <strong>ไม่ใช้ AI</strong> และ
+          และทำให้เหนือคู่แข่งในตลาด RIS แยกเป็น 2 หมวด คือ
+          <strong>ไม่ใช้ AI</strong> และ
           <strong>ใช้ Ollama Local AI (ไม่เกี่ยวกับงานวินิจฉัย)</strong>
         </p>
         <div class="meta">
@@ -516,6 +517,7 @@
             >codebase: <code>7.2.12</code> (branch <code>main</code>, commit
             <code>986637d</code>)</span
           >
+          <span>สถานะ: ข้อเสนอ ยังไม่มีการแก้โค้ด</span>
         </div>
       </div>
     </header>
@@ -593,12 +595,12 @@
             <div class="why">socket มีแล้ว แค่ต่อให้ถึงผู้ใช้</div>
           </div>
           <div class="panel">
-            <div class="num">1.6</div>
-            <div class="ttl">Critical result closed-loop</div>
-            <div class="why">ความปลอดภัยผู้ป่วย + มาตรฐาน HA / JCI</div>
+            <div class="num">1.3</div>
+            <div class="ttl">Text macro / autotext</div>
+            <div class="why">ลดการพิมพ์ประโยคซ้ำในทุกรายงาน</div>
           </div>
           <div class="panel">
-            <div class="num">1.7</div>
+            <div class="num">1.6</div>
             <div class="ttl">SLA alert + dashboard</div>
             <div class="why">ข้อมูลมีครบใน <code>RIS_PERFORMANCE</code></div>
           </div>
@@ -733,16 +735,8 @@
               </tr>
               <tr data-cat="noai" data-eff="M">
                 <td class="n">1.6</td>
-                <td><a href="#f1-6">Critical result closed-loop</a></td>
-                <td class="c">B</td>
-                <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-M">M</span></td>
-                <td>SMS / email file drop, socket</td>
-              </tr>
-              <tr data-cat="noai" data-eff="M">
-                <td class="n">1.7</td>
                 <td>
-                  <a href="#f1-7"
+                  <a href="#f1-6"
                     >SLA (Service Level Agreement) / TAT (Turnaround Time) alert
                     เชิงรุก + dashboard</a
                   >
@@ -753,67 +747,36 @@
                 <td><code>RIS_PERFORMANCE</code>, time guarantee</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
-                <td class="n">1.8</td>
-                <td><a href="#f1-8">Integration monitor + retry queue</a></td>
+                <td class="n">1.7</td>
+                <td><a href="#f1-7">Integration monitor + retry queue</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-high">สูง</span></td>
                 <td><span class="badge e-M">M</span></td>
                 <td>item-status, pdf services</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
-                <td class="n">1.9</td>
-                <td><a href="#f1-9">Follow-up recommendation tracking</a></td>
+                <td class="n">1.8</td>
+                <td><a href="#f1-8">Follow-up recommendation tracking</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-high">สูง</span></td>
                 <td><span class="badge e-M">M</span></td>
                 <td>sign flow</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
-                <td class="n">1.10</td>
-                <td><a href="#f1-10">Prior compare + version diff</a></td>
+                <td class="n">1.9</td>
+                <td><a href="#f1-9">Prior compare + version diff</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-mid">กลาง</span></td>
                 <td><span class="badge e-M">M</span></td>
                 <td><code>RIS_OLD_REPORT</code></td>
               </tr>
               <tr data-cat="noai" data-eff="M">
-                <td class="n">1.11</td>
-                <td><a href="#f1-11">Safety checklist ก่อน Start Exam</a></td>
-                <td class="c">B</td>
-                <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
-                <td>order flow, <code>order_lab_service</code></td>
-              </tr>
-              <tr data-cat="noai" data-eff="M">
-                <td class="n">1.12</td>
-                <td><a href="#f1-12">Peer review (RADPEER-style)</a></td>
+                <td class="n">1.10</td>
+                <td><a href="#f1-10">Peer review (RADPEER-style)</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-mid">กลาง</span></td>
                 <td><span class="badge e-M">M</span></td>
                 <td>co-sign, <code>TOTAL_DECLINE</code></td>
-              </tr>
-              <tr data-cat="noai" data-eff="M">
-                <td class="n">1.13</td>
-                <td>
-                  <a href="#f1-13">ตารางเวรรังสีแพทย์ผูกกับ auto-assign</a>
-                </td>
-                <td class="c">B</td>
-                <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
-                <td>auto-assign, <code>doctor_schedule_service</code></td>
-              </tr>
-              <tr data-cat="noai" data-eff="S M">
-                <td class="n">1.14</td>
-                <td>
-                  <a href="#f1-14"
-                    >อื่น ๆ (i18n, drag &amp; drop, site config, dose
-                    tracking)</a
-                  >
-                </td>
-                <td class="c">C</td>
-                <td><span class="badge i-low">ต่ำ</span></td>
-                <td>—</td>
-                <td>—</td>
               </tr>
               <tr data-cat="ai" data-eff="M">
                 <td class="n">2.1</td>
@@ -839,7 +802,7 @@
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-high">สูง</span></td>
                 <td><span class="badge e-M">M</span></td>
-                <td>ต้องมี 1.9 ก่อน</td>
+                <td>ต้องมี 1.8 ก่อน</td>
               </tr>
               <tr data-cat="ai" data-eff="S M">
                 <td class="n">2.4</td>
@@ -851,55 +814,31 @@
               </tr>
               <tr data-cat="ai" data-eff="S M">
                 <td class="n">2.5</td>
-                <td><a href="#f2-5">Master data mapping ตอนขึ้นระบบใหม่</a></td>
-                <td class="c"><span class="badge t-ai">AI</span></td>
-                <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-S">S–M</span></td>
-                <td><code>RIS_PROTOCOL</code>, template</td>
-              </tr>
-              <tr data-cat="ai" data-eff="S">
-                <td class="n">2.6</td>
-                <td><a href="#f2-6">จัดหมวด free text เพื่อวิเคราะห์</a></td>
-                <td class="c"><span class="badge t-ai">AI</span></td>
-                <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-S">S</span></td>
-                <td>cancel reason, note</td>
-              </tr>
-              <tr data-cat="ai" data-eff="S M">
-                <td class="n">2.7</td>
-                <td><a href="#f2-7">สรุปรายงานผู้บริหารอัตโนมัติ</a></td>
+                <td><a href="#f2-5">สรุปรายงานผู้บริหารอัตโนมัติ</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-mid">กลาง</span></td>
                 <td><span class="badge e-S">S–M</span></td>
                 <td>Workload, TAT log</td>
               </tr>
               <tr data-cat="ai" data-eff="M">
-                <td class="n">2.8</td>
-                <td><a href="#f2-8">OCR ใบส่งตัว / ใบขอตรวจกระดาษ</a></td>
-                <td class="c"><span class="badge t-ai">AI</span></td>
-                <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
-                <td>Registration</td>
-              </tr>
-              <tr data-cat="ai" data-eff="M">
-                <td class="n">2.9</td>
-                <td><a href="#f2-9">Semantic search (ค้นตามความหมาย)</a></td>
+                <td class="n">2.6</td>
+                <td><a href="#f2-6">Semantic search (ค้นตามความหมาย)</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-mid">กลาง</span></td>
                 <td><span class="badge e-M">M</span></td>
                 <td>Elasticsearch</td>
               </tr>
               <tr data-cat="ai" data-eff="S">
-                <td class="n">2.10</td>
-                <td><a href="#f2-10">Template &amp; teaching helper</a></td>
+                <td class="n">2.7</td>
+                <td><a href="#f2-7">Template &amp; teaching helper</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-low">ต่ำ–กลาง</span></td>
                 <td><span class="badge e-S">S</span></td>
                 <td>Clean Up, tag</td>
               </tr>
               <tr data-cat="ai" data-eff="M">
-                <td class="n">2.11</td>
-                <td><a href="#f2-11">Admin log &amp; PDPA assistant</a></td>
+                <td class="n">2.8</td>
+                <td><a href="#f2-8">Admin log &amp; PDPA assistant</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-mid">กลาง</span></td>
                 <td><span class="badge e-M">M</span></td>
@@ -1164,80 +1103,6 @@
           <article class="card" id="f1-6" data-cat="noai" data-eff="M">
             <div class="card-head">
               <span class="no">1.6</span>
-              <h4>Critical result closed-loop</h4>
-              <div class="badges">
-                <span class="badge i-high">สูง</span
-                ><span class="badge e-M">M</span>
-              </div>
-            </div>
-            <dl>
-              <dt>ปัญหา</dt>
-              <dd>
-                เมื่อพบผลที่ต้องแจ้งแพทย์ผู้ดูแลโดยด่วน BRIS
-                ไม่มีที่บันทึกว่าแจ้งใคร เมื่อไร ทางไหน และผู้รับทราบแล้วหรือยัง
-                — ตรวจสอบย้อนหลังไม่ได้ และไม่มีอะไรเตือนถ้ายังไม่ได้แจ้ง
-              </dd>
-              <dt>Flow</dt>
-              <dd>
-                <ol>
-                  <li>
-                    <strong>ระบุ</strong> — ตอน sign รังสีแพทย์เลือกระดับ เช่น
-                    Critical / Urgent / Significant พร้อมเวลาเป้าหมายในการแจ้ง
-                    (ตั้งค่าได้ใน System Configuration)
-                  </li>
-                  <li>
-                    <strong>สร้างรายการรอแจ้ง</strong> — เข้าหน้า "Critical
-                    results" ของผู้รับผิดชอบ (รังสีแพทย์ / พยาบาล /
-                    เจ้าหน้าที่ประสานงาน) พร้อมนับเวลาถอยหลัง
-                  </li>
-                  <li>
-                    <strong>แจ้ง</strong> — SMS / email (ต่อยอด file drop ใน
-                    <code>order-flow/transitions.ts</code>), in-app notification
-                    ถ้าแพทย์ผู้สั่งใช้ BRIS หรือโทรแล้วบันทึกเอง
-                  </li>
-                  <li>
-                    <strong>บันทึกการรับทราบ</strong> — ชื่อผู้รับ, ตำแหน่ง,
-                    ช่องทาง, เวลา และ read-back (ผู้รับทวนผลกลับถูกต้อง)
-                  </li>
-                  <li>
-                    <strong>Escalate</strong> —
-                    เกินเวลาเป้าหมายแล้วยังไม่มีผู้รับทราบ → แจ้งหัวหน้าเวร /
-                    หัวหน้าแผนก
-                  </li>
-                  <li>
-                    <strong>ปิดรายการ</strong> — เก็บประวัติทั้งหมดใน audit
-                    และเลือกได้ว่าจะต่อท้ายข้อความ "แจ้งแก่ … เวลา …" ในรายงาน
-                  </li>
-                </ol>
-              </dd>
-              <dt>รายงาน</dt>
-              <dd>
-                จำนวนเคส critical, % ที่แจ้งทันเวลา, เวลาเฉลี่ยตั้งแต่ sign
-                ถึงรับทราบ แยกตาม modality / แผนก — ใช้ประกอบการตรวจรับรองคุณภาพ
-              </dd>
-              <dt>ตอนนี้</dt>
-              <dd>
-                ไม่พบ critical result ทั้ง client และ server; มีแค่ชื่อ property
-                <code>show_readback_service</code> ที่ยังไม่มีโค้ด; severity
-                ที่เลือกตอน sign (<code>OfficialSign.tsx</code>)
-                เก็บเป็นค่าอย่างเดียว ไม่ได้ trigger อะไรต่อ
-              </dd>
-              <dt>ประโยชน์</dt>
-              <dd>
-                มาตรฐานการรับรองโรงพยาบาลกำหนดให้สื่อสารผลวิกฤตได้และตรวจสอบย้อนหลังได้;
-                ระบบระดับ enterprise ขายเป็น module แยก
-              </dd>
-            </dl>
-            <div class="tags">
-              <span class="tag">ความปลอดภัยผู้ป่วย</span
-              ><span class="tag">accreditation</span
-              ><span class="tag">แข่งขัน</span>
-            </div>
-          </article>
-
-          <article class="card" id="f1-7" data-cat="noai" data-eff="M">
-            <div class="card-head">
-              <span class="no">1.7</span>
               <h4>
                 SLA (Service Level Agreement) / TAT (Turnaround Time) alert
                 เชิงรุก + dashboard จอใหญ่
@@ -1302,9 +1167,9 @@
             </div>
           </article>
 
-          <article class="card" id="f1-8" data-cat="noai" data-eff="M">
+          <article class="card" id="f1-7" data-cat="noai" data-eff="M">
             <div class="card-head">
-              <span class="no">1.8</span>
+              <span class="no">1.7</span>
               <h4>Integration monitor + retry queue</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
@@ -1335,9 +1200,9 @@
             </div>
           </article>
 
-          <article class="card" id="f1-9" data-cat="noai" data-eff="M">
+          <article class="card" id="f1-8" data-cat="noai" data-eff="M">
             <div class="card-head">
-              <span class="no">1.9</span>
+              <span class="no">1.8</span>
               <h4>Follow-up recommendation tracking</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
@@ -1365,9 +1230,9 @@
             </div>
           </article>
 
-          <article class="card" id="f1-10" data-cat="noai" data-eff="M">
+          <article class="card" id="f1-9" data-cat="noai" data-eff="M">
             <div class="card-head">
-              <span class="no">1.10</span>
+              <span class="no">1.9</span>
               <h4>Prior compare + version diff</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
@@ -1393,37 +1258,9 @@
             </div>
           </article>
 
-          <article class="card" id="f1-11" data-cat="noai" data-eff="M">
+          <article class="card" id="f1-10" data-cat="noai" data-eff="M">
             <div class="card-head">
-              <span class="no">1.11</span>
-              <h4>Safety checklist ก่อน Start Exam</h4>
-              <div class="badges">
-                <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
-              </div>
-            </div>
-            <dl>
-              <dt>ทำอะไร</dt>
-              <dd>
-                ตั้งครรภ์ (หญิงวัยเจริญพันธุ์ สำหรับ X-ray / CT), แพ้ contrast,
-                eGFR / creatinine, MRI screening (โลหะ / pacemaker); กำหนดตาม
-                protocol, บังคับกรอกก่อน Start Exam, เก็บ audit
-              </dd>
-              <dt>ตอนนี้</dt>
-              <dd>
-                allergy แสดงใน Note แต่ไม่มี checklist; มี property
-                <code>order_lab_service</code> ค้างอยู่
-              </dd>
-            </dl>
-            <div class="tags">
-              <span class="tag">ความปลอดภัยผู้ป่วย</span
-              ><span class="tag">accreditation</span>
-            </div>
-          </article>
-
-          <article class="card" id="f1-12" data-cat="noai" data-eff="M">
-            <div class="card-head">
-              <span class="no">1.12</span>
+              <span class="no">1.10</span>
               <h4>Peer review (RADPEER-style)</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
@@ -1447,91 +1284,6 @@
               <span class="tag">คุณภาพ</span
               ><span class="tag">accreditation</span>
             </div>
-          </article>
-
-          <article class="card" id="f1-13" data-cat="noai" data-eff="M">
-            <div class="card-head">
-              <span class="no">1.13</span>
-              <h4>ตารางเวรรังสีแพทย์ผูกกับ auto-assign</h4>
-              <div class="badges">
-                <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
-              </div>
-            </div>
-            <dl>
-              <dt>ทำอะไร</dt>
-              <dd>
-                shift, วันลา, modality ที่อ่านได้, เพดานงานต่อ shift →
-                auto-assign ตามเวรจริง
-              </dd>
-              <dt>ตอนนี้</dt>
-              <dd>
-                auto-assign ดู online flag / allow assign /
-                <code>RAD_ASSIGN_SLOT</code> (reset เที่ยงคืน); มี property
-                <code>doctor_schedule_service</code> ค้างอยู่
-              </dd>
-            </dl>
-            <div class="tags">
-              <span class="tag">ประโยชน์</span
-              ><span class="tag">กระจายงาน</span>
-            </div>
-          </article>
-        </div>
-
-        <div class="group-head">
-          <h3>กลุ่ม C — อื่น ๆ</h3>
-          <span>ไว้ทีหลัง</span>
-        </div>
-        <div class="cards">
-          <article class="card" id="f1-14" data-cat="noai" data-eff="S M">
-            <div class="card-head">
-              <span class="no">1.14</span>
-              <h4>อื่น ๆ (ไว้ทีหลัง)</h4>
-              <div class="badges"><span class="badge i-low">ต่ำ</span></div>
-            </div>
-            <ul>
-              <li>i18n ไทย / อังกฤษ — label ตอนนี้ hard-code ปนกัน</li>
-              <li>drag &amp; drop แนบไฟล์ — ตอนนี้ต้องกดปุ่ม upload</li>
-              <li>
-                ย้าย site feature ที่ hard-code ตามชื่อโรงพยาบาล (<code
-                  >SITE_FEATURES</code
-                >
-                ใน <code>client/src/config.ts</code>) ไปเป็น config —
-                ลดงานตอนขึ้น site ใหม่
-              </li>
-              <li>
-                <strong>Radiation dose tracking</strong>
-                <ul>
-                  <li>
-                    <strong>คืออะไร:</strong>
-                    เก็บปริมาณรังสีที่ผู้ป่วยได้รับจากแต่ละการตรวจ เช่น CT
-                    (CTDIvol, DLP), X-ray / fluoroscopy (DAP), mammography (AGD)
-                    แล้วสะสมต่อผู้ป่วย
-                  </li>
-                  <li>
-                    <strong>ประโยชน์:</strong> ดูประวัติ dose
-                    สะสมของผู้ป่วยก่อนสั่งตรวจซ้ำ, แจ้งเตือนเมื่อค่าเกิน DRL
-                    (Diagnostic Reference Level) ของ protocol, รายงาน dose
-                    ต่อเครื่อง / protocol
-                    ให้นักฟิสิกส์การแพทย์และงานความปลอดภัยทางรังสีใช้ปรับ
-                    protocol
-                  </li>
-                  <li>
-                    <strong>ข้อมูลมาจากไหน:</strong> เครื่องส่งค่า dose
-                    ออกมาเป็น RDSR (Radiation Dose Structured Report — DICOM
-                    object มาตรฐาน) ไปที่ PACS; BRIS ต้องมี service รับหรือดึง
-                    RDSR มาอ่านค่าแล้วจับคู่กับ accession
-                  </li>
-                  <li>
-                    <strong>ทำไมไว้ทีหลัง:</strong> BRIS ยังไม่มีส่วนที่รับ
-                    DICOM (ตอนนี้มีแค่ link เปิด viewer),
-                    เครื่องรุ่นเก่าหลายรุ่นไม่ส่ง RDSR (มีแค่ภาพ dose screen
-                    ต้องใช้ OCR) และขึ้นกับ PACS / เครื่องของแต่ละ site —
-                    แรงสูงเมื่อเทียบกับประโยชน์ที่ผู้ใช้เห็นทุกวัน
-                  </li>
-                </ul>
-              </li>
-            </ul>
           </article>
         </div>
       </section>
@@ -1641,10 +1393,10 @@
               <dd>
                 หลัง sign ดึงประโยคคำแนะนำที่รังสีแพทย์เขียนเอง (เช่น "แนะนำ CT
                 ซ้ำใน 3 เดือน") → เสนอเข้ารายการ follow-up ของข้อ
-                <a href="#f1-9">1.9</a> ให้คนยืนยัน
+                <a href="#f1-8">1.8</a> ให้คนยืนยัน
               </dd>
               <dt>ขอบเขต</dt>
-              <dd>ไม่ตีความใหม่ แค่ไม่ให้คำแนะนำของหมอหลุด; ต้องทำ 1.9 ก่อน</dd>
+              <dd>ไม่ตีความใหม่ แค่ไม่ให้คำแนะนำของหมอหลุด; ต้องทำ 1.8 ก่อน</dd>
             </dl>
             <div class="tags"><span class="tag">ความปลอดภัยผู้ป่วย</span></div>
           </article>
@@ -1677,48 +1429,6 @@
           <article class="card ai-card" id="f2-5" data-cat="ai" data-eff="S M">
             <div class="card-head">
               <span class="no">2.5</span>
-              <h4>Master data mapping ตอนขึ้นระบบโรงพยาบาลใหม่</h4>
-              <div class="badges">
-                <span class="badge i-mid">กลาง</span
-                ><span class="badge e-S">S–M</span>
-              </div>
-            </div>
-            <dl>
-              <dt>ทำอะไร</dt>
-              <dd>
-                จับคู่ชื่อ order จาก HIS → <code>RIS_PROTOCOL</code>, body part,
-                modality, template; หาตัวที่ซ้ำหรือสะกดต่างกัน
-              </dd>
-              <dt>ประโยชน์</dt>
-              <dd>ลดเวลาของทีม implement ในแต่ละ site</dd>
-            </dl>
-            <div class="tags"><span class="tag">implementation</span></div>
-          </article>
-
-          <article class="card ai-card" id="f2-6" data-cat="ai" data-eff="S">
-            <div class="card-head">
-              <span class="no">2.6</span>
-              <h4>จัดหมวด free text เพื่อวิเคราะห์</h4>
-              <div class="badges">
-                <span class="badge i-mid">กลาง</span
-                ><span class="badge e-S">S</span>
-              </div>
-            </div>
-            <dl>
-              <dt>ทำอะไร</dt>
-              <dd>
-                เหตุผล cancel, processing note, เหตุผล decline co-sign →
-                หมวดหมู่ → dashboard "ยกเลิก / ถูกตีกลับเพราะอะไร"
-              </dd>
-            </dl>
-            <div class="tags">
-              <span class="tag">ผู้บริหาร</span><span class="tag">คุณภาพ</span>
-            </div>
-          </article>
-
-          <article class="card ai-card" id="f2-7" data-cat="ai" data-eff="S M">
-            <div class="card-head">
-              <span class="no">2.7</span>
               <h4>สรุปรายงานผู้บริหารอัตโนมัติ</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
@@ -1739,35 +1449,9 @@
             <div class="tags"><span class="tag">ผู้บริหาร</span></div>
           </article>
 
-          <article class="card ai-card" id="f2-8" data-cat="ai" data-eff="M">
+          <article class="card ai-card" id="f2-6" data-cat="ai" data-eff="M">
             <div class="card-head">
-              <span class="no">2.8</span>
-              <h4>OCR ใบส่งตัว / ใบขอตรวจกระดาษ</h4>
-              <div class="badges">
-                <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
-              </div>
-            </div>
-            <dl>
-              <dt>ทำอะไร</dt>
-              <dd>
-                vision model อ่านเอกสาร (ไม่ใช่ภาพทางการแพทย์) → เติมหน้า
-                Registration
-                (<code>client/src/pages/registration/Registration.tsx</code>):
-                ชื่อ, เลขบัตร, exam ที่ขอ, แพทย์ผู้ส่ง
-              </dd>
-              <dt>เหมาะกับ</dt>
-              <dd>site ที่มีผู้ป่วย refer มาพร้อมเอกสารกระดาษจำนวนมาก</dd>
-            </dl>
-            <div class="tags">
-              <span class="tag">สะดวก</span
-              ><span class="tag">ลดการพิมพ์ซ้ำ</span>
-            </div>
-          </article>
-
-          <article class="card ai-card" id="f2-9" data-cat="ai" data-eff="M">
-            <div class="card-head">
-              <span class="no">2.9</span>
+              <span class="no">2.6</span>
               <h4>Semantic search (ค้นตามความหมาย)</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
@@ -1830,9 +1514,9 @@
             </div>
           </article>
 
-          <article class="card ai-card" id="f2-10" data-cat="ai" data-eff="S">
+          <article class="card ai-card" id="f2-7" data-cat="ai" data-eff="S">
             <div class="card-head">
-              <span class="no">2.10</span>
+              <span class="no">2.7</span>
               <h4>Template &amp; teaching helper</h4>
               <div class="badges">
                 <span class="badge i-low">ต่ำ–กลาง</span
@@ -1850,9 +1534,9 @@
             <div class="tags"><span class="tag">admin</span></div>
           </article>
 
-          <article class="card ai-card" id="f2-11" data-cat="ai" data-eff="M">
+          <article class="card ai-card" id="f2-8" data-cat="ai" data-eff="M">
             <div class="card-head">
-              <span class="no">2.11</span>
+              <span class="no">2.8</span>
               <h4>Admin log &amp; PDPA assistant</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
@@ -1891,15 +1575,14 @@
             <h3>ระยะ 2 — ความเร็ว + ความปลอดภัย</h3>
             <ul>
               <li>1.3 macro, 1.4 template suggestion</li>
-              <li>1.6 critical result</li>
-              <li>1.7 SLA dashboard</li>
+              <li>1.6 SLA dashboard</li>
               <li>2.1 แบบ rule-based</li>
             </ul>
           </div>
           <div class="panel">
             <h3>ระยะ 3 — คุณภาพ + Ollama</h3>
             <ul>
-              <li>1.8–1.13</li>
+              <li>1.7–1.10</li>
               <li>ตั้ง Ollama server กลาง</li>
               <li>2.1 เสริม LLM, 2.2, 2.3, 2.4</li>
             </ul>
@@ -1907,8 +1590,7 @@
           <div class="panel">
             <h3>ระยะ 4 — ส่วนเสริม</h3>
             <ul>
-              <li>2.5–2.11 ตามความต้องการของ site</li>
-              <li>1.14 อื่น ๆ</li>
+              <li>2.5–2.8 ตามความต้องการของ site</li>
             </ul>
           </div>
         </div>
