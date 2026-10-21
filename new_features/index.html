@@ -105,6 +105,32 @@
         padding-top: 28px;
         padding-bottom: 22px;
       }
+      nav.pages {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        padding: 3px;
+        margin-bottom: 14px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+      nav.pages a {
+        text-decoration: none;
+        font-size: 0.85rem;
+        color: var(--text-2);
+        padding: 3px 12px;
+        border-radius: 7px;
+      }
+      nav.pages a:hover {
+        color: var(--accent);
+      }
+      nav.pages a[aria-current='page'] {
+        background: var(--surface);
+        color: var(--text);
+        font-weight: 600;
+        box-shadow: var(--shadow);
+      }
       .eyebrow {
         color: var(--muted);
         font-size: 0.85rem;
@@ -193,6 +219,10 @@
       .e-S {
         background: var(--ok-soft);
         color: var(--ok);
+      }
+      .e-SM {
+        background: #f1f1d8;
+        color: #6b6a12;
       }
       .e-M {
         background: var(--warn-soft);
@@ -477,6 +507,7 @@
           font-size: 12pt;
         }
         .filters,
+        nav.pages,
         nav.toc {
           display: none !important;
         }
@@ -500,6 +531,10 @@
   <body>
     <header class="top">
       <div class="wrap">
+        <nav class="pages" aria-label="เอกสาร">
+          <a href="index.html" aria-current="page">ข้อเสนอฟีเจอร์ใหม่</a>
+          <a href="bris_2027_2028_features_roadmap.html">Roadmap 2027–2028</a>
+        </nav>
         <div class="eyebrow">BRIS · Radiology Information System</div>
         <h1>ข้อเสนอฟีเจอร์ใหม่ เรียงตามความคุ้มค่า</h1>
         <p class="lead">
@@ -565,11 +600,12 @@
           <h3>เกณฑ์การจัดลำดับ</h3>
           <p>
             ความคุ้มค่า = (ประโยชน์ × ความถี่ที่ใช้งาน) ÷ แรงพัฒนา ·
-            แรงพัฒนาประเมินคร่าว ๆ สำหรับ dev 1 คนที่รู้โค้ดนี้
+            แรงพัฒนาเป็น manday (MD) ประเมินคร่าว ๆ สำหรับ dev 1 คนที่รู้โค้ดนี้
           </p>
           <div class="legend">
-            <span><span class="badge e-S">S</span> ≈ ไม่เกิน 2 สัปดาห์</span>
-            <span><span class="badge e-M">M</span> ≈ 2–6 สัปดาห์</span>
+            <span><span class="badge e-S">≤ 10 MD</span> งานเล็ก</span>
+            <span><span class="badge e-SM">11–15 MD</span> ปานกลาง</span>
+            <span><span class="badge e-M">16–30 MD</span> งานใหญ่</span>
             <span
               ><span class="badge i-high">ผลกระทบสูง</span>
               <span class="badge i-mid">กลาง</span>
@@ -655,7 +691,15 @@
             data-f-eff="S"
             aria-pressed="false"
           >
-            S
+            ≤ 10 MD
+          </button>
+          <button
+            class="chip"
+            type="button"
+            data-f-eff="SM"
+            aria-pressed="false"
+          >
+            11–15 MD
           </button>
           <button
             class="chip"
@@ -663,7 +707,7 @@
             data-f-eff="M"
             aria-pressed="false"
           >
-            M
+            16–30 MD
           </button>
           <span class="count" id="filterCount"></span>
         </div>
@@ -675,7 +719,7 @@
                 <th>ฟีเจอร์</th>
                 <th>หมวด</th>
                 <th>ผลกระทบ</th>
-                <th>แรง</th>
+                <th>แรง (MD)</th>
                 <th>ต่อยอดจากของที่มี</th>
               </tr>
             </thead>
@@ -687,7 +731,7 @@
                 </td>
                 <td class="c">A</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-S">S</span></td>
+                <td><span class="badge e-S">8</span></td>
                 <td>TinyMCE, worklist DataGrid</td>
               </tr>
               <tr data-cat="noai" data-eff="S">
@@ -699,18 +743,18 @@
                 </td>
                 <td class="c">A</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-S">S</span></td>
+                <td><span class="badge e-S">8</span></td>
                 <td>socket.io events</td>
               </tr>
-              <tr data-cat="noai" data-eff="S M">
+              <tr data-cat="noai" data-eff="SM">
                 <td class="n">1.3</td>
                 <td><a href="#f1-3">Text macro / autotext</a></td>
                 <td class="c">A</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-S">S–M</span></td>
+                <td><span class="badge e-SM">15</span></td>
                 <td>TinyMCE</td>
               </tr>
-              <tr data-cat="noai" data-eff="S M">
+              <tr data-cat="noai" data-eff="SM">
                 <td class="n">1.4</td>
                 <td>
                   <a href="#f1-4"
@@ -719,7 +763,7 @@
                 </td>
                 <td class="c">A</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-S">S–M</span></td>
+                <td><span class="badge e-SM">15</span></td>
                 <td><code>suggest_template_service</code></td>
               </tr>
               <tr data-cat="noai" data-eff="S">
@@ -729,7 +773,7 @@
                 </td>
                 <td class="c">A</td>
                 <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-S">S</span></td>
+                <td><span class="badge e-S">8</span></td>
                 <td>FiltersForm</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
@@ -742,7 +786,7 @@
                 </td>
                 <td class="c">B</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td><code>RIS_PERFORMANCE</code>, time guarantee</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
@@ -750,7 +794,7 @@
                 <td><a href="#f1-7">Integration monitor + retry queue</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td>item-status, pdf services</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
@@ -758,7 +802,7 @@
                 <td><a href="#f1-8">Follow-up recommendation tracking</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td>sign flow</td>
               </tr>
               <tr data-cat="noai" data-eff="M">
@@ -766,7 +810,7 @@
                 <td><a href="#f1-9">Prior compare + version diff</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td><code>RIS_OLD_REPORT</code></td>
               </tr>
               <tr data-cat="noai" data-eff="M">
@@ -774,7 +818,7 @@
                 <td><a href="#f1-10">Peer review (RADPEER-style)</a></td>
                 <td class="c">B</td>
                 <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td>co-sign, <code>TOTAL_DECLINE</code></td>
               </tr>
               <tr data-cat="ai" data-eff="M">
@@ -782,15 +826,15 @@
                 <td><a href="#f2-1">Pre-sign clerical check</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td>sign flow</td>
               </tr>
-              <tr data-cat="ai" data-eff="S M">
+              <tr data-cat="ai" data-eff="SM">
                 <td class="n">2.2</td>
                 <td><a href="#f2-2">Natural-language search → filter</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-high">กลาง–สูง</span></td>
-                <td><span class="badge e-S">S–M</span></td>
+                <td><span class="badge e-SM">15</span></td>
                 <td>FiltersForm</td>
               </tr>
               <tr data-cat="ai" data-eff="M">
@@ -800,23 +844,23 @@
                 </td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-high">สูง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td>ต้องมี 1.8 ก่อน</td>
               </tr>
-              <tr data-cat="ai" data-eff="S M">
+              <tr data-cat="ai" data-eff="SM">
                 <td class="n">2.4</td>
                 <td><a href="#f2-4">Help assistant (RAG คู่มือ / SOP)</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-high">กลาง–สูง</span></td>
-                <td><span class="badge e-S">S–M</span></td>
+                <td><span class="badge e-SM">15</span></td>
                 <td>release note, คู่มือ</td>
               </tr>
-              <tr data-cat="ai" data-eff="S M">
+              <tr data-cat="ai" data-eff="SM">
                 <td class="n">2.5</td>
                 <td><a href="#f2-5">สรุปรายงานผู้บริหารอัตโนมัติ</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-S">S–M</span></td>
+                <td><span class="badge e-SM">15</span></td>
                 <td>Workload, TAT log</td>
               </tr>
               <tr data-cat="ai" data-eff="M">
@@ -824,7 +868,7 @@
                 <td><a href="#f2-6">Semantic search (ค้นตามความหมาย)</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td>Elasticsearch</td>
               </tr>
               <tr data-cat="ai" data-eff="S">
@@ -832,7 +876,7 @@
                 <td><a href="#f2-7">Template &amp; teaching helper</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-low">ต่ำ–กลาง</span></td>
-                <td><span class="badge e-S">S</span></td>
+                <td><span class="badge e-S">8</span></td>
                 <td>Clean Up, tag</td>
               </tr>
               <tr data-cat="ai" data-eff="M">
@@ -840,7 +884,7 @@
                 <td><a href="#f2-8">Admin log &amp; PDPA assistant</a></td>
                 <td class="c"><span class="badge t-ai">AI</span></td>
                 <td><span class="badge i-mid">กลาง</span></td>
-                <td><span class="badge e-M">M</span></td>
+                <td><span class="badge e-M">20</span></td>
                 <td><code>RIS_LOGGER</code></td>
               </tr>
             </tbody>
@@ -863,7 +907,7 @@
               <h4>Keyboard shortcuts + Ctrl+K quick jump</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-S">S</span>
+                ><span class="badge e-S">8 MD</span>
               </div>
             </div>
             <dl>
@@ -896,7 +940,7 @@
               <h4>Browser notification + เสียง + count บน tab title</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-S">S</span>
+                ><span class="badge e-S">8 MD</span>
               </div>
             </div>
             <dl>
@@ -919,8 +963,8 @@
               </dd>
               <dt>ตอนนี้</dt>
               <dd>
-                socket <code>my_list&lt;code&gt;</code>,
-                <code>cosign_list&lt;code&gt;</code>,
+                socket <code>my_list${user.code}</code>,
+                <code>cosign_list${user.code}</code>,
                 <code>public_list</code> มีแล้ว
                 (<code>client/src/components/layout/hooks.ts</code>) แต่แสดงแค่
                 snackbar ในหน้า; list ไม่ reload เอง อัปเดตแค่ badge; Order Flow
@@ -959,13 +1003,13 @@
             </div>
           </article>
 
-          <article class="card" id="f1-3" data-cat="noai" data-eff="S M">
+          <article class="card" id="f1-3" data-cat="noai" data-eff="SM">
             <div class="card-head">
               <span class="no">1.3</span>
               <h4>Text macro / autotext</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-S">S–M</span>
+                ><span class="badge e-SM">15 MD</span>
               </div>
             </div>
             <dl>
@@ -1017,13 +1061,13 @@
             </div>
           </article>
 
-          <article class="card" id="f1-4" data-cat="noai" data-eff="S M">
+          <article class="card" id="f1-4" data-cat="noai" data-eff="SM">
             <div class="card-head">
               <span class="no">1.4</span>
               <h4>Template suggestion ตาม protocol + เรียงตามความถี่</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-S">S–M</span>
+                ><span class="badge e-SM">15 MD</span>
               </div>
             </div>
             <dl>
@@ -1052,7 +1096,7 @@
               <h4>Saved views / filter preset ต่อ user เก็บที่ server</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
-                ><span class="badge e-S">S</span>
+                ><span class="badge e-S">8 MD</span>
               </div>
             </div>
             <dl>
@@ -1096,7 +1140,9 @@
 
         <div class="group-head">
           <h3>กลุ่ม B — คุ้มมาก</h3>
-          <span>แรงปานกลาง ผลต่อคุณภาพและการรับรอง HA / JCI</span>
+          <span
+            >งานใหญ่ขึ้น (≈ 20 MD ต่อข้อ) ผลต่อคุณภาพและการรับรอง HA / JCI</span
+          >
         </div>
         <div class="cards">
           <article class="card" id="f1-6" data-cat="noai" data-eff="M">
@@ -1108,7 +1154,7 @@
               </h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1172,7 +1218,7 @@
               <h4>Integration monitor + retry queue</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1205,7 +1251,7 @@
               <h4>Follow-up recommendation tracking</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1235,7 +1281,7 @@
               <h4>Prior compare + version diff</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1263,7 +1309,7 @@
               <h4>Peer review (RADPEER-style)</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1329,7 +1375,7 @@
               <h4>Pre-sign clerical check (ตรวจทานก่อน sign)</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1343,7 +1389,7 @@
               <dd>
                 แสดงเป็น warning ก่อน sign หมอตัดสินใจเอง; เริ่มจาก rule-based
                 (ซ้าย / ขวา, เพศ, placeholder) ซึ่งไม่ต้องใช้ AI แล้วค่อยเสริม
-                LLM
+                LLM — rule-based ≈ 8 MD, ส่วน LLM ≈ 12 MD
               </dd>
               <dt>ประโยชน์</dt>
               <dd>ลด addendum และ co-sign decline</dd>
@@ -1354,13 +1400,13 @@
             </div>
           </article>
 
-          <article class="card ai-card" id="f2-2" data-cat="ai" data-eff="S M">
+          <article class="card ai-card" id="f2-2" data-cat="ai" data-eff="SM">
             <div class="card-head">
               <span class="no">2.2</span>
               <h4>Natural-language search → filter</h4>
               <div class="badges">
                 <span class="badge i-high">กลาง–สูง</span
-                ><span class="badge e-S">S–M</span>
+                ><span class="badge e-SM">15 MD</span>
               </div>
             </div>
             <dl>
@@ -1384,7 +1430,7 @@
               <h4>ดึง follow-up recommendation จากรายงานที่ sign แล้ว</h4>
               <div class="badges">
                 <span class="badge i-high">สูง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1400,13 +1446,13 @@
             <div class="tags"><span class="tag">ความปลอดภัยผู้ป่วย</span></div>
           </article>
 
-          <article class="card ai-card" id="f2-4" data-cat="ai" data-eff="S M">
+          <article class="card ai-card" id="f2-4" data-cat="ai" data-eff="SM">
             <div class="card-head">
               <span class="no">2.4</span>
               <h4>Help assistant (RAG คู่มือ / SOP / release note)</h4>
               <div class="badges">
                 <span class="badge i-high">กลาง–สูง</span
-                ><span class="badge e-S">S–M</span>
+                ><span class="badge e-SM">15 MD</span>
               </div>
             </div>
             <dl>
@@ -1425,13 +1471,13 @@
             </div>
           </article>
 
-          <article class="card ai-card" id="f2-5" data-cat="ai" data-eff="S M">
+          <article class="card ai-card" id="f2-5" data-cat="ai" data-eff="SM">
             <div class="card-head">
               <span class="no">2.5</span>
               <h4>สรุปรายงานผู้บริหารอัตโนมัติ</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
-                ><span class="badge e-S">S–M</span>
+                ><span class="badge e-SM">15 MD</span>
               </div>
             </div>
             <dl>
@@ -1454,7 +1500,7 @@
               <h4>Semantic search (ค้นตามความหมาย)</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1519,7 +1565,7 @@
               <h4>Template &amp; teaching helper</h4>
               <div class="badges">
                 <span class="badge i-low">ต่ำ–กลาง</span
-                ><span class="badge e-S">S</span>
+                ><span class="badge e-S">8 MD</span>
               </div>
             </div>
             <dl>
@@ -1539,7 +1585,7 @@
               <h4>Admin log &amp; PDPA assistant</h4>
               <div class="badges">
                 <span class="badge i-mid">กลาง</span
-                ><span class="badge e-M">M</span>
+                ><span class="badge e-M">20 MD</span>
               </div>
             </div>
             <dl>
@@ -1560,36 +1606,39 @@
       <!-- ================= PHASES ================= -->
       <section id="phases">
         <h2>ลำดับการทำที่แนะนำ</h2>
-        <p class="section-intro">จัดตามความคุ้มค่าและ dependency ระหว่างข้อ</p>
+        <p class="section-intro">
+          สรุปจาก
+          <a href="bris_2027_2028_features_roadmap.html">Roadmap 2027–2028</a>
+          (dev 1 คน) จัดตามความคุ้มค่าและ dependency ระหว่างข้อ —
+          รายละเอียดรายไตรมาสดูที่ roadmap
+        </p>
         <div class="phases">
           <div class="panel">
-            <h3>ระยะ 1 — quick win</h3>
+            <h3>2027 H1 — เร็วขึ้น + คุมเวลา</h3>
             <ul>
-              <li>1.1 shortcuts</li>
-              <li>1.2 notification</li>
-              <li>1.5 saved views</li>
+              <li>Q1: 1.1, 1.2, 1.3, 2.1 แบบ rule-based</li>
+              <li>Q2: 1.6, 1.4 + Ollama PoC</li>
             </ul>
           </div>
           <div class="panel">
-            <h3>ระยะ 2 — ความเร็ว + ความปลอดภัย</h3>
+            <h3>2027 H2 — เริ่มใช้ Local AI</h3>
             <ul>
-              <li>1.3 macro, 1.4 template suggestion</li>
-              <li>1.6 SLA dashboard</li>
-              <li>2.1 แบบ rule-based</li>
+              <li>Q3: Ollama server + AI gateway, 2.1 เสริม LLM, 2.2</li>
+              <li>Q4: 1.8 แล้วต่อด้วย 2.3</li>
             </ul>
           </div>
           <div class="panel">
-            <h3>ระยะ 3 — คุณภาพ + Ollama</h3>
+            <h3>2028 H1 — Local AI ครบ</h3>
             <ul>
-              <li>1.7–1.10</li>
-              <li>ตั้ง Ollama server กลาง</li>
-              <li>2.1 เสริม LLM, 2.2, 2.3, 2.4</li>
+              <li>Q1: 2.4, 2.5, 2.7</li>
+              <li>Q2: 2.6, 2.8</li>
             </ul>
           </div>
           <div class="panel">
-            <h3>ระยะ 4 — ส่วนเสริม</h3>
+            <h3>2028 H2 — ความเสถียร + คุณภาพ</h3>
             <ul>
-              <li>2.5–2.8 ตามความต้องการของ site</li>
+              <li>Q3: 1.7, 1.5</li>
+              <li>Q4: 1.9, 1.10</li>
             </ul>
           </div>
         </div>
@@ -1619,8 +1668,8 @@
           </li>
         </ul>
         <p>
-          หลักฐานในโค้ดอ้างอิงจาก commit <code>986637d</code>;
-          แรงพัฒนาเป็นการประเมินเบื้องต้น ควรประเมินซ้ำหลังออกแบบรายละเอียด
+          หลักฐานในโค้ดอ้างอิงจาก commit <code>986637d</code>; แรงพัฒนา (manday)
+          เป็นการประเมินเบื้องต้น ควรประเมินซ้ำหลังออกแบบรายละเอียด
         </p>
       </footer>
     </main>

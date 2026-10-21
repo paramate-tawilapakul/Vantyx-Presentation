@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <title>BRIS Roadmap 2027–2028</title>
+    <style>
+      :root {
+        --bg: #f4f6fa;
+        --surface: #ffffff;
+        --text: #1b2333;
+        --text-2: #4a5468;
+        --muted: #737c8f;
+        --border: #e1e5ec;
+        --track: #c9d0db;
+        --ai: #6a3fb5;
+        --ai-soft: #efe8fa;
+        --blue: #2563c9;
+        --blue-soft: #e7effc;
+        --teal: #0e7c86;
+        --teal-soft: #e0f2f3;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        width: 1920px;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          'Leelawadee UI', 'Sarabun', 'Noto Sans Thai', Tahoma, sans-serif;
+      }
+      .page {
+        padding: 48px 60px 34px;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 40px;
+      }
+      header .eyebrow {
+        font-size: 21px;
+        color: var(--muted);
+        letter-spacing: 0.03em;
+      }
+      header h1 {
+        font-size: 58px;
+        line-height: 1.15;
+        margin: 4px 0 2px;
+      }
+      header .sub {
+        font-size: 24px;
+        color: var(--text-2);
+      }
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 19px;
+        color: var(--text-2);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px 18px;
+        margin-bottom: 4px;
+      }
+
+      .year {
+        margin-top: 34px;
+      }
+      .year-head {
+        display: flex;
+        align-items: baseline;
+        gap: 18px;
+        margin-bottom: 12px;
+      }
+      .yr {
+        font-size: 46px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--c);
+      }
+      .yr-theme {
+        font-size: 27px;
+        font-weight: 700;
+      }
+      .yr-sub {
+        font-size: 19px;
+        color: var(--text-2);
+      }
+
+      .road {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+        align-items: start;
+      }
+      .col {
+        min-width: 0;
+      }
+      .qhead {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .qno {
+        font-size: 34px;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--c);
+      }
+      .qmon {
+        font-size: 18px;
+        color: var(--muted);
+      }
+      .track {
+        position: relative;
+        height: 28px;
+      }
+      .track::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: -22px;
+        top: 50%;
+        height: 4px;
+        margin-top: -2px;
+        background: var(--track);
+      }
+      .col:last-child .track::before {
+        right: 14px;
+      }
+      .col:last-child .track::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -9px;
+        border: 9px solid transparent;
+        border-left: 15px solid var(--track);
+        border-right: 0;
+      }
+      .track .dot {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 18px;
+        height: 18px;
+        margin-top: -9px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 5px solid var(--c);
+        box-sizing: border-box;
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: 5px solid var(--c);
+        border-radius: 16px;
+        padding: 18px 18px 16px;
+        box-shadow:
+          0 1px 2px rgba(20, 30, 50, 0.05),
+          0 6px 18px rgba(20, 30, 50, 0.06);
+      }
+      .theme {
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: var(--c);
+      }
+      .items {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        background: var(--soft);
+        border-radius: 12px;
+        padding: 12px 14px;
+      }
+      .item.ai {
+        background: var(--ai-soft);
+      }
+      .ic {
+        flex: none;
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        background: var(--surface);
+        color: var(--c);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .item.ai .ic {
+        color: var(--ai);
+      }
+      .ic svg {
+        width: 24px;
+        height: 24px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .t {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+      .b {
+        font-size: 16.5px;
+        line-height: 1.5;
+        color: var(--text-2);
+        margin-top: 2px;
+      }
+      .pill {
+        display: inline-block;
+        vertical-align: 2px;
+        margin-left: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #fff;
+        background: var(--ai);
+        border-radius: 6px;
+        padding: 0 7px;
+        line-height: 1.6;
+      }
+      .legend .pill {
+        margin: 0;
+        font-size: 15px;
+      }
+      .nw {
+        white-space: nowrap;
+      }
+
+      .y2027 {
+        --c: var(--blue);
+        --soft: var(--blue-soft);
+      }
+      .y2028 {
+        --c: var(--teal);
+        --soft: var(--teal-soft);
+      }
+
+      footer {
+        margin-top: 22px;
+        font-size: 16px;
+        color: var(--muted);
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div>
+          <div class="eyebrow">BRIS · Radiology Information System</div>
+          <h1>Roadmap 2027–2028</h1>
+          <div class="sub">ฟีเจอร์ใหม่ที่จะทยอยมาในแต่ละไตรมาส</div>
+        </div>
+        <div class="legend">
+          <span class="pill">AI</span>
+          <span
+            >Local AI ทำงานใน server ของโรงพยาบาล ·
+            ข้อมูลผู้ป่วยไม่ออกนอกโรงพยาบาล</span
+          >
+        </div>
+      </header>
+
+      <!-- ================= 2027 ================= -->
+      <section class="year y2027">
+        <div class="year-head">
+          <span class="yr">2027</span>
+          <span class="yr-theme">เร็วขึ้น คุมเวลา และเริ่มใช้ Local AI</span>
+          <span class="yr-sub"
+            >งานประจำวันเร็วขึ้น และเริ่มให้ AI ช่วยตรวจทานและค้นหา</span
+          >
+        </div>
+        <div class="road">
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q1</span><span class="qmon">ม.ค. – มี.ค.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">เร็วขึ้นทุกวัน</div>
+              <div class="items">
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="2" y="6" width="20" height="12" rx="2" />
+                      <path
+                        d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">Shortcut + ค้นหาด่วน</div>
+                    <div class="b">
+                      ทำงานโดยไม่ต้องจับเมาส์ ค้นเคสด้วย
+                      HN&nbsp;/&nbsp;Accession ได้ทุกหน้า
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">แจ้งเตือนเคสใหม่</div>
+                    <div class="b">
+                      popup และเสียงเมื่อมีเคสใหม่หรือ STAT
+                      <span class="nw">แม้เปิดโปรแกรมอื่นอยู่</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">Text macro</div>
+                    <div class="b">
+                      พิมพ์รหัสสั้น ๆ แทนประโยคที่ใช้บ่อย
+                      ลด<span class="nw">เวลาพิมพ์ผล</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="9 11 12 14 22 4" />
+                      <path
+                        d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">ตรวจทานรายงานก่อน Sign</div>
+                    <div class="b">
+                      เตือนเมื่อซ้าย&nbsp;/&nbsp;ขวา หรือเพศไม่ตรงกับ order
+                      และ template ที่ค้าง
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q2</span><span class="qmon">เม.ย. – มิ.ย.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">คุมเวลา รายงานเร็วขึ้น</div>
+              <div class="items">
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">แจ้งเตือน TAT + Dashboard</div>
+                    <div class="b">
+                      เตือนก่อนเคสเกินเวลา หัวหน้าเห็นภาพรวมแบบ real-time
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                      />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">แนะนำ Template อัตโนมัติ</div>
+                    <div class="b">
+                      เสนอ template ที่เหมาะกับการตรวจทันทีที่<span class="nw"
+                        >เปิดเคส</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q3</span><span class="qmon">ก.ค. – ก.ย.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">เริ่มใช้ Local AI</div>
+              <div class="items">
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"
+                      />
+                      <path
+                        d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      AI ช่วยตรวจทานรายงาน<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      <b class="nw">ต่อยอดจาก Q1</b> จับคำผิดและข้อความ<span class="nw"
+                        >ไม่สอดคล้อง</span
+                      >ก่อน sign <span class="nw">แพทย์ตัดสินใจเอง</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      ค้นหาด้วยภาษาพูด<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      พิมพ์ <span class="nw">“CT จาก ER ที่ยังไม่อ่าน”</span>
+                      ระบบกรองรายการให้ทันที
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q4</span><span class="qmon">ต.ค. – ธ.ค.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">ผู้ป่วยไม่หลุดการติดตาม</div>
+              <div class="items">
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                      <path d="m9 16 2 2 4-4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">ติดตามนัดตรวจซ้ำ</div>
+                    <div class="b">
+                      รวบรวมคำแนะนำตรวจซ้ำ แจ้งเมื่อครบกำหนด
+                      <span class="nw">ผู้ป่วยไม่หลุดการติดตาม</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                      />
+                      <rect x="8" y="2" width="8" height="4" rx="1" />
+                      <path d="m9 14 2 2 4-4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      AI ดึงคำแนะนำตรวจซ้ำ<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      <b class="nw">ต่อยอดจากติดตามนัดตรวจซ้ำ</b>
+                      อ่านคำแนะนำในรายงาน แล้วเสนอเข้ารายการติดตามให้ยืนยัน
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2028 ================= -->
+      <section class="year y2028">
+        <div class="year-head">
+          <span class="yr">2028</span>
+          <span class="yr-theme">Local AI เต็มรูปแบบ + ยกระดับคุณภาพ</span>
+          <span class="yr-sub"
+            >AI ช่วยตอบคำถาม สรุป และค้นหา ต่อด้วยงานด้านคุณภาพรายงาน</span
+          >
+        </div>
+        <div class="road">
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q1</span><span class="qmon">ม.ค. – มี.ค.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">AI ช่วยตอบและสรุป</div>
+              <div class="items">
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                      <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      ผู้ช่วยตอบคำถาม<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      ถามวิธีใช้ระบบหรือ SOP ของโรงพยาบาล
+                      ได้<span class="nw">คำตอบทันที</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <line x1="18" y1="20" x2="18" y2="10" />
+                      <line x1="12" y1="20" x2="12" y2="4" />
+                      <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      สรุปรายงานผู้บริหาร<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      สรุป workload และ TAT รายเดือน
+                      พร้อม<span class="nw">ชี้จุดผิดปกติ</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                      <polyline points="2 17 12 22 22 17" />
+                      <polyline points="2 12 12 17 22 12" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      ผู้ช่วยจัดการ Template<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      แปลง template จาก Word และหา template
+                      ที่ซ้ำกันให้อัตโนมัติ
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q2</span><span class="qmon">เม.ย. – มิ.ย.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">AI ค้นหาและดูแลข้อมูล</div>
+              <div class="items">
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      ค้นรายงานตามความหมาย<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      ค้นเจอแม้ใช้คำต่างกัน เช่น ตัวย่อ หรือไทยปนอังกฤษ
+                    </div>
+                  </div>
+                </div>
+                <div class="item ai">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">
+                      ผู้ช่วยตรวจสอบ PDPA<span class="pill">AI</span>
+                    </div>
+                    <div class="b">
+                      เตือนเมื่อพบการเปิดดูข้อมูลผู้ป่วยผิดปกติจาก log
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q3</span><span class="qmon">ก.ค. – ก.ย.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">ข้อมูลครบ ทำงานสะดวก</div>
+              <div class="items">
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <polyline points="23 4 23 10 17 10" />
+                      <polyline points="1 20 1 14 7 14" />
+                      <path
+                        d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">ติดตามการส่งผล HIS&nbsp;/&nbsp;PACS</div>
+                    <div class="b">
+                      เห็นทันทีเมื่อส่งผลไม่สำเร็จ และส่งซ้ำได้ในคลิกเดียว
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <polygon
+                        points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">บันทึกมุมมอง Worklist</div>
+                    <div class="b">
+                      เก็บชุดตัวกรองที่ใช้ประจำ เรียกใช้ได้ในคลิกเดียว
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="qhead">
+              <span class="qno">Q4</span><span class="qmon">ต.ค. – ธ.ค.</span>
+            </div>
+            <div class="track"><span class="dot"></span></div>
+            <div class="panel">
+              <div class="theme">ยกระดับคุณภาพรายงาน</div>
+              <div class="items">
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <line x1="12" y1="3" x2="12" y2="21" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">เทียบผลเก่า + ดูการแก้ไข</div>
+                    <div class="b">
+                      เปิดผลเก่าคู่กับรายงานที่กำลังพิมพ์
+                      เห็นจุดที่แก้ในแต่ละ version
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ic">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="t">Peer review</div>
+                    <div class="b">
+                      สุ่มรายงานให้รังสีแพทย์อีกท่านประเมินแบบ<span class="nw"
+                        >ไม่ระบุตัวตน</span
+                      >
+                      พร้อมสรุปรายเดือน
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>แผนอาจปรับเปลี่ยนตามความเหมาะสม</footer>
+    </div>
+  </body>
+</html>
